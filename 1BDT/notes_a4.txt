@@ -1,0 +1,29 @@
+Notes on A4
+
+1BDT
+
+Bad1
+commented out insert() -> all else worked
+supposed to return INITIALIZATION_ERROR but returned SUCCESS - so it is 
+initialized
+** it is insert()
+
+Bad2
+assert failing means that temp and "a\na/x\na" ARE the same
+it is correctly removing the entire tree from lines abive
+it is not to_String()
+** remove() - when it wanted to remove one child it removed both
+
+Bad3
+** insert
+when we print it, it has not been inserted
+
+attr==2609597== LEAK SUMMARY:
+==2609597==    definitely lost: 46 bytes in 3 blocks
+==2609597==    indirectly lost: 244 bytes in 14 blocks
+==2609597==      possibly lost: 0 bytes in 0 blocks
+==2609597==    still reachable: 1,132 bytes in 7 blocks
+==2609597==         suppressed: 0 bytes in 0 blocks
+
+Bad4
+prob to_String
