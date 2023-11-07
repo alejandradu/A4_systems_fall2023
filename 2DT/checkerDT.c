@@ -63,6 +63,20 @@ static boolean CheckerDT_treeCheck(Node_T oNNode) {
       if(!CheckerDT_Node_isValid(oNNode))
          return FALSE;
 
+
+      /*checking all getchild calls are returning a not null node*/
+      if (Node_getNumChildren(oNNode) > 0) {
+         Node_T oNChild = NULL;
+         for (ulIndex = 0; ulIndex < Node_getNumChildren(oNNode); ulIndex++) {
+            Node_getChild(oNNode, ulIndex, &oNChild);
+            if (oNChild == NULL) {
+               fprintf(stderr, "detected a null node \n");
+                  return FALSE;
+            }
+         }   
+      }
+
+
       /*check if every path of each node's children is unique*/
       if (Node_getNumChildren(oNNode) > 1) {
          for (ulIndex = 0; ulIndex < Node_getNumChildren(oNNode)-1; ulIndex++) {
