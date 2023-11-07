@@ -53,6 +53,8 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
 */
 static boolean CheckerDT_treeCheck(Node_T oNNode) {
    size_t ulIndex;
+   size_t ulIndex2;
+   
 
    if(oNNode!= NULL) {
 
@@ -60,6 +62,24 @@ static boolean CheckerDT_treeCheck(Node_T oNNode) {
       /* If not, pass that failure back up immediately */
       if(!CheckerDT_Node_isValid(oNNode))
          return FALSE;
+
+      /*check if every path of each node's children is unique*/
+      for (ulIndex = 0; ulIndex < Node_getNumChildren(oNNode)-1; ulIndex++) {
+         Node_T oNChild = NULL;
+         Path_T pathChild1 = NULL;
+         Node_getChild(oNNode, ulIndex, &oNChild);
+         pathChild1 = Node_getPath(oNChild);
+         for (ulIndex2 = ulIndex +1; ulIndex < Node_getNumChildren(oNNode); ulIndex2++){
+            Node_T oNChild2 = NULL;
+            Path_T pathChild2 = NULL;
+            Node_getChild(oNNode, ulIndex2, &oNChild2);
+            pathChild2 = Node_getPath(oNChild2);
+            if (!Path_comparePath(pathChild1, pathChild2)){
+               fprintf(stderr, "detected two identical paths in the DT");
+               return FALSE;
+            }
+         }
+      }
 
       /* Recur on every child of oNNode */
       for(ulIndex = 0; ulIndex < Node_getNumChildren(oNNode); ulIndex++)
@@ -92,6 +112,9 @@ boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
          fprintf(stderr, "Not initialized, but count is not 0\n");
          return FALSE;
       }
+
+
+
 
    /* Now checks invariants recursively at each node from the root. */
    return CheckerDT_treeCheck(oNRoot);

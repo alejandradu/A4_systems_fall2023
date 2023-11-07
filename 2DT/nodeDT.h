@@ -36,7 +36,7 @@ int Node_new(Path_T oPPath, Node_T oNParent, Node_T *poNResult);
 size_t Node_free(Node_T oNNode);
 
 /* Returns the path object representing oNNode's absolute path. */
-Path_T Node_getPath(Node_T oNNode);
+Path_T Node_getPath(Node_T oNNode); /*works*/
 
 /*
   Returns TRUE if oNParent has a child with path oPPath. Returns
@@ -51,7 +51,7 @@ boolean Node_hasChild(Node_T oNParent, Path_T oPPath,
                          size_t *pulChildID);
 
 /* Returns the number of children that oNParent has. */
-size_t Node_getNumChildren(Node_T oNParent);
+size_t Node_getNumChildren(Node_T oNParent); /*works*/
 
 /*
   Returns an int SUCCESS status and sets *poNResult to be the child
@@ -60,13 +60,13 @@ size_t Node_getNumChildren(Node_T oNParent);
   * NO_SUCH_PATH if ulChildID is not a valid child for oNParent
 */
 int Node_getChild(Node_T oNParent, size_t ulChildID,
-                  Node_T *poNResult);
+                  Node_T *poNResult); /*works*/
 
 /*
   Returns a the parent node of oNNode.
   Returns NULL if oNNode is the root and thus has no parent.
 */
-Node_T Node_getParent(Node_T oNNode);
+Node_T Node_getParent(Node_T oNNode); /*works*/
 
 /*
   Compares oNFirst and oNSecond lexicographically based on their paths.
