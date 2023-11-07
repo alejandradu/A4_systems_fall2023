@@ -51,7 +51,7 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
    parameter list to facilitate constructing your checks.
    If you do, you should update this function comment.
 */
-static boolean CheckerDT_treeCheck(Node_T oNNode) {
+static boolean CheckerDT_treeCheck(Node_T oNNode, size_t* pNumNode) {
    size_t ulIndex;
    size_t ulIndex2;
    char* pathname;
@@ -79,8 +79,11 @@ static boolean CheckerDT_treeCheck(Node_T oNNode) {
          }   
       }
 
+      /* check that the total number of nodes is equal to ulCount*/
+      *pNumNode = *pNumNode + Node_getNumChildren(oNNode);
 
-      /*toString should contain the path names of all nodes, assuming that node_toString works*/
+      /* check if toString expression contains the path names of all nodes,
+       assuming that node_toString works*/
       pathname = Node_toString(oNNode);
       stringDT = DT_toString();
       stringContain= strstr((const char*)stringDT, pathname); 
@@ -153,6 +156,8 @@ static boolean CheckerDT_treeCheck(Node_T oNNode) {
 boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
                           size_t ulCount) {
 
+   size_t totalCount;
+
    /* Sample check on a top-level data structure invariant:
       if the DT is not initialized, its count should be 0. */
    if(!bIsInitialized)
@@ -163,5 +168,14 @@ boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
 
 
    /* Now checks invariants recursively at each node from the root. */
-   return CheckerDT_treeCheck(oNRoot);
+   boolean treecheck = CheckerDT_treeCheck(oNRoot, &totalCount);
+   
+   /*check if ulCount equals the total number of nodes getnumchildren report to us*/
+   if (treecheck) {
+      if (ulCount != (totalCount +1))
+         fprint(stderr, "ulCount does not equal total number of nodes detected by GiveNumChildren");
+         return FALSE;
+   }
+
+   else return treecheck;
 }
