@@ -80,7 +80,7 @@ static boolean CheckerDT_treeCheck(Node_T oNNode, size_t* pNumNode) {
       }
 
       /* check that the total number of nodes is equal to ulCount*/
-      *pNumNode += Node_getNumChildren(oNNode);
+      *pNumNode ++;
 
       /* check if toString expression contains the path names of all nodes,
        assuming that node_toString works*/
@@ -172,11 +172,11 @@ boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
    totalCount = 0;
    treecheck= CheckerDT_treeCheck(oNRoot, &totalCount);
    
-   /*check if ulCount equals the total number of nodes getnumchildren report to us*/
+   /*check if ulCount equals the total number of nodes detected*/
    if (treecheck) {
       if (ulCount > 0) {
          if (ulCount != (totalCount + 1)){
-            fprintf(stderr, "ulCount does not equal total number of nodes detected by GiveNumChildren\n");
+            fprintf(stderr, "ulCount does not equal total number of nodes detected \n");
             fprintf(stderr, "ulCount is %ld, while total number of nodes detected is %ld\n", ulCount, (totalCount +1));
             return FALSE;
          }   
