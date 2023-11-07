@@ -76,7 +76,7 @@ static boolean CheckerDT_treeCheck(Node_T oNNode) {
                Node_getChild(oNNode, ulIndex2, &oNChild2);
                pathChild2 = Node_getPath(oNChild2);
                if (!Path_comparePath(pathChild1, pathChild2)){
-                  fprintf(stderr, "detected two identical paths in the DT");
+                  fprintf(stderr, "detected two identical paths in the DT\n");
                   return FALSE;
                }
             }
