@@ -173,11 +173,13 @@ boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
    
    /*check if ulCount equals the total number of nodes getnumchildren report to us*/
    if (treecheck) {
-      if (ulCount != (totalCount + 1)){
-         fprintf(stderr, "ulCount does not equal total number of nodes detected by GiveNumChildren\n");
-         fprintf(stderr, "ulCount is %ld, while total number of nodes detected is %ld\n", ulCount, (totalCount +1));
-         return FALSE;
-      }     
+      if (ulCount > 0) {
+         if (ulCount != (totalCount + 1)){
+            fprintf(stderr, "ulCount does not equal total number of nodes detected by GiveNumChildren\n");
+            fprintf(stderr, "ulCount is %ld, while total number of nodes detected is %ld\n", ulCount, (totalCount +1));
+            return FALSE;
+         }   
+      }  
    }
 
    return treecheck;
