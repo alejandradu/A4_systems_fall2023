@@ -6,6 +6,7 @@
 #include "dynarray.h"
 #include <assert.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 /*--------------------------------------------------------------------*/
 
@@ -142,6 +143,7 @@ void *DynArray_set(DynArray_T oDynArray, size_t uIndex,
    const void *pvOldElement;
 
    assert(oDynArray != NULL);
+   fprintf(stderr, "length is %ld, index is %ld", oDynArray->uLength, uIndex);
    assert(uIndex < oDynArray->uLength);
    assert(DynArray_isValid(oDynArray));
 
