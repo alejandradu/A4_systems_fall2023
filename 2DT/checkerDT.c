@@ -145,7 +145,7 @@ static boolean CheckerDT_treeCheck(Node_T oNNode, size_t* pNumNode) {
 
          /* if recurring down one subtree results in a failed check
             farther down, passes the failure back up immediately */
-         if(!CheckerDT_treeCheck(oNChild))
+         if(!CheckerDT_treeCheck(oNChild, pNumNode))
             return FALSE;
       }
    }
@@ -173,9 +173,10 @@ boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
    
    /*check if ulCount equals the total number of nodes getnumchildren report to us*/
    if (treecheck) {
-      if (ulCount != (totalCount +1))
+      if (ulCount != (totalCount +1)){
          fprintf(stderr, "ulCount does not equal total number of nodes detected by GiveNumChildren");
          return FALSE;
+      }     
    }
 
    return treecheck;
