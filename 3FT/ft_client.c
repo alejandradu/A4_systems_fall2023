@@ -152,7 +152,7 @@ int main(void) {
   assert(FT_containsFile("1root/2second/3gfile") == FALSE);
   assert(FT_rmFile("1root/2child/2child/2child/2child") == SUCCESS);
   assert(FT_rmDir("1root/2child/2child") == SUCCESS);
-  /*assert((temp = FT_toString()) != NULL);*/
+  assert((temp = FT_toString()) != NULL);
   fprintf(stderr, "Checkpoint 3:\n%s\n", temp);
   free(temp);
 
