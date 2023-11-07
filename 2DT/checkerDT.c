@@ -56,6 +56,7 @@ static boolean CheckerDT_treeCheck(Node_T oNNode) {
    size_t ulIndex2;
    char* pathname;
    char* stringDT;
+   char* stringContain;
    
 
    if(oNNode!= NULL) {
@@ -81,8 +82,9 @@ static boolean CheckerDT_treeCheck(Node_T oNNode) {
 
       /*toString should contain the path names of all nodes, assuming that node_toString works*/
       pathname = Node_toString(oNNode);
-      stringDT= strstr((const char*)DT_toString(), pathname); 
-      if (stringDT == NULL) {
+      stringDT = DT_toString();
+      stringContain= strstr((const char*)stringDT, pathname); 
+      if (stringContain == NULL) {
           fprintf(stderr, "toString function does not print all the nodes in the DT\n");
                   return FALSE;
       }
