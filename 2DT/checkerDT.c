@@ -80,7 +80,7 @@ static boolean CheckerDT_treeCheck(Node_T oNNode, size_t* ptotalCount) {
       }
 
       /* check that the total number of nodes is equal to ulCount*/
-      *ptotalCount ++;
+      (*ptotalCount)++;
 
       /* check if toString expression contains the path names of all nodes,
        assuming that node_toString works*/
