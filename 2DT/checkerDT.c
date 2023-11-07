@@ -51,7 +51,7 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
    parameter list to facilitate constructing your checks.
    If you do, you should update this function comment.
 */
-static boolean CheckerDT_treeCheck(Node_T oNNode, size_t* pNumNode) {
+static boolean CheckerDT_treeCheck(Node_T oNNode, size_t* ptotalCount) {
    size_t ulIndex;
    size_t ulIndex2;
    char* pathname;
@@ -80,7 +80,7 @@ static boolean CheckerDT_treeCheck(Node_T oNNode, size_t* pNumNode) {
       }
 
       /* check that the total number of nodes is equal to ulCount*/
-      *pNumNode ++;
+      *ptotalCount ++;
 
       /* check if toString expression contains the path names of all nodes,
        assuming that node_toString works*/
@@ -145,7 +145,7 @@ static boolean CheckerDT_treeCheck(Node_T oNNode, size_t* pNumNode) {
 
          /* if recurring down one subtree results in a failed check
             farther down, passes the failure back up immediately */
-         if(!CheckerDT_treeCheck(oNChild, pNumNode))
+         if(!CheckerDT_treeCheck(oNChild, ptotalCount))
             return FALSE;
       }
    }
@@ -175,9 +175,9 @@ boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
    /*check if ulCount equals the total number of nodes detected*/
    if (treecheck) {
       if (ulCount > 0) {
-         if (ulCount != (totalCount + 1)){
+         if (ulCount != (totalCount)){
             fprintf(stderr, "ulCount does not equal total number of nodes detected \n");
-            fprintf(stderr, "ulCount is %ld, while total number of nodes detected is %ld\n", ulCount, (totalCount +1));
+            fprintf(stderr, "ulCount is %ld, while total number of nodes detected is %ld\n", ulCount, totalCount);
             return FALSE;
          }   
       }  
