@@ -77,6 +77,14 @@ static boolean CheckerDT_treeCheck(Node_T oNNode) {
       }
 
 
+      /*toString should contain the path names of all nodes, assuming that node_toString works*/
+      char* pathname = Node_toString(oNNode);
+      char* stringDT = strstr(DT_toString(), pathname);
+      if (stringDT == NULL) {
+          fprintf(stderr, "toString function does not print all the nodes in the DT\n");
+                  return FALSE;
+      }
+
       /*check if every path of each node's children is unique*/
       if (Node_getNumChildren(oNNode) > 1) {
          for (ulIndex = 0; ulIndex < Node_getNumChildren(oNNode)-1; ulIndex++) {
@@ -130,8 +138,6 @@ boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
          fprintf(stderr, "Not initialized, but count is not 0\n");
          return FALSE;
       }
-
-
 
 
    /* Now checks invariants recursively at each node from the root. */
