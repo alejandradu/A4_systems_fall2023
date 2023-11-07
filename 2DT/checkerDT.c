@@ -89,6 +89,26 @@ static boolean CheckerDT_treeCheck(Node_T oNNode) {
                   return FALSE;
       }
 
+
+      /* check if the children are arranged in lexicographic order */
+      if (Node_getNumChildren(oNNode) > 1) {
+         for (ulIndex = 0; ulIndex < Node_getNumChildren(oNNode)-1; ulIndex++) {
+            Node_T oNChild1 = NULL;
+            Path_T pathChild1 = NULL;
+            Node_T oNChild2 = NULL;
+            Path_T pathChild2 = NULL;
+            Node_getChild(oNNode, ulIndex, &oNChild1);
+            Node_getChild(oNNode, ulIndex+1, &oNChild2);
+            pathChild1 = Node_getPath(oNChild1);
+            pathChild2 = Node_getPath(oNChild2);
+            if (Path_comparePath(pathChild1, pathChild2)>0){
+               fprintf(stderr, "childrens are not arranged in lexicographic order\n");
+               return FALSE;
+            }
+         }
+      }
+
+
       /*check if every path of each node's children is unique*/
       if (Node_getNumChildren(oNNode) > 1) {
          for (ulIndex = 0; ulIndex < Node_getNumChildren(oNNode)-1; ulIndex++) {
