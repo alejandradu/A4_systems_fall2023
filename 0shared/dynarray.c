@@ -142,6 +142,7 @@ void *DynArray_set(DynArray_T oDynArray, size_t uIndex,
    const void *pvOldElement;
 
    assert(oDynArray != NULL);
+   fprintf(stderr, "uIndex is %ld, uLength is %ld", uIndex, oDynArray->uLength);
    assert(uIndex < oDynArray->uLength);
    assert(DynArray_isValid(oDynArray));
 
