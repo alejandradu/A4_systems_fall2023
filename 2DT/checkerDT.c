@@ -129,8 +129,6 @@ static boolean CheckerDT_treeCheck(Node_T oNNode) {
          }
       }
       
-      
-
       /* Recur on every child of oNNode */
       for(ulIndex = 0; ulIndex < Node_getNumChildren(oNNode); ulIndex++)
       {
