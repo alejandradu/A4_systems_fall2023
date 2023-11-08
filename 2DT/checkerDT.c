@@ -105,6 +105,33 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
    return TRUE;
 }
 
+
+/* NEW: check if every path of each node's children is unique*/
+/* NOTES: if numgetchildren > 1 not needed - would just never enter for loop */
+static boolean check_UniquePaths(Node_T oNNode) {
+    size_t ulIndex = 0;
+    size_t ulIndex2;
+
+    for (; ulIndex < Node_getNumChildren(oNNode)-1; ulIndex++) {
+        Node_T oNChild = NULL;
+        Path_T pathChild1 = NULL;
+        Node_getChild(oNNode, ulIndex, &oNChild);
+        pathChild1 = Node_getPath(oNChild);
+        /* do pairwise comparisons */
+        for (ulIndex2 = ulIndex +1; ulIndex2 < Node_getNumChildren(oNNode); ulIndex2++){
+           Node_T oNChild2 = NULL;
+           Path_T pathChild2 = NULL;
+           Node_getChild(oNNode, ulIndex2, &oNChild2);
+           pathChild2 = Node_getPath(oNChild2);
+           if (!Path_comparePath(pathChild1, pathChild2)){
+              return FALSE;
+           }
+        }
+    }
+    return TRUE;
+}
+
+
 /*
    Performs a pre-order traversal of the tree rooted at oNNode.
    Returns FALSE if a broken invariant is found and
@@ -120,7 +147,6 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
 */
 static boolean CheckerDT_treeCheck(Node_T oNNode, size_t* ptotalCount) {
    size_t ulIndex;
-   size_t ulIndex2; 
    
 
     if(oNNode!= NULL) {
@@ -157,32 +183,6 @@ static boolean CheckerDT_treeCheck(Node_T oNNode, size_t* ptotalCount) {
       }
    }
    return TRUE;
-}
-
-
-/* NEW: check if every path of each node's children is unique*/
-/* NOTES: if numgetchildren > 1 not needed - would just never enter for loop */
-static boolean check_UniquePaths(Node_T oNNode) {
-    size_t ulIndex = 0;
-    size_t ulIndex2;
-
-    for (; ulIndex < Node_getNumChildren(oNNode)-1; ulIndex++) {
-        Node_T oNChild = NULL;
-        Path_T pathChild1 = NULL;
-        Node_getChild(oNNode, ulIndex, &oNChild);
-        pathChild1 = Node_getPath(oNChild);
-        /* do pairwise comparisons */
-        for (ulIndex2 = ulIndex +1; ulIndex2 < Node_getNumChildren(oNNode); ulIndex2++){
-           Node_T oNChild2 = NULL;
-           Path_T pathChild2 = NULL;
-           Node_getChild(oNNode, ulIndex2, &oNChild2);
-           pathChild2 = Node_getPath(oNChild2);
-           if (!Path_comparePath(pathChild1, pathChild2)){
-              return FALSE;
-           }
-        }
-    }
-    return TRUE;
 }
 
 
