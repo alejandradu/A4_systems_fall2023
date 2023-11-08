@@ -18,6 +18,7 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
    Path_T oPNPath;
    Path_T oPPPath;
    size_t ulIndex;
+   size_t ulIndex2;
 
    /* Sample check: a NULL pointer is not a valid node */
    if(oNNode == NULL) {
@@ -52,6 +53,26 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
             }
         }   
     }
+
+    /* NEW: check if every path of each node's children is unique*/
+      if (Node_getNumChildren(oNNode) > 1) {
+         for (ulIndex = 0; ulIndex < Node_getNumChildren(oNNode)-1; ulIndex++) {
+         Node_T oNChild = NULL;
+         Path_T pathChild1 = NULL;
+         Node_getChild(oNNode, ulIndex, &oNChild);
+         pathChild1 = Node_getPath(oNChild);
+            for (ulIndex2 = ulIndex +1; ulIndex2 < Node_getNumChildren(oNNode); ulIndex2++){
+               Node_T oNChild2 = NULL;
+               Path_T pathChild2 = NULL;
+               Node_getChild(oNNode, ulIndex2, &oNChild2);
+               pathChild2 = Node_getPath(oNChild2);
+               if (!Path_comparePath(pathChild1, pathChild2)){
+                  fprintf(stderr, "detected two identical paths in the DT\n");
+                  return FALSE;
+               }
+            }
+         }
+      }
 
    return TRUE;
 }
@@ -118,27 +139,8 @@ static boolean CheckerDT_treeCheck(Node_T oNNode, size_t* ptotalCount) {
          }
       }
 
+      /* MOVED ABOVE */
 
-      /* NEW: check if every path of each node's children is unique*/
-      if (Node_getNumChildren(oNNode) > 1) {
-         for (ulIndex = 0; ulIndex < Node_getNumChildren(oNNode)-1; ulIndex++) {
-         Node_T oNChild = NULL;
-         Path_T pathChild1 = NULL;
-         Node_getChild(oNNode, ulIndex, &oNChild);
-         pathChild1 = Node_getPath(oNChild);
-            for (ulIndex2 = ulIndex +1; ulIndex2 < Node_getNumChildren(oNNode); ulIndex2++){
-               Node_T oNChild2 = NULL;
-               Path_T pathChild2 = NULL;
-               Node_getChild(oNNode, ulIndex2, &oNChild2);
-               pathChild2 = Node_getPath(oNChild2);
-               if (!Path_comparePath(pathChild1, pathChild2)){
-                  fprintf(stderr, "detected two identical paths in the DT\n");
-                  return FALSE;
-               }
-            }
-         }
-      }
-      
       /* Recur on every child of oNNode */
       for(ulIndex = 0; ulIndex < Node_getNumChildren(oNNode); ulIndex++)
       {
