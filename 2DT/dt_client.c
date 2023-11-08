@@ -96,7 +96,6 @@ int main(void) {
   assert((temp = DT_toString()) != NULL);
   fprintf(stderr, "Checkpoint 2:\n%s\n", temp);
   free(temp);
-  printf("BROKE CHECKPOINT");
 
   /* calling rm on a path that doesn't exist should return
      NO_SUCH_PATH, but on a path that does exist should return
@@ -104,11 +103,12 @@ int main(void) {
   */
   assert(DT_contains("1root/2second/3grandchild/1root") == TRUE);
   assert(DT_contains("1root/2second/3second") == FALSE);
-  fprintf(stderr, "FIRST REMOVE");
   assert(DT_rm("1root/2second/3second") == NO_SUCH_PATH);
   fprintf(stderr, "PASSED FIRST REMOVE");
   assert(DT_contains("1root/2second/3second") == FALSE);
+  fprintf(stderr, "before second REMOVE");
   assert(DT_rm("1root/2second") == SUCCESS);
+  fprintf(stderr, "PASSED FIRST REMOVE");
   assert(DT_contains("1root") == TRUE);
   assert(DT_contains("1root/2child") == TRUE);
   assert(DT_contains("1root/2second") == FALSE);
