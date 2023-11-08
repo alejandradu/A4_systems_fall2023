@@ -116,8 +116,16 @@ int main(void) {
   assert((temp = DT_toString()) != NULL);
   fprintf(stderr, "\n%s\n", temp);
   free(temp);
+  fprintf(stderr, "PRINT CONTAINS 3\n");
   assert(DT_contains("1root/2second/3second") == FALSE);
+  assert((temp = DT_toString()) != NULL);
+  fprintf(stderr, "\n%s\n", temp);
+  free(temp);
+  fprintf(stderr, "PRINT RM 2\n");
   assert(DT_rm("1root/2second") == SUCCESS);
+  assert((temp = DT_toString()) != NULL);
+  fprintf(stderr, "\n%s\n", temp);
+  free(temp);
   assert(DT_contains("1root") == TRUE);
   assert(DT_contains("1root/2child") == TRUE);
   assert(DT_contains("1root/2second") == FALSE);
