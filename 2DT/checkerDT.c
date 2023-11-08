@@ -96,7 +96,6 @@ static boolean check_UniquePaths(Node_T oNNode) {
 /* NEW: check if the children are arranged in lexicographic order */
 static boolean check_lexOrder(Node_T oNNode) {
     size_t ulIndex;
-    size_t ulIndex2;
 
     for (ulIndex = 0; ulIndex < Node_getNumChildren(oNNode)-1; ulIndex++) {
         Node_T oNChild1 = NULL;
@@ -131,8 +130,6 @@ static boolean check_lexOrder(Node_T oNNode) {
 */
 static boolean CheckerDT_treeCheck(Node_T oNNode, size_t* ptotalCount) {
    size_t ulIndex;
-   size_t ulIndex2 = 0;
-   
 
     if(oNNode!= NULL) {
 
