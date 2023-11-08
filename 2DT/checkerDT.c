@@ -18,9 +18,6 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
    Path_T oPNPath;
    Path_T oPPPath;
 
-   size_t ulIndex;
-   size_t ulIndex2;
-
    /* Sample check: a NULL pointer is not a valid node */
    if(oNNode == NULL) {
       fprintf(stderr, "A node is a NULL pointer\n");
@@ -58,12 +55,11 @@ static boolean check_toStringComplete(Node_T oNNode) {
 }
 
 /* NEW: check if every path of each node's children is unique*/
-/* NOTES: if numgetchildren > 1 not needed - would just never enter for loop */
 static boolean check_UniquePaths(Node_T oNNode) {
-    size_t ulIndex = 0;
+    size_t ulIndex;
     size_t ulIndex2;
 
-    for (; ulIndex < Node_getNumChildren(oNNode)-1; ulIndex++) {
+    for (ulIndex = 0; ulIndex < Node_getNumChildren(oNNode)-1; ulIndex++) {
         Node_T oNChild = NULL;
         Path_T pathChild1 = NULL;
         Node_getChild(oNNode, ulIndex, &oNChild);
@@ -116,9 +112,11 @@ static boolean CheckerDT_treeCheck(Node_T oNNode, size_t* ptotalCount) {
         }
 
         /* NEW: check if every path of each node's children is unique*/
-        if(!check_UniquePaths(oNNode)) {
-            fprintf(stderr, "detected two identical paths in the DT\n");
-            return FALSE;
+        if (Node_getNumChildren(oNNode) > 1) {
+            if(!check_UniquePaths(oNNode)) {
+                fprintf(stderr, "detected two identical paths in the DT\n");
+                return FALSE;
+            }
         }
 
            /* NEW: check all getchild calls return a not null node */
