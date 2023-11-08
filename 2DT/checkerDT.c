@@ -12,11 +12,12 @@
 #include "dt.h"
 
 
-/* see checkerDT.h for specification */
+/* TO CHECK nodeDT.c functions */
 boolean CheckerDT_Node_isValid(Node_T oNNode) {
    Node_T oNParent;
    Path_T oPNPath;
    Path_T oPPPath;
+   size_t ulIndex;
 
    /* Sample check: a NULL pointer is not a valid node */
    if(oNNode == NULL) {
@@ -39,6 +40,19 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
       }
    }
 
+   /* NEW: check all getchild calls return a not null node */
+   /* QUESTION: isn't this contained in the first function here? */
+    if (Node_getNumChildren(oNNode) > 0) {
+        Node_T oNChild = NULL;
+        for (ulIndex = 0; ulIndex < Node_getNumChildren(oNNode); ulIndex++) {
+            Node_getChild(oNNode, ulIndex, &oNChild);
+            if (oNChild == NULL) {
+               fprintf(stderr, "detected a null node \n");
+                  return FALSE;
+            }
+        }   
+    }
+
    return TRUE;
 }
 
@@ -50,6 +64,10 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
    You may want to change this function's return type or
    parameter list to facilitate constructing your checks.
    If you do, you should update this function comment.
+
+   TODO: change function description
+
+   THIS IS FOR LOWER-LEVEL DT FUNCTIONS
 */
 static boolean CheckerDT_treeCheck(Node_T oNNode, size_t* ptotalCount) {
    size_t ulIndex;
@@ -66,24 +84,13 @@ static boolean CheckerDT_treeCheck(Node_T oNNode, size_t* ptotalCount) {
       if(!CheckerDT_Node_isValid(oNNode))
          return FALSE;
 
-
-      /*checking all getchild calls are returning a not null node*/
-      if (Node_getNumChildren(oNNode) > 0) {
-         Node_T oNChild = NULL;
-         for (ulIndex = 0; ulIndex < Node_getNumChildren(oNNode); ulIndex++) {
-            Node_getChild(oNNode, ulIndex, &oNChild);
-            if (oNChild == NULL) {
-               fprintf(stderr, "detected a null node \n");
-                  return FALSE;
-            }
-         }   
-      }
+      /* MOVED ABOVE */
 
       /* check that the total number of nodes is equal to ulCount*/
       (*ptotalCount)++;
 
-      /* check if toString expression contains the path names of all nodes,
-       assuming that node_toString works*/
+      /* NEW: check if DT_toString returns a path with the path names 
+      of all nodes, assuming node_toString works*/
       pathname = Node_toString(oNNode);
       stringDT = DT_toString();
       stringContain= strstr((const char*)stringDT, pathname); 
@@ -93,7 +100,7 @@ static boolean CheckerDT_treeCheck(Node_T oNNode, size_t* ptotalCount) {
       }
 
 
-      /* check if the children are arranged in lexicographic order */
+      /* NEW: check if the children are arranged in lexicographic order */
       if (Node_getNumChildren(oNNode) > 1) {
          for (ulIndex = 0; ulIndex < Node_getNumChildren(oNNode)-1; ulIndex++) {
             Node_T oNChild1 = NULL;
@@ -105,14 +112,14 @@ static boolean CheckerDT_treeCheck(Node_T oNNode, size_t* ptotalCount) {
             pathChild1 = Node_getPath(oNChild1);
             pathChild2 = Node_getPath(oNChild2);
             if (Path_comparePath(pathChild1, pathChild2)>0){
-               fprintf(stderr, "childrens are not arranged in lexicographic order\n");
+               fprintf(stderr, "Children are not arranged in lexicographic order\n");
                return FALSE;
             }
          }
       }
 
 
-      /*check if every path of each node's children is unique*/
+      /* NEW: check if every path of each node's children is unique*/
       if (Node_getNumChildren(oNNode) > 1) {
          for (ulIndex = 0; ulIndex < Node_getNumChildren(oNNode)-1; ulIndex++) {
          Node_T oNChild = NULL;
@@ -152,7 +159,7 @@ static boolean CheckerDT_treeCheck(Node_T oNNode, size_t* ptotalCount) {
    return TRUE;
 }
 
-/* see checkerDT.h for specification */
+/* THIS IS FOR TOP-LEVEL INVARIANTS of DT */
 boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
                           size_t ulCount) {
 
@@ -167,21 +174,9 @@ boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
          return FALSE;
       }
 
+   totalCount = 0;
+   treecheck = CheckerDT_treeCheck(oNRoot, &totalCount);
 
    /* Now checks invariants recursively at each node from the root. */
-   totalCount = 0;
-   treecheck= CheckerDT_treeCheck(oNRoot, &totalCount);
-   
-   /*check if ulCount equals the total number of nodes detected*/
-   if (treecheck) {
-      if (ulCount > 0) {
-         if (ulCount != (totalCount)){
-            fprintf(stderr, "ulCount does not equal total number of nodes detected \n");
-            fprintf(stderr, "ulCount is %ld, while total number of nodes detected is %ld\n", ulCount, totalCount);
-            return FALSE;
-         }   
-      }  
-   }
-
    return treecheck;
 }
