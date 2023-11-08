@@ -101,31 +101,13 @@ int main(void) {
      NO_SUCH_PATH, but on a path that does exist should return
      SUCCESS and remove entire subtree rooted at that path
   */
-  fprintf(stderr, "PRINT CONTAINS 1\n");
   assert(DT_contains("1root/2second/3grandchild/1root") == TRUE);
-  assert((temp = DT_toString()) != NULL);
-  fprintf(stderr, "\n%s\n", temp);
-  free(temp);
-  fprintf(stderr, "PRINT CONTAINS 2\n");
   assert(DT_contains("1root/2second/3second") == FALSE);
-  assert((temp = DT_toString()) != NULL);
-  fprintf(stderr, "\n%s\n", temp);
-  free(temp);
-  fprintf(stderr, "PRINT RM 1\n");
   assert(DT_rm("1root/2second/3second") == NO_SUCH_PATH);
-  assert((temp = DT_toString()) != NULL);
-  fprintf(stderr, "\n%s\n", temp);
-  free(temp);
-  fprintf(stderr, "PRINT CONTAINS 3\n");
   assert(DT_contains("1root/2second/3second") == FALSE);
-  assert((temp = DT_toString()) != NULL);
-  fprintf(stderr, "\n%s\n", temp);
-  free(temp);
-  fprintf(stderr, "PRINT RM 2\n");
+  /* something goes wrong after successfully removing
+  INVARIANTS*/
   assert(DT_rm("1root/2second") == SUCCESS);
-  assert((temp = DT_toString()) != NULL);
-  fprintf(stderr, "\n%s\n", temp);
-  free(temp);
   assert(DT_contains("1root") == TRUE);
   assert(DT_contains("1root/2child") == TRUE);
   assert(DT_contains("1root/2second") == FALSE);
