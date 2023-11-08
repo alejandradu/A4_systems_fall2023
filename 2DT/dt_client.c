@@ -34,9 +34,9 @@ int main(void) {
   assert(DT_init() == SUCCESS);
   assert(DT_contains("") == FALSE);
   assert(DT_contains("1root") == FALSE);
-  /*assert((temp = DT_toString()) != NULL);*/
+  /*assert((temp = DT_toString()) != NULL);
   assert(!strcmp(temp,""));
-  free(temp);
+  free(temp);*/
 
   /* A valid path must not:
      * be the empty string
@@ -78,9 +78,9 @@ int main(void) {
   assert(DT_contains("1root/2ok") == TRUE);
   assert(DT_contains("1root/2ok/3yes") == TRUE);
   assert(DT_contains("1root/2ok/3yes/4indeed") == TRUE);
-  /*assert((temp = DT_toString()) != NULL);*/
+  /*assert((temp = DT_toString()) != NULL);
   fprintf(stderr, "Checkpoint 1:\n%s\n", temp);
-  free(temp);
+  free(temp);*/
 
   /* Children of any path must be unique, but individual directories
      in different paths needn't be
@@ -93,9 +93,9 @@ int main(void) {
   assert(DT_insert("1root/2second/3grandchild") == ALREADY_IN_TREE);
   assert(DT_insert("1root/2second/3grandchild/1root") == SUCCESS);
   assert(DT_contains("1root/2second/3grandchild/1root") == TRUE);
-  /*assert((temp = DT_toString()) != NULL);*/
+  /*assert((temp = DT_toString()) != NULL);
   fprintf(stderr, "Checkpoint 2:\n%s\n", temp);
-  free(temp);
+  free(temp);*/
 
   /* calling rm on a path that doesn't exist should return
      NO_SUCH_PATH, but on a path that does exist should return
