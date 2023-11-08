@@ -118,6 +118,7 @@ int main(void) {
   assert((temp = DT_toString()) != NULL);
   fprintf(stderr, "Checkpoint 3:\n%s\n", temp);
   free(temp);
+  fprintf(stderr, "sterr?\n");
 
   /* removing the root doesn't uninitialize the structure */
   assert(DT_rm("1anotherroot") == CONFLICTING_PATH);
