@@ -20,7 +20,6 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
 
    size_t ulIndex;
    size_t ulIndex2;
-   char* stringContain;
 
    /* Sample check: a NULL pointer is not a valid node */
    if(oNNode == NULL) {
