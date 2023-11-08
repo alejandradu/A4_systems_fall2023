@@ -104,11 +104,11 @@ int main(void) {
   assert(DT_contains("1root/2second/3grandchild/1root") == TRUE);
   assert(DT_contains("1root/2second/3second") == FALSE);
   assert(DT_rm("1root/2second/3second") == NO_SUCH_PATH);
-  fprintf(stderr, "PASSED FIRST REMOVE");
+  fprintf(stderr, "PASSED FIRST REMOVE\n");
   assert(DT_contains("1root/2second/3second") == FALSE);
-  fprintf(stderr, "before second REMOVE");
+  fprintf(stderr, "before second REMOVE\n");
   assert(DT_rm("1root/2second") == SUCCESS);
-  fprintf(stderr, "PASSED FIRST REMOVE");
+  fprintf(stderr, "PASSED FIRST REMOVE\n");
   assert(DT_contains("1root") == TRUE);
   assert(DT_contains("1root/2child") == TRUE);
   assert(DT_contains("1root/2second") == FALSE);
