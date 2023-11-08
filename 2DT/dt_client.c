@@ -96,6 +96,7 @@ int main(void) {
   /*assert((temp = DT_toString()) != NULL);
   fprintf(stderr, "Checkpoint 2:\n%s\n", temp);
   free(temp);*/
+  printf("BROKE CHECKPOINT");
 
   /* calling rm on a path that doesn't exist should return
      NO_SUCH_PATH, but on a path that does exist should return
