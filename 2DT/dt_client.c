@@ -108,8 +108,9 @@ int main(void) {
   assert(DT_contains("1root/2second/3second") == FALSE);
   fprintf(stderr, "before second REMOVE\n");
   assert(DT_rm("1root/2second") == SUCCESS);
-  fprintf(stderr, "PASSED FIRST REMOVE\n");
+  fprintf(stderr, "PASSED SECOND REMOVE\n");
   assert(DT_contains("1root") == TRUE);
+  fprintf(stderr, "PASSED containes after rm 2\n");
   assert(DT_contains("1root/2child") == TRUE);
   assert(DT_contains("1root/2second") == FALSE);
   assert(DT_contains("1root/2second/3grandchild") == FALSE);
