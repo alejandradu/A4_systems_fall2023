@@ -76,14 +76,6 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
         }
     }
 
-    /* NEW: check if DT_toString returns a path with the path names 
-    of all nodes, assuming node_toString works*/
-    stringContain= strstr((const char*)DT_toString(), Node_toString(oNNode)); 
-    if (stringContain == NULL) {
-        fprintf(stderr, "toString function does not print all the nodes in the DT\n");
-                return FALSE;
-    }
-
     /* NEW: check if the children are arranged in lexicographic order */
     if (Node_getNumChildren(oNNode) > 1) {
        for (ulIndex = 0; ulIndex < Node_getNumChildren(oNNode)-1; ulIndex++) {
@@ -105,6 +97,16 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
    return TRUE;
 }
 
+
+/* NEW: check if toString returns the path names of all nodes,
+assuming that node_toString works*/
+static boolean check_toStringComplete(Node_T oNNode) {
+    boolean stringContain;
+    stringContain= strstr((const char*)DT_toString(), Node_toString(oNNode)); 
+    if (stringContain == NULL) {
+        return FALSE;
+    }
+}
 
 /* NEW: check if every path of each node's children is unique*/
 /* NOTES: if numgetchildren > 1 not needed - would just never enter for loop */
@@ -155,6 +157,13 @@ static boolean CheckerDT_treeCheck(Node_T oNNode, size_t* ptotalCount) {
         /* If not, pass that failure back up immediately */
         if(!CheckerDT_Node_isValid(oNNode))
             return FALSE;
+
+        /* NEW: check if toString returns the path names of all nodes,
+        assuming that node_toString works*/
+        if(!check_toStringComplete(oNNode)) {
+            fprintf(stderr, "toString function does not print all the nodes in the DT\n");
+            return FALSE;
+        }
 
         /* NEW: check if every path of each node's children is unique*/
         if(!check_UniquePaths(oNNode)) {
