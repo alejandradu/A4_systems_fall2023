@@ -62,7 +62,7 @@ static boolean check_toStringComplete(Node_T oNNode) {
     char *stringContain;
     stringContain= strstr((const char*)DT_toString(), Node_toString(oNNode)); 
     if (stringContain == NULL) {
-        fprintf(stderr, "DT_toString function does not print all the nodes in the DT\n");
+        fprintf(stderr, "DT_toString does not print all the nodes in the DT\n");
         return FALSE;
     }
     return TRUE;
