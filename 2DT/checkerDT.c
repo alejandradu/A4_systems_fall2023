@@ -42,57 +42,6 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
       }
    }
 
-   /* NEW: check all getchild calls return a not null node */
-   /* QUESTION: isn't this contained in the first function here? */
-    if (Node_getNumChildren(oNNode) > 0) {
-        Node_T oNChild = NULL;
-        for (ulIndex = 0; ulIndex < Node_getNumChildren(oNNode); ulIndex++) {
-            Node_getChild(oNNode, ulIndex, &oNChild);
-            if (oNChild == NULL) {
-               fprintf(stderr, "detected a null node \n");
-                  return FALSE;
-            }
-        }   
-    }
-
-    /* NEW: check if every path of each node's children is unique*/
-    if (Node_getNumChildren(oNNode) > 1) {
-        for (ulIndex = 0; ulIndex < Node_getNumChildren(oNNode)-1; ulIndex++) {
-        Node_T oNChild = NULL;
-        Path_T pathChild1 = NULL;
-        Node_getChild(oNNode, ulIndex, &oNChild);
-        pathChild1 = Node_getPath(oNChild);
-            for (ulIndex2 = ulIndex +1; ulIndex2 < Node_getNumChildren(oNNode); ulIndex2++){
-               Node_T oNChild2 = NULL;
-               Path_T pathChild2 = NULL;
-               Node_getChild(oNNode, ulIndex2, &oNChild2);
-               pathChild2 = Node_getPath(oNChild2);
-               if (!Path_comparePath(pathChild1, pathChild2)){
-                  fprintf(stderr, "detected two identical paths in the DT\n");
-                  return FALSE;
-               }
-            }
-        }
-    }
-
-    /* NEW: check if the children are arranged in lexicographic order */
-    if (Node_getNumChildren(oNNode) > 1) {
-       for (ulIndex = 0; ulIndex < Node_getNumChildren(oNNode)-1; ulIndex++) {
-          Node_T oNChild1 = NULL;
-          Path_T pathChild1 = NULL;
-          Node_T oNChild2 = NULL;
-          Path_T pathChild2 = NULL;
-          Node_getChild(oNNode, ulIndex, &oNChild1);
-          Node_getChild(oNNode, ulIndex+1, &oNChild2);
-          pathChild1 = Node_getPath(oNChild1);
-          pathChild2 = Node_getPath(oNChild2);
-          if (Path_comparePath(pathChild1, pathChild2)>0){
-             fprintf(stderr, "Children are not arranged in lexicographic order\n");
-             return FALSE;
-          }
-       }
-    }
-
    return TRUE;
 }
 
@@ -149,6 +98,7 @@ static boolean check_UniquePaths(Node_T oNNode) {
 */
 static boolean CheckerDT_treeCheck(Node_T oNNode, size_t* ptotalCount) {
    size_t ulIndex;
+   size_t ulIndex2 = 0;
    
 
     if(oNNode!= NULL) {
@@ -170,6 +120,57 @@ static boolean CheckerDT_treeCheck(Node_T oNNode, size_t* ptotalCount) {
             fprintf(stderr, "detected two identical paths in the DT\n");
             return FALSE;
         }
+
+           /* NEW: check all getchild calls return a not null node */
+   /* QUESTION: isn't this contained in the first function here? */
+    if (Node_getNumChildren(oNNode) > 0) {
+        Node_T oNChild = NULL;
+        for (ulIndex = 0; ulIndex < Node_getNumChildren(oNNode); ulIndex++) {
+            Node_getChild(oNNode, ulIndex, &oNChild);
+            if (oNChild == NULL) {
+               fprintf(stderr, "detected a null node \n");
+                  return FALSE;
+            }
+        }   
+    }
+
+    /* NEW: check if every path of each node's children is unique*/
+    if (Node_getNumChildren(oNNode) > 1) {
+        for (ulIndex = 0; ulIndex < Node_getNumChildren(oNNode)-1; ulIndex++) {
+        Node_T oNChild = NULL;
+        Path_T pathChild1 = NULL;
+        Node_getChild(oNNode, ulIndex, &oNChild);
+        pathChild1 = Node_getPath(oNChild);
+            for (ulIndex2 = ulIndex +1; ulIndex2 < Node_getNumChildren(oNNode); ulIndex2++){
+               Node_T oNChild2 = NULL;
+               Path_T pathChild2 = NULL;
+               Node_getChild(oNNode, ulIndex2, &oNChild2);
+               pathChild2 = Node_getPath(oNChild2);
+               if (!Path_comparePath(pathChild1, pathChild2)){
+                  fprintf(stderr, "detected two identical paths in the DT\n");
+                  return FALSE;
+               }
+            }
+        }
+    }
+
+    /* NEW: check if the children are arranged in lexicographic order */
+    if (Node_getNumChildren(oNNode) > 1) {
+       for (ulIndex = 0; ulIndex < Node_getNumChildren(oNNode)-1; ulIndex++) {
+          Node_T oNChild1 = NULL;
+          Path_T pathChild1 = NULL;
+          Node_T oNChild2 = NULL;
+          Path_T pathChild2 = NULL;
+          Node_getChild(oNNode, ulIndex, &oNChild1);
+          Node_getChild(oNNode, ulIndex+1, &oNChild2);
+          pathChild1 = Node_getPath(oNChild1);
+          pathChild2 = Node_getPath(oNChild2);
+          if (Path_comparePath(pathChild1, pathChild2)>0){
+             fprintf(stderr, "Children are not arranged in lexicographic order\n");
+             return FALSE;
+          }
+       }
+    }
 
         /* check that the total number of nodes is equal to ulCount*/
         /* (*ptotalCount)++; */
