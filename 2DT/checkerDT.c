@@ -101,11 +101,12 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
 /* NEW: check if toString returns the path names of all nodes,
 assuming that node_toString works*/
 static boolean check_toStringComplete(Node_T oNNode) {
-    boolean stringContain;
+    char *stringContain;
     stringContain= strstr((const char*)DT_toString(), Node_toString(oNNode)); 
     if (stringContain == NULL) {
         return FALSE;
     }
+    return TRUE;
 }
 
 /* NEW: check if every path of each node's children is unique*/
