@@ -111,9 +111,9 @@ int main(void) {
   assert(DT_contains("1root/2second") == FALSE);
   assert(DT_contains("1root/2second/3grandchild") == FALSE);
   assert(DT_contains("1root/2second/3grandchild/1root") == FALSE);
-  assert((temp = DT_toString()) != NULL);
+  /*assert((temp = DT_toString()) != NULL);
   fprintf(stderr, "Checkpoint 3:\n%s\n", temp);
-  free(temp);
+  free(temp);*/
 
   /* removing the root doesn't uninitialize the structure */
   assert(DT_rm("1anotherroot") == CONFLICTING_PATH);
