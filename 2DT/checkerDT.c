@@ -167,8 +167,8 @@ static boolean CheckerDT_treeCheck(Node_T oNNode, size_t *ptotalCount) {
         /* WE HAVE TO DO THIS BC EACH NODE ONLY KNOWS ITS DIRECT CHILDREN */
         for(ulIndex = 0; ulIndex < Node_getNumChildren(oNNode); ulIndex++) {
             Node_T oNChild = NULL;
+            fprintf(stderr, "number of children %lu", Node_getNumChildren(oNNode));
             int iStatus = Node_getChild(oNNode, ulIndex, &oNChild);
-            fprintf(stderr, "num children %lu\n", Node_getNumChildren(oNNode));
    
             if(iStatus != SUCCESS) {
                fprintf(stderr, "getNumChildren claims more children than getChild returns\n");
@@ -204,14 +204,14 @@ boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
    treecheck = CheckerDT_treeCheck(oNRoot, &totalCount);
 
    /* check if ulCount equals the total number of nodes detected*/
-    /*if (treecheck && ulCount > 0) {
+    if (treecheck && ulCount > 0) {
         fprintf(stderr, "ulCount %lu, my count %lu \n", ulCount, totalCount);
         if (ulCount != totalCount){
             fprintf(stderr, "ulCount does not equal total number of nodes detected \n");
             fprintf(stderr, "ulCount is %lu, while total number of nodes detected is %lu\n", ulCount, totalCount);
             return FALSE;
         }  
-    }*/
+    }
 
    /* Now checks invariants recursively at each node from the root. */
    return treecheck;
