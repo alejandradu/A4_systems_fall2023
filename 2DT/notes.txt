@@ -1,0 +1,72 @@
+DT_rm -> Node_free (UPDATES LENGTH)
+
+* initialized uCount in Node_free?
+* steps into DynArray_bsearch
+
+-> DynArray_removeAt
+* THERE IS A COMPARISON THAT PASSES - PRINT THIS
+
+-> DynArray_free
+
+-> Path_free
+
+problem is indexing something bigger than child?
+
+IF NOT INITIALIZED (IF AND ONLY IF)
+- root not null
+- count is 0
+
+
+FLAG FOR DESIGN
+oNNode->oNParent->oDChildren this is redundant in nodeDTGood
+
+
+PRINTS ACCESSIBLE TO All called from remove
+(one must be going wrong at the end)
+- DynArray_bsearch: looking for an element and return index
+- DynArray_removeAt
+---- everything should be correct above ---
+- DynArray_getLength
+- DynArray_free
+- Path_free
+
+if I binary search it, 
+
+THE DYNARRAY IS CORRECT
+
+nodegetnumchildren = size of dynarray (a node check)
+
+
+######
+IF DynArray_free and Path_free have been called
+- if size of path is X, size of children for each node
+in dynarray should be X
+(would reflect if either one of free path or 
+free node was not called)
+#######
+Path_getDepth(Path_T oPPath)
+size_t DynArray_getLength(DynArray_T oDynArray);
+######
+
+preordertraversal:
+nodes contains all the nodes in the order I want them 
+to be 
+
+
+
+ulCount is number of nodes deleted
+(so maybe it is returning that 2 nodes were deleted)
+
+PRINT LENGTH SIZE TRYING TO REMOVE A HIGH ORDER NODE
+THAT WOULD MAKE IT REMOVE +1 NODE
+
+get children = size of dynarray
+
+compare get children to some counter i keep track of by
+using the depth function
+
+FOR THE DYNARRAY WE CREATE, THE SIZE IS TOO SMALL
+iterate through all nodes -> ulcount = sum of all
+numchildren
+
+
