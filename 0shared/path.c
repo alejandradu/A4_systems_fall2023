@@ -6,6 +6,7 @@
 #include <assert.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
 
 #include "dynarray.h"
 #include "path.h"
@@ -252,7 +253,7 @@ void Path_free(Path_T oPPath) {
       }
    }
 
-      fprintf("I freed the path %s", Path_getpathname(oPPath));
+      fprintf("I freed the path %s, length of path is %lu\n", oPPath->pcPath, oPPath->ulLength);
 
    free((struct path*) oPPath);
 }
