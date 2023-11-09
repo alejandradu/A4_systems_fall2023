@@ -110,6 +110,8 @@ void DynArray_free(DynArray_T oDynArray)
    assert(oDynArray != NULL);
    assert(DynArray_isValid(oDynArray));
 
+   fprintf("I freed the child %s", Node_toString(oDynArray));
+
    free(oDynArray->ppvArray);
    free(oDynArray);
 }
@@ -131,6 +133,8 @@ void *DynArray_get(DynArray_T oDynArray, size_t uIndex)
    assert(oDynArray != NULL);
    assert(uIndex < oDynArray->uLength);
    assert(DynArray_isValid(oDynArray));
+
+   fprintf(stderr, "I got the child %s", Node_toString(oDynArray));
 
    return (void*)(oDynArray->ppvArray)[uIndex];
 }
@@ -208,9 +212,10 @@ void *DynArray_removeAt(DynArray_T oDynArray, size_t uIndex)
    size_t u;
 
    assert(oDynArray != NULL);
+   /* this assert is working */
    assert(uIndex < oDynArray->uLength);
    assert(DynArray_isValid(oDynArray));
-
+   
    pvOldElement = oDynArray->ppvArray[uIndex];
 
    oDynArray->uLength--;
