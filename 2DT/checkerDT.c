@@ -159,6 +159,10 @@ static boolean CheckerDT_treeCheck(Node_T oNNode, size_t *ptotalCount) {
                 return FALSE;
         }
 
+        /* add to node count */
+            fprintf(stderr, "At node %s with child %s\n", Node_toString(oNNode), Node_toString(oNChild));
+            (*ptotalCount)++;
+
         /* Recur on every child of oNNode */
         /* WE HAVE TO DO THIS BC EACH NODE ONLY KNOWS ITS DIRECT CHILDREN */
         for(ulIndex = 0; ulIndex < Node_getNumChildren(oNNode); ulIndex++) {
@@ -169,11 +173,6 @@ static boolean CheckerDT_treeCheck(Node_T oNNode, size_t *ptotalCount) {
                fprintf(stderr, "getNumChildren claims more children than getChild returns\n");
                return FALSE;
             }
-
-            /* add to node count */
-            fprintf(stderr, "At node %s with child %s\n", Node_toString(oNNode), Node_toString(oNChild));
-            (*ptotalCount)++;
-
 
             /* if recurring down one subtree results in a failed check
                farther down, passes the failure back up immediately */
