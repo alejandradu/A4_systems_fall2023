@@ -253,7 +253,7 @@ void Path_free(Path_T oPPath) {
       }
    }
 
-      fprintf("I freed the path %s, length of path is %lu\n", (char*)oPPath->pcPath, oPPath->ulLength);
+      fprintf("I freed the path %s, length of path is %lu\n", (char*)oPPath->pcPath, (char*)oPPath->ulLength);
 
    free((struct path*) oPPath);
 }
