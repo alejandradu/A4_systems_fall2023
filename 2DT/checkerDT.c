@@ -171,7 +171,7 @@ static boolean CheckerDT_treeCheck(Node_T oNNode, size_t *ptotalCount) {
             }
 
             /* add to node count */
-            /*(*ptotalCount)++;*/
+            (*ptotalCount)++;
 
             /* if recurring down one subtree results in a failed check
                farther down, passes the failure back up immediately */
