@@ -160,8 +160,8 @@ static boolean CheckerDT_treeCheck(Node_T oNNode, size_t *ptotalCount) {
         }
 
         /* add to node count */
-            fprintf(stderr, "At node %s\n", Node_toString(oNNode));
-            (*ptotalCount)++;
+        fprintf(stderr, "At node %s\n", Node_toString(oNNode));
+        (*ptotalCount)++;
 
         /* Recur on every child of oNNode */
         /* WE HAVE TO DO THIS BC EACH NODE ONLY KNOWS ITS DIRECT CHILDREN */
