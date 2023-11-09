@@ -171,8 +171,8 @@ static boolean CheckerDT_treeCheck(Node_T oNNode, size_t *ptotalCount) {
             }
 
             /* add to node count */
-            (*ptotalCount)++;
-   
+            /*(*ptotalCount)++;*/
+
             /* if recurring down one subtree results in a failed check
                farther down, passes the failure back up immediately */
             if(!CheckerDT_treeCheck(oNChild, ptotalCount))
@@ -187,7 +187,7 @@ static boolean CheckerDT_treeCheck(Node_T oNNode, size_t *ptotalCount) {
 boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
                           size_t ulCount) {
 
-   size_t *totalCount;
+   size_t *totalCount = 0;
    boolean treecheck;
 
    /* Sample check on a top-level data structure invariant:
