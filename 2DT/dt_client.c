@@ -111,7 +111,7 @@ int main(void) {
   assert(DT_contains("1root/2second") == FALSE);
   assert(DT_contains("1root/2second/3grandchild") == FALSE);
   assert(DT_contains("1root/2second/3grandchild/1root") == FALSE);
-  /*assert((temp = DT_toString()) != NULL);
+  assert((temp = DT_toString()) != NULL);
   fprintf(stderr, "Checkpoint 3:\n%s\n", temp);
   free(temp);*/
 
