@@ -171,8 +171,9 @@ static boolean CheckerDT_treeCheck(Node_T oNNode, size_t *ptotalCount) {
             }
 
             /* add to node count */
-            fprintf(stderr, "val of manual count %lu\n", *ptotalCount);
+            fprintf(stderr, "At node %s with child\n", Node_getPath(oNNode), Node_getPath(oNChild));
             (*ptotalCount)++;
+
 
             /* if recurring down one subtree results in a failed check
                farther down, passes the failure back up immediately */
