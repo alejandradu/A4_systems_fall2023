@@ -112,6 +112,12 @@ int main(void) {
   fprintf(stderr, "Basic build:\n%s\n", temp);
   free(temp);
 
+  DT_rm("1root/2b");
+
+  assert((temp = DT_toString()) != NULL);
+  fprintf(stderr, "Basic build:\n%s\n", temp);
+  free(temp);
+
 
   /*assert(DT_contains("1root/2second/3grandchild/1root") == TRUE);
   assert(DT_contains("1root/2second/3second") == FALSE);
