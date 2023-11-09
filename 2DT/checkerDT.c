@@ -128,7 +128,7 @@ static boolean check_lexOrder(Node_T oNNode) {
 
    THIS IS FOR LOWER-LEVEL DT FUNCTIONS
 */
-static boolean CheckerDT_treeCheck(Node_T oNNode, size_t* ptotalCount) {
+static boolean CheckerDT_treeCheck(Node_T oNNode, size_t *ptotalCount) {
    size_t ulIndex;
 
     if(oNNode!= NULL) {
@@ -159,9 +159,6 @@ static boolean CheckerDT_treeCheck(Node_T oNNode, size_t* ptotalCount) {
                 return FALSE;
         }
 
-        /* check that the total number of nodes is equal to ulCount*/
-        /* (*ptotalCount)++; */
-
         /* Recur on every child of oNNode */
         /* WE HAVE TO DO THIS BC EACH NODE ONLY KNOWS ITS DIRECT CHILDREN */
         for(ulIndex = 0; ulIndex < Node_getNumChildren(oNNode); ulIndex++) {
@@ -172,6 +169,9 @@ static boolean CheckerDT_treeCheck(Node_T oNNode, size_t* ptotalCount) {
                fprintf(stderr, "getNumChildren claims more children than getChild returns\n");
                return FALSE;
             }
+
+            /* add to node count */
+            (*ptotalCount)++;
    
             /* if recurring down one subtree results in a failed check
                farther down, passes the failure back up immediately */
@@ -187,7 +187,7 @@ static boolean CheckerDT_treeCheck(Node_T oNNode, size_t* ptotalCount) {
 boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
                           size_t ulCount) {
 
-   size_t totalCount;
+   size_t *totalCount;
    boolean treecheck;
 
    /* Sample check on a top-level data structure invariant:
@@ -199,18 +199,17 @@ boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
       }
 
    totalCount = 0;
-   treecheck = CheckerDT_treeCheck(oNRoot, &totalCount);
+   treecheck = CheckerDT_treeCheck(oNRoot, totalCount);
 
-   /*check if ulCount equals the total number of nodes detected*/
-   /*if (treecheck) {
-      if (ulCount > 0) {
-         if (ulCount != (totalCount)){
+   /* check if ulCount equals the total number of nodes detected*/
+    if (treecheck && ulCount > 0) {
+        fprintf(stderr, "ulCount %ld, my count %ld \n", ulCount, totalCount);
+        if (ulCount != (totalCount)){
             fprintf(stderr, "ulCount does not equal total number of nodes detected \n");
             fprintf(stderr, "ulCount is %ld, while total number of nodes detected is %ld\n", ulCount, totalCount);
             return FALSE;
-         }   
-      }  
-   }*/
+        }  
+    }
 
    /* Now checks invariants recursively at each node from the root. */
    return treecheck;
