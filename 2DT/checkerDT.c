@@ -172,7 +172,7 @@ static boolean CheckerDT_treeCheck(Node_T oNNode, size_t *ptotalCount) {
 
             /* add to node count */
             fprintf(stderr, "val of manual count %lu\n", *ptotalCount);
-            /*(*ptotalCount)++;*/
+            (*ptotalCount)++;
 
             /* if recurring down one subtree results in a failed check
                farther down, passes the failure back up immediately */
@@ -188,7 +188,7 @@ static boolean CheckerDT_treeCheck(Node_T oNNode, size_t *ptotalCount) {
 boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
                           size_t ulCount) {
 
-   size_t *totalCount = 0;
+   size_t totalCount = 0;
    boolean treecheck;
 
    /* Sample check on a top-level data structure invariant:
@@ -200,17 +200,17 @@ boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
       }
 
    totalCount = 0;
-   treecheck = CheckerDT_treeCheck(oNRoot, totalCount);
+   treecheck = CheckerDT_treeCheck(oNRoot, &totalCount);
 
    /* check if ulCount equals the total number of nodes detected*/
-    /*if (treecheck && ulCount > 0) {
-        fprintf(stderr, "ulCount %lu, my count %lu \n", ulCount, *totalCount);
-        if (ulCount != *totalCount){
+    if (treecheck && ulCount > 0) {
+        fprintf(stderr, "ulCount %lu, my count %lu \n", ulCount, totalCount);
+        if (ulCount != totalCount){
             fprintf(stderr, "ulCount does not equal total number of nodes detected \n");
-            fprintf(stderr, "ulCount is %lu, while total number of nodes detected is %lu\n", ulCount, *totalCount);
+            fprintf(stderr, "ulCount is %lu, while total number of nodes detected is %lu\n", ulCount, totalCount);
             return FALSE;
         }  
-    }*/
+    }
 
    /* Now checks invariants recursively at each node from the root. */
    return treecheck;
