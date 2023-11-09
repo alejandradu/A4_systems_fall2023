@@ -251,6 +251,9 @@ void Path_free(Path_T oPPath) {
          DynArray_free(oPPath->oDComponents);
       }
    }
+
+      fprintf("I freed the path %s", Path_getpathname(oPPath));
+
    free((struct path*) oPPath);
 }
 

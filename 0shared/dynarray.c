@@ -110,7 +110,7 @@ void DynArray_free(DynArray_T oDynArray)
    assert(oDynArray != NULL);
    assert(DynArray_isValid(oDynArray));
 
-   fprintf(stderr, "I freed the child %s", Node_toString(oDynArray));
+   fprintf(stderr, "Freed a node, uLength: %lu, physlength: %lu\n", oDynArray->uLength, oDynArray->uPhysLength);
 
    free(oDynArray->ppvArray);
    free(oDynArray);
@@ -134,7 +134,7 @@ void *DynArray_get(DynArray_T oDynArray, size_t uIndex)
    assert(uIndex < oDynArray->uLength);
    assert(DynArray_isValid(oDynArray));
 
-   fprintf(stderr, "I got the child %s", Node_toString(oDynArray));
+   fprintf(stderr, "Got a node, uLength: %lu, physlength: %lu\n", oDynArray->uLength, oDynArray->uPhysLength);
 
    return (void*)(oDynArray->ppvArray)[uIndex];
 }
