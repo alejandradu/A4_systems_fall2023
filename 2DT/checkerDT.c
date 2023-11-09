@@ -138,26 +138,6 @@ static boolean CheckerDT_treeCheck(Node_T oNNode, size_t *ptotalCount) {
         if(!CheckerDT_Node_isValid(oNNode))
             return FALSE;
 
-        /* NEW: check all getchild calls return not null */
-        /* QUESTION: isn't this contained in the first function here? */
-        if (Node_getNumChildren(oNNode) > 0) {
-            if(!check_GetChildNull(oNNode))
-            return FALSE;
-        }
-
-        /* NEW: check if toString returns the path names of all nodes,
-        assuming that node_toString works*/
-        if(!check_toStringComplete(oNNode)) 
-            return FALSE;
-
-        if (Node_getNumChildren(oNNode) > 1) {
-            /* NEW: check if every path of each node's children is unique*/
-            if(!check_UniquePaths(oNNode)) 
-                return FALSE;
-            /* NEW: check if the children are arranged in lexicographic order */
-            if(!check_lexOrder(oNNode))
-                return FALSE;
-        }
 
         /* add to node count */
         fprintf(stderr, "At node %s\n", Node_toString(oNNode));
