@@ -115,7 +115,7 @@ int main(void) {
   DT_rm("1root/2b");
 
   assert((temp = DT_toString()) != NULL);
-  fprintf(stderr, "Basic build:\n%s\n", temp);
+  fprintf(stderr, "Removed build:\n%s\n", temp);
   free(temp);
 
 
