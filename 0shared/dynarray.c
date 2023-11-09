@@ -110,7 +110,7 @@ void DynArray_free(DynArray_T oDynArray)
    assert(oDynArray != NULL);
    assert(DynArray_isValid(oDynArray));
 
-   fprintf("I freed the child %s", Node_toString(oDynArray));
+   fprintf(stderr, "I freed the child %s", Node_toString(oDynArray));
 
    free(oDynArray->ppvArray);
    free(oDynArray);
