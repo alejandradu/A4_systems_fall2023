@@ -167,7 +167,6 @@ static boolean CheckerDT_treeCheck(Node_T oNNode, size_t *ptotalCount) {
         /* WE HAVE TO DO THIS BC EACH NODE ONLY KNOWS ITS DIRECT CHILDREN */
         for(ulIndex = 0; ulIndex < Node_getNumChildren(oNNode); ulIndex++) {
             Node_T oNChild = NULL;
-            fprintf(stderr, "number of children %lu", Node_getNumChildren(oNNode));
             int iStatus = Node_getChild(oNNode, ulIndex, &oNChild);
    
             if(iStatus != SUCCESS) {
@@ -204,7 +203,7 @@ boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
    treecheck = CheckerDT_treeCheck(oNRoot, &totalCount);
 
    /* check if ulCount equals the total number of nodes detected*/
-    if (treecheck && ulCount > 0) {
+    if (treecheck && (ulCount > 0)) {
         fprintf(stderr, "ulCount %lu, my count %lu \n", ulCount, totalCount);
         if (ulCount != totalCount){
             fprintf(stderr, "ulCount does not equal total number of nodes detected \n");
