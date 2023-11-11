@@ -110,8 +110,6 @@ void DynArray_free(DynArray_T oDynArray)
    assert(oDynArray != NULL);
    assert(DynArray_isValid(oDynArray));
 
-   fprintf(stderr, "Freed a node, uLength: %lu, physlength: %lu\n", oDynArray->uLength, oDynArray->uPhysLength);
-
    free(oDynArray->ppvArray);
    free(oDynArray);
 }
@@ -134,8 +132,6 @@ void *DynArray_get(DynArray_T oDynArray, size_t uIndex)
    assert(uIndex < oDynArray->uLength);
    assert(DynArray_isValid(oDynArray));
 
-   fprintf(stderr, "Got a node, uLength: %lu, physlength: %lu\n", oDynArray->uLength, oDynArray->uPhysLength);
-
    return (void*)(oDynArray->ppvArray)[uIndex];
 }
 
@@ -147,7 +143,7 @@ void *DynArray_set(DynArray_T oDynArray, size_t uIndex,
    const void *pvOldElement;
 
    assert(oDynArray != NULL);
-   /*fprintf(stderr, "length is %ld, index is %ld\n", oDynArray->uLength, uIndex);*/
+   fprintf(stderr, "length is %ld, index is %ld\n", oDynArray->uLength, uIndex);
    assert(uIndex < oDynArray->uLength);
    assert(DynArray_isValid(oDynArray));
 
@@ -212,11 +208,12 @@ void *DynArray_removeAt(DynArray_T oDynArray, size_t uIndex)
    size_t u;
 
    assert(oDynArray != NULL);
-   /* this assert is working */
+   /* this assert is working - not trying to remove outside of list */
    assert(uIndex < oDynArray->uLength);
    assert(DynArray_isValid(oDynArray));
    
    pvOldElement = oDynArray->ppvArray[uIndex];
+   fprintf(stderr, "dynarray removed node at index %lu\n", uIndex);
 
    oDynArray->uLength--;
 
