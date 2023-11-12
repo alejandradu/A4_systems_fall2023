@@ -117,32 +117,27 @@ static boolean check_lexOrder(Node_T oNNode) {
 }
 
 
-/*static boolean CheckerDT_count(Node_T oNNode, size_t *my_index) {
+static boolean CheckerDT_count(Node_T oNNode, size_t *my_index) {
     size_t i;
+
+       if (oNNode != NULL) {
 
         for(i = 0; i< Node_getNumChildren(oNNode); i++) {
         Node_T oNChild = NULL;
         int iStatus = Node_getChild(oNNode, *my_index, &oNChild);
 
-        if(iStatus != SUCCESS) {
-               fprintf(stderr, "getNumChildren claims more children than getChild returns\n");
-               return FALSE;
-            }
-
         (*my_index)++;
 
         /* if recurring down one subtree results in a failed check
            farther down, passes the failure back up immediately */
-        /*if(!CheckerDT_count(oNChild, my_index))
-           return FALSE;
-        /* NEW: update index mimic DT_preOrderTraversal */
-        /*CheckerDT_treeCheck(oNChild, ptotalCount);
+        (void) CheckerDT_count(oNChild, my_index);
+
         }
 
-
+       }
 return TRUE;
 
-}*/
+}
 
 
 
@@ -248,17 +243,24 @@ boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
     }*/
 
    totalCount = 0;
+
+   /* INSERT INDEPENDENT TRAVERSAL HERE */
+
+   (void)CheckerDT_count(oNRoot, &totalCount);
+
+   fprintf(stderr, "total count is %lu\n", totalCount);
+
    treecheck = CheckerDT_treeCheck(oNRoot, &totalCount, ulCount);
 
    /* NEW: check if ulCount equals the total number of nodes detected*/
-    if (treecheck) {
+    /*if (treecheck) {
         fprintf(stderr, "ulCount %lu, my count %lu \n", ulCount, totalCount);
         if (ulCount != totalCount){
             fprintf(stderr, "ulCount does not equal total number of nodes detected \n");
             fprintf(stderr, "ulCount is %lu, while total number of nodes detected is %lu\n", ulCount, totalCount);
             return FALSE;
         }  
-    }
+    }*/
 
    /* Now checks invariants recursively at each node from the root. */
    return treecheck;
