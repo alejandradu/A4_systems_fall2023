@@ -104,11 +104,11 @@ int main(void) {
   assert(DT_contains("1root/2second/3grandchild/1root") == TRUE);
   assert(DT_contains("1root/2second/3second") == FALSE);
   assert(DT_rm("1root/2second/3second") == NO_SUCH_PATH);
-  fprintf(stderr, "I should have fiailed to remove something");
+  fprintf(stderr, "I should have fialed to remove something\n");
   assert(DT_contains("1root/2second/3second") == FALSE);
-  fprintf(stderr, "I tested for contains");
+  fprintf(stderr, "I tested for contains\n");
   assert(DT_rm("1root/2second") == SUCCESS);
-  fprintf(stderr, "I should have successfully removed something");
+  fprintf(stderr, "I should have successfully removed something\n");
   assert(DT_contains("1root") == TRUE);
   assert(DT_contains("1root/2child") == TRUE);
   assert(DT_contains("1root/2second") == FALSE);
