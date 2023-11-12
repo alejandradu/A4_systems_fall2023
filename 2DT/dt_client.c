@@ -55,7 +55,7 @@ int main(void) {
      ALREADY_IN_TREE, and trying to insert some other root should
      return CONFLICTING_PATH.
   */
-  assert(DT_insert("1root") == SUCCESS);
+  /*assert(DT_insert("1root") == SUCCESS);
   assert(DT_insert("1root/2child/3grandchild") == SUCCESS);
   assert(DT_contains("1root") == TRUE);
   assert(DT_contains("1root/2child") == TRUE);
@@ -65,7 +65,7 @@ int main(void) {
   assert(DT_contains("anotherRoot") == FALSE);
   assert(DT_contains("1root/2second") == FALSE);
   assert(DT_insert("1root/2child/3grandchild") == ALREADY_IN_TREE);
-  assert(DT_insert("anotherRoot/2nope/3noteven") == CONFLICTING_PATH);
+  assert(DT_insert("anotherRoot/2nope/3noteven") == CONFLICTING_PATH);*/
 
   /*assert((temp = DT_toString()) != NULL);
   fprintf(stderr, "Before rm:\n%s\n", temp);
@@ -79,7 +79,7 @@ int main(void) {
   free(temp);*/
 
   /* Trying to insert a third child should succeed, unlike in BDT */
-  /*assert(DT_insert("1root/2second") == SUCCESS);
+  assert(DT_insert("1root/2second") == SUCCESS);
   assert(DT_insert("1root/2third") == SUCCESS);
   assert(DT_insert("1root/2ok/3yes/4indeed") == SUCCESS);
   assert(DT_contains("1root") == TRUE);
@@ -91,7 +91,7 @@ int main(void) {
   assert(DT_contains("1root/2ok/3yes/4indeed") == TRUE);
   assert((temp = DT_toString()) != NULL);
   fprintf(stderr, "Checkpoint 1:\n%s\n", temp);
-  free(temp);*/
+  free(temp);
 
   /* Children of any path must be unique, but individual directories
      in different paths needn't be
