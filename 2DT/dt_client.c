@@ -109,13 +109,13 @@ int main(void) {
   free(temp);*/
 
   DT_insert("1root");
-  fprintf(stderr, "insert 1");
+  fprintf(stderr, "insert 1\n");
   DT_insert("1root/2a");
-  fprintf(stderr, "insert 2");
+  fprintf(stderr, "insert 2\n");
   DT_insert("1root/2a/3last");
-  fprintf(stderr, "insert 3");
+  fprintf(stderr, "insert 3\n");
   DT_insert("1root/2b");
-  fprintf(stderr, "insert 4");
+  fprintf(stderr, "insert 4\n");
 
 
   /* calling rm on a path that doesn't exist should return
@@ -127,7 +127,7 @@ int main(void) {
   assert(DT_rm("1root/2second/3second") == NO_SUCH_PATH);
   assert(DT_contains("1root/2second/3second") == FALSE);*/
   assert(DT_rm("1root/2a") == SUCCESS);
-  fprintf(stderr, "remove 1");
+  fprintf(stderr, "remove 1\n");
   /*assert(DT_contains("1root") == TRUE);
   assert(DT_contains("1root/2child") == TRUE);
   assert(DT_contains("1root/2second") == FALSE);
