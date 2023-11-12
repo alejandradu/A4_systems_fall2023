@@ -117,23 +117,27 @@ static boolean check_lexOrder(Node_T oNNode) {
 }
 
 
-static size_t CheckerDT_count(Node_T oNNode) {
-    size_t ulIndex;
+static boolean CheckerDT_count(Node_T oNNode, size_t *my_index) {
 
-        for(ulIndex = 0; ulIndex < Node_getNumChildren(oNNode); ulIndex++) {
+        for(*my_index = 0; *my_index < Node_getNumChildren(oNNode); (*my_index)++) {
         Node_T oNChild = NULL;
-        int iStatus = Node_getChild(oNNode, ulIndex, &oNChild);
+        int iStatus = Node_getChild(oNNode, *my_index, &oNChild);
+
+        if(iStatus != SUCCESS) {
+               fprintf(stderr, "getNumChildren claims more children than getChild returns\n");
+               return FALSE;
+            }
 
         /* if recurring down one subtree results in a failed check
            farther down, passes the failure back up immediately */
-        if(!CheckerDT_count(oNChild))
+        if(!CheckerDT_count(oNChild, my_index))
            return FALSE;
         /* NEW: update index mimic DT_preOrderTraversal */
         /*CheckerDT_treeCheck(oNChild, ptotalCount);*/
         }
 
 
-return ulIndex;
+return TRUE;
 
 }
 
@@ -160,7 +164,7 @@ static boolean CheckerDT_treeCheck(Node_T oNNode, size_t *ptotalCount, size_t ul
 
 
     if(oNNode!= NULL) {
-        my_index = CheckerDT_count(oNNode);
+        (void)CheckerDT_count(oNNode, my_index);
         fprintf(stderr,"my index is %lu\n\n", my_index);
 
         fprintf(stderr, "Node valid %s\n", Node_toString(oNNode));
