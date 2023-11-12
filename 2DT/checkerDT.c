@@ -184,6 +184,8 @@ static size_t CheckerDT_treeCheck(Node_T oNNode, size_t ptotalCount, boolean *re
                *result = FALSE;
             }
 
+            fprintf(stderr, "SECOND ulCount is %lu, index is %lu\n", ulCount, ptotalCount);
+
             /* if recurring down one subtree results in a failed check
                farther down, passes the failure back up immediately */
             if(!CheckerDT_treeCheck(oNChild, ptotalCount, result, ulCount))
