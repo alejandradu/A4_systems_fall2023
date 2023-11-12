@@ -118,8 +118,9 @@ static boolean check_lexOrder(Node_T oNNode) {
 
 
 static boolean CheckerDT_count(Node_T oNNode, size_t *my_index) {
+    size_t i;
 
-        for(*my_index = 0; *my_index < Node_getNumChildren(oNNode); (*my_index)++) {
+        for(i = 0; i< Node_getNumChildren(oNNode); i++) {
         Node_T oNChild = NULL;
         int iStatus = Node_getChild(oNNode, *my_index, &oNChild);
 
@@ -128,9 +129,11 @@ static boolean CheckerDT_count(Node_T oNNode, size_t *my_index) {
                return FALSE;
             }
 
+        (*my_index)++;
+
         /* if recurring down one subtree results in a failed check
            farther down, passes the failure back up immediately */
-        if(!CheckerDT_count(oNChild, *my_index))
+        if(!CheckerDT_count(oNChild, my_index))
            return FALSE;
         /* NEW: update index mimic DT_preOrderTraversal */
         /*CheckerDT_treeCheck(oNChild, ptotalCount);*/
