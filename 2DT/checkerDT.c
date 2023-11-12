@@ -130,8 +130,10 @@ static boolean check_lexOrder(Node_T oNNode) {
 
    THIS IS FOR LOWER-LEVEL DT FUNCTIONS
 */
-static boolean CheckerDT_treeCheck(Node_T oNNode, size_t *ptotalCount) {
+static boolean CheckerDT_treeCheck(Node_T oNNode, size_t *ptotalCount, size_t ulCount) {
    size_t ulIndex;
+
+   fprintf("before checking null, ulCount is %lu and ptotalCount is %lu\n", ulCount, *ptotalCount);
 
     if(oNNode!= NULL) {
 
@@ -246,7 +248,7 @@ boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
     }*/
 
    totalCount = 0;
-   treecheck = CheckerDT_treeCheck(oNRoot, &totalCount);
+   treecheck = CheckerDT_treeCheck(oNRoot, &totalCount, ulCount);
 
    /* NEW: check if ulCount equals the total number of nodes detected*/
     if (treecheck) {
@@ -261,3 +263,29 @@ boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
    /* Now checks invariants recursively at each node from the root. */
    return treecheck;
 }
+
+
+Node valid? 1root
+Node valid? 1root/2child
+Node valid? 1root/2child/3grandchild
+Node valid? 1root/2ok
+Node valid? 1root/2ok/3yes
+Node valid? 1root/2ok/3yes/4indeed
+Node valid? 1root/2second
+Node valid? 1root/2second/3grandchild
+Node valid? 1root/2second/3grandchild/1root
+Node valid? 1root/2third
+ulCount 10, my count 10 
+Node valid? 1root
+Node valid? 1root/2child
+Node valid? 1root/2child/3grandchild
+Node valid? 1root/2ok
+Node valid? 1root/2ok/3yes
+Node valid? 1root/2ok/3yes/4indeed
+Node valid? 1root/2second
+Node valid? 1root/2second/3grandchild
+Node valid? 1root/2second/3grandchild/1root
+Node valid? 1root/2third
+ulCount 10, my count 10 
+
+THE ROOT IS NULL
