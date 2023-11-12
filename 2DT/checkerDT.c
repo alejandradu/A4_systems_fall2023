@@ -17,7 +17,6 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
    Node_T oNParent;
    Path_T oPNPath;
    Path_T oPPPath;
-   char * stringVersion;
 
    /* Sample check: a NULL pointer is not a valid node */
    if(oNNode == NULL) {
