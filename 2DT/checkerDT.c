@@ -134,6 +134,7 @@ static boolean CheckerDT_treeCheck(Node_T oNNode, size_t *ptotalCount, size_t ul
    size_t ulIndex;
 
     if (oNNode == NULL) {
+        fprintf(stderr, "in a null node, count is %lu\n", ulCount);
         if (ulCount != 0) {
             fprintf(stderr, "ulCount is not 0, but the node is NULL\n");
             return FALSE;
@@ -142,7 +143,7 @@ static boolean CheckerDT_treeCheck(Node_T oNNode, size_t *ptotalCount, size_t ul
 
     if(oNNode!= NULL) {
 
-        fprintf(stderr, "Node valid? %s\n", Node_toString(oNNode));
+        fprintf(stderr, "Node valid %s\n", Node_toString(oNNode));
 
         /* Sample check on each node: node must be valid */
         /* If not, pass that failure back up immediately */
