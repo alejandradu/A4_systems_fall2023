@@ -38,6 +38,14 @@ int Node_new(Path_T oPPath, Node_T oNParent, boolean isFile, void* FileContent, 
 /* Takes in a Node and returns True if it is a file, false if it is a directory*/
 boolean Node_isFile(Node_T oNNode);
 
+
+/*
+  Replaces current contents of the file at the node oNNode with new FileContent 
+  Returns the old contents if successful. (Note: contents may be NULL.)
+  Returns NULL if unable to complete the request for any reason.
+*/
+void *Node_ReplaceFileContent (Node_T oNNode, void* NewFileContent);
+
 /*
   Destroys and frees all memory allocated for the subtree rooted at
   oNNode, i.e., deletes this node and all its descendents. Returns the
