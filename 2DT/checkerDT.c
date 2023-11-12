@@ -240,8 +240,6 @@ boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
    totalCount = 0;
    treecheck = CheckerDT_treeCheck(oNRoot, &totalCount);
 
-   fprintf(stderr, "ulCount %lu, my count %lu \n", ulCount, totalCount);
-
    /* NEW: check if ulCount equals the total number of nodes detected*/
     /*if (treecheck && (ulCount > 0)) {
         fprintf(stderr, "ulCount %lu, my count %lu \n", ulCount, totalCount);
@@ -251,7 +249,7 @@ boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
             return FALSE;
         }  
     }*/
-    
+
    /* Now checks invariants recursively at each node from the root. */
    return treecheck;
 }

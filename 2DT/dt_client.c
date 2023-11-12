@@ -32,11 +32,11 @@ int main(void) {
      and toString should return the empty string.
   */
   assert(DT_init() == SUCCESS);
-  /*assert(DT_contains("") == FALSE);
+  assert(DT_contains("") == FALSE);
   assert(DT_contains("1root") == FALSE);
   assert((temp = DT_toString()) != NULL);
   assert(!strcmp(temp,""));
-  free(temp);*/
+  free(temp);
 
   /* A valid path must not:
      * be the empty string
@@ -55,7 +55,7 @@ int main(void) {
      ALREADY_IN_TREE, and trying to insert some other root should
      return CONFLICTING_PATH.
   */
-  /*assert(DT_insert("1root") == SUCCESS);
+  assert(DT_insert("1root") == SUCCESS);
   assert(DT_insert("1root/2child/3grandchild") == SUCCESS);
   assert(DT_contains("1root") == TRUE);
   assert(DT_contains("1root/2child") == TRUE);
@@ -65,7 +65,7 @@ int main(void) {
   assert(DT_contains("anotherRoot") == FALSE);
   assert(DT_contains("1root/2second") == FALSE);
   assert(DT_insert("1root/2child/3grandchild") == ALREADY_IN_TREE);
-  assert(DT_insert("anotherRoot/2nope/3noteven") == CONFLICTING_PATH);*/
+  assert(DT_insert("anotherRoot/2nope/3noteven") == CONFLICTING_PATH);
 
   /*assert((temp = DT_toString()) != NULL);
   fprintf(stderr, "Before rm:\n%s\n", temp);
@@ -79,7 +79,7 @@ int main(void) {
   free(temp);*/
 
   /* Trying to insert a third child should succeed, unlike in BDT */
-  /*assert(DT_insert("1root/2second") == SUCCESS);
+  assert(DT_insert("1root/2second") == SUCCESS);
   assert(DT_insert("1root/2third") == SUCCESS);
   assert(DT_insert("1root/2ok/3yes/4indeed") == SUCCESS);
   assert(DT_contains("1root") == TRUE);
@@ -91,12 +91,12 @@ int main(void) {
   assert(DT_contains("1root/2ok/3yes/4indeed") == TRUE);
   assert((temp = DT_toString()) != NULL);
   fprintf(stderr, "Checkpoint 1:\n%s\n", temp);
-  free(temp);*/
+  free(temp);
 
   /* Children of any path must be unique, but individual directories
      in different paths needn't be
   */
-  /*assert(DT_insert("1root/2child/3grandchild") == ALREADY_IN_TREE);
+  assert(DT_insert("1root/2child/3grandchild") == ALREADY_IN_TREE);
   assert(DT_contains("1root/2second/3grandchild") == FALSE);
   assert(DT_insert("1root/2second/3grandchild") == SUCCESS);
   assert(DT_contains("1root/2child/3grandchild") == TRUE);
@@ -106,39 +106,38 @@ int main(void) {
   assert(DT_contains("1root/2second/3grandchild/1root") == TRUE);
   assert((temp = DT_toString()) != NULL);
   fprintf(stderr, "Checkpoint 2:\n%s\n", temp);
-  free(temp);*/
+  free(temp);
 
-  DT_insert("1root");
+  /*DT_insert("1root");
   fprintf(stderr, "insert 1\n");
   DT_insert("1root/2a");
   fprintf(stderr, "insert 2\n");
   DT_insert("1root/2a/3last");
   fprintf(stderr, "insert 3\n");
   DT_insert("1root/2b");
-  fprintf(stderr, "insert 4\n");
+  fprintf(stderr, "insert 4\n");*/
 
 
   /* calling rm on a path that doesn't exist should return
      NO_SUCH_PATH, but on a path that does exist should return
      SUCCESS and remove entire subtree rooted at that path
   */
-  /*assert(DT_contains("1root/2second/3grandchild/1root") == TRUE);
+  assert(DT_contains("1root/2second/3grandchild/1root") == TRUE);
   assert(DT_contains("1root/2second/3second") == FALSE);
   assert(DT_rm("1root/2second/3second") == NO_SUCH_PATH);
-  assert(DT_contains("1root/2second/3second") == FALSE);*/
-  assert(DT_rm("1root/2a") == SUCCESS);
-  fprintf(stderr, "remove 1\n");
-  /*assert(DT_contains("1root") == TRUE);
+  assert(DT_contains("1root/2second/3second") == FALSE);
+  assert(DT_rm("1root/2second") == SUCCESS);
+  assert(DT_contains("1root") == TRUE);
   assert(DT_contains("1root/2child") == TRUE);
   assert(DT_contains("1root/2second") == FALSE);
   assert(DT_contains("1root/2second/3grandchild") == FALSE);
   assert(DT_contains("1root/2second/3grandchild/1root") == FALSE);
   assert((temp = DT_toString()) != NULL);
   fprintf(stderr, "Checkpoint 3:\n%s\n", temp);
-  free(temp);*/
+  free(temp);
 
   /* removing the root doesn't uninitialize the structure */
-  /*assert(DT_rm("1anotherroot") == CONFLICTING_PATH);
+  assert(DT_rm("1anotherroot") == CONFLICTING_PATH);
   assert(DT_rm("1root") == SUCCESS);
   assert(DT_contains("1root/2child") == FALSE);
   assert(DT_contains("1root") == FALSE);
@@ -146,7 +145,7 @@ int main(void) {
   assert(DT_rm("1anotherroot") == NO_SUCH_PATH);
   assert((temp = DT_toString()) != NULL);
   assert(!strcmp(temp,""));
-  free(temp);*/
+  free(temp);
 
   /* children should be printed in lexicographic order, depth first */
 
@@ -154,7 +153,7 @@ int main(void) {
      assert(!strcmp(...)) line in the code below:
      fprintf(stderr, "Checkpoint Promotion:\n%s\n", temp);
   */
-  /*assert(DT_insert("a/y") == SUCCESS);
+  assert(DT_insert("a/y") == SUCCESS);
   assert((temp = DT_toString()) != NULL);
   assert(!strcmp(temp,"a\na/y\n"));
   free(temp);
@@ -185,7 +184,7 @@ int main(void) {
   assert(DT_destroy() == SUCCESS);
   assert(DT_destroy() == INITIALIZATION_ERROR);
   assert(DT_contains("a") == FALSE);
-  assert((temp = DT_toString()) == NULL);*/
+  assert((temp = DT_toString()) == NULL);
 
   return 0;
 }
