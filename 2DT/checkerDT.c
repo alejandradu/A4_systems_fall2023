@@ -160,6 +160,7 @@ static boolean CheckerDT_treeCheck(Node_T oNNode, size_t *ptotalCount, size_t ul
     /* NEW: check minimal size */
     if (oNNode == NULL && ulCount != 0) {
         fprintf(stderr, "ulCount is not 0, but the node is NULL\n");
+        return FALSE;
     }
 
     if(oNNode!= NULL) {
@@ -172,7 +173,24 @@ static boolean CheckerDT_treeCheck(Node_T oNNode, size_t *ptotalCount, size_t ul
         /* add to node count */
         (*ptotalCount)++;
 
-        /* NEW: check all getchild calls return not null */
+        /* Recur on every child of oNNode */
+        for(ulIndex = 0; ulIndex < Node_getNumChildren(oNNode); ulIndex++) {
+            Node_T oNChild = NULL;
+            int iStatus = Node_getChild(oNNode, ulIndex, &oNChild);
+   
+            if(iStatus != SUCCESS) {
+               fprintf(stderr, "getNumChildren claims more children than getChild returns\n");
+               return FALSE;
+            }
+
+            /* if recurring down one subtree results in a failed check
+               farther down, passes the failure back up immediately */
+            if(!CheckerDT_treeCheck(oNChild, ptotalCount, ulCount))
+               return FALSE;
+        }
+
+
+                /* NEW: check all getchild calls return not null */
         /* QUESTION: isn't this contained in the first function here? */
         if (Node_getNumChildren(oNNode) > 0) {
             if(!check_GetChildNull(oNNode))
@@ -193,27 +211,11 @@ static boolean CheckerDT_treeCheck(Node_T oNNode, size_t *ptotalCount, size_t ul
                 return FALSE;
         }
 
-        /* Recur on every child of oNNode */
-        for(ulIndex = 0; ulIndex < Node_getNumChildren(oNNode); ulIndex++) {
-            Node_T oNChild = NULL;
-            int iStatus = Node_getChild(oNNode, ulIndex, &oNChild);
-   
-            if(iStatus != SUCCESS) {
-               fprintf(stderr, "getNumChildren claims more children than getChild returns\n");
-               return FALSE;
-            }
+    return TRUE;
 
-            /* if recurring down one subtree results in a failed check
-               farther down, passes the failure back up immediately */
-            if(!CheckerDT_treeCheck(oNChild, ptotalCount, ulCount))
-               return FALSE;
-
-            /* NEW: update index mimic DT_preOrderTraversal */
-            /*CheckerDT_treeCheck(oNChild, ptotalCount);*/
-      }
-   }
-   return TRUE;
+    }
 }
+
 
 
 boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
