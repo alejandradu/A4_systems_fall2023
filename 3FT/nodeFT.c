@@ -181,6 +181,10 @@ int Node_new(Path_T oPPath, Node_T oNParent, boolean isFile, void* FileContent, 
    return SUCCESS;
 }
 
+boolean Node_isFile(Node_T oNNode) {
+    assert(oNNode != NULL);
+    return oNNode->isFile;
+}
 
 boolean Node_hasChild(Node_T oNParent, Path_T oPPath, boolean *pisFile,
                          size_t *pulChildID) {

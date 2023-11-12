@@ -35,6 +35,9 @@ typedef struct node *Node_T;
 */
 int Node_new(Path_T oPPath, Node_T oNParent, boolean isFile, void* FileContent, Node_T *poNResult);
 
+/* Takes in a Node and returns True if it is a file, false if it is a directory*/
+boolean Node_isFile(Node_T oNNode);
+
 /*
   Destroys and frees all memory allocated for the subtree rooted at
   oNNode, i.e., deletes this node and all its descendents. Returns the
