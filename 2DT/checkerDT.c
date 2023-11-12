@@ -173,15 +173,14 @@ boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
 
    /* Now checks invariants recursively at each node from the root. */
    totalCount = 0;
-   if (CheckerDT_treeCheck(oNRoot, &totalCount)) {
-      fprintf(stderr, "!!total number of nodes detected is %ld \n", totalCount);
-      printf("!!at this point, ulCount is %ld\n",ulCount);
-      /*check if ulCount equals the total number of nodes detected*/
-      if (ulCount != (totalCount)){
-         fprintf(stderr, "ulCount does not equal total number of nodes detected \n");
-         fprintf(stderr, "ulCount is %ld, while total number of nodes detected is %ld\n", ulCount, totalCount);
-         return FALSE;
-      }  
+   (void)CheckerDT_treeCheck(oNRoot, &totalCount);
+   fprintf(stderr, "!!total number of nodes detected is %ld \n", totalCount);
+   printf("!!at this point, ulCount is %ld\n",ulCount);
+   /*check if ulCount equals the total number of nodes detected*/
+   if (ulCount != (totalCount)){
+      fprintf(stderr, "ulCount does not equal total number of nodes detected \n");
+      fprintf(stderr, "ulCount is %ld, while total number of nodes detected is %ld\n", ulCount, totalCount);
+      return FALSE;
    }  
 
    if (!CheckerDT_treeCheck(oNRoot, &totalCount)) {
