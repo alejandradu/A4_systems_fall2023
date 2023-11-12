@@ -170,10 +170,6 @@ static boolean CheckerDT_treeCheck(Node_T oNNode, size_t *ptotalCount, size_t ul
         if(!CheckerDT_Node_isValid(oNNode))
             return FALSE;
 
-        /* add to node count */
-        (*ptotalCount)++;
-        fprintf(stderr, "LOOK ulCount is %lu, index is %lu\n", ulCount, *ptotalCount);
-
 
           /* NEW: check all getchild calls return not null */
         /* QUESTION: isn't this contained in the first function here? */
@@ -211,6 +207,12 @@ static boolean CheckerDT_treeCheck(Node_T oNNode, size_t *ptotalCount, size_t ul
                farther down, passes the failure back up immediately */
             if(!CheckerDT_treeCheck(oNChild, ptotalCount, ulCount))
                return FALSE;
+
+
+        /* add to node count */
+        (*ptotalCount)++;
+        fprintf(stderr, "LOOK ulCount is %lu, index is %lu\n", ulCount, *ptotalCount);
+
         }
 
     }
