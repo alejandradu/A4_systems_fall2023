@@ -167,7 +167,7 @@ boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
          return FALSE;
       }
    
-   if (oNRoot = NULL) {
+   if (oNRoot == NULL) {
       if(ulCount != 0) {
          fprintf(stderr, "Root is NULL, but count is not 0\n");
          return FALSE;
