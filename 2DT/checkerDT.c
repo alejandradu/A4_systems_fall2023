@@ -133,7 +133,7 @@ static boolean check_lexOrder(Node_T oNNode) {
 static boolean CheckerDT_treeCheck(Node_T oNNode, size_t *ptotalCount, size_t ulCount) {
    size_t ulIndex;
 
-   fprintf("before checking null, ulCount is %lu and ptotalCount is %lu\n", ulCount, *ptotalCount);
+   fprintf(stderr, "before checking null, ulCount is %lu and ptotalCount is %lu\n", ulCount, *ptotalCount);
 
     if(oNNode!= NULL) {
 
