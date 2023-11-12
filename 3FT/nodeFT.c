@@ -37,7 +37,8 @@ int Node_new(Path_T oPPath, Node_T oNParent, boolean isFile, void* FileContent, 
    int iStatus;
 
    assert(oPPath != NULL);
-   assert(oNParent == NULL || CheckerDT_Node_isValid(oNParent));
+   assert(oNParent == NULL);
+   assert(isFile != NULL);
 
    /* allocate space for a new node */
    psNew = malloc(sizeof(struct node));
@@ -100,14 +101,6 @@ int Node_new(Path_T oPPath, Node_T oNParent, boolean isFile, void* FileContent, 
    psNew->oNParent = oNParent;
 
    /* initialize the new node */
-   psNew->oDChildren = DynArray_new(0);
-   if(psNew->oDChildren == NULL) {
-      Path_free(psNew->oPPath);
-      free(psNew);
-      *poNResult = NULL;
-      return MEMORY_ERROR;
-   }
-
    /* Link into parent's children list */
    if(oNParent != NULL) {
       iStatus = Node_addChild(oNParent, psNew, ulIndex);
@@ -126,14 +119,27 @@ int Node_new(Path_T oPPath, Node_T oNParent, boolean isFile, void* FileContent, 
     psNew->FileContent = FileContent;
     psNew->oDChildren = NULL;
     psNew->oFChildren = NULL;
+   } else {
+        psNew->oDChildren = DynArray_new(0);
+        if(psNew->oDChildren == NULL) {
+            Path_free(psNew->oPPath);
+            free(psNew);
+            *poNResult = NULL;
+            return MEMORY_ERROR;
+        }
+        psNew->oFChildren = DynArray_new(0);
+        if(psNew->oFChildren == NULL) {
+            Path_free(psNew->oPPath);
+            free(psNew);
+            *poNResult = NULL;
+            return MEMORY_ERROR;
+        }
+        psNew->FileContent = NULL;
    }
-
-   
 
    *poNResult = psNew;
 
-   assert(oNParent == NULL || CheckerDT_Node_isValid(oNParent));
-   assert(CheckerDT_Node_isValid(*poNResult));
+   assert(oNParent == NULL);
 
    return SUCCESS;
 }
