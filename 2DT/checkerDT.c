@@ -158,6 +158,8 @@ static boolean CheckerDT_treeCheck(Node_T oNNode, size_t *ptotalCount, size_t ul
    size_t ulIndex;
    size_t my_index;
 
+   fprintf(stderr, "in ANY node, count is %lu\n", ulCount);
+
     if (oNNode == NULL) {
         fprintf(stderr, "in NULL node, count is %lu\n", ulCount);
     }
