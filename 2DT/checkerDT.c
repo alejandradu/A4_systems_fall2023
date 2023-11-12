@@ -184,7 +184,7 @@ boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
       }  
    }  
 
-   if (!CheckerDT_treeCheck) {
+   if (!CheckerDT_treeCheck(oNRoot, &totalCount)) {
       return FALSE;
    }
    
