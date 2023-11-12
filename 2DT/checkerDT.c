@@ -160,6 +160,7 @@ boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
    boolean treecheck;
 
    fprintf(stderr,"if this shows up then removed called checkerDT_isValid\n");
+   printf("at this point, ulCount is %ld\n",ulCount);
 
    /* Sample check on a top-level data structure invariant:
       if the DT is not initialized, its count should be 0. */
@@ -172,9 +173,9 @@ boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
 
    /* Now checks invariants recursively at each node from the root. */
    totalCount = 0;
-   treecheck= CheckerDT_treeCheck(oNRoot, &totalCount);
+   treecheck = CheckerDT_treeCheck(oNRoot, &totalCount);
    
-   printf("at this point, ulCount is %ld\n",ulCount);
+   
    fprintf(stderr, "total number of nodes detected is %ld \n", totalCount);
 
    /*check if ulCount equals the total number of nodes detected*/
