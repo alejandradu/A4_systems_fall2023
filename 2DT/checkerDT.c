@@ -184,7 +184,7 @@ static size_t CheckerDT_treeCheck(Node_T oNNode, size_t ptotalCount, boolean *re
       }
    }
 
-   fprintf(stderr, "ulCount (from isValid) %lu, my count (from treecheck) %lu \n", ulCount, ptotalCount);
+   /* fprintf(stderr, "ulCount (from isValid) %lu, my count (from treecheck) %lu \n", ulCount, ptotalCount);*/
 
    return ptotalCount;
 }
@@ -205,7 +205,7 @@ boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
       }
 
 
-   /*fprintf(stderr, "ulCount %lu, my count %lu \n", ulCount, totalCount);*/
+   fprintf(stderr, "ulCount %lu, my count %lu \n", ulCount, totalCount);
 
    totalCount = CheckerDT_treeCheck(oNRoot, totalCount, &treecheck_result, ulCount);
 
