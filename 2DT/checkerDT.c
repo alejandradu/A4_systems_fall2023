@@ -163,7 +163,6 @@ boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
    size_t totalCount;
    boolean treecheck;
 
-   printf("at this point, ulCount is %ld\n",ulCount);
    /* Sample check on a top-level data structure invariant:
       if the DT is not initialized, its count should be 0. */
    if(!bIsInitialized)
@@ -177,6 +176,9 @@ boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
    totalCount = 0;
    treecheck= CheckerDT_treeCheck(oNRoot, &totalCount);
    
+   printf("at this point, ulCount is %ld\n",ulCount);
+   fprintf(stderr, "total number of nodes detected is %ld \n", totalCount);
+
    /*check if ulCount equals the total number of nodes detected*/
       if (ulCount != (totalCount)){
          fprintf(stderr, "ulCount does not equal total number of nodes detected \n");
