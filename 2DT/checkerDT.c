@@ -190,12 +190,14 @@ static boolean CheckerDT_treeCheck(Node_T oNNode) {
 
 
         /* Recur on every child of oNNode */
-        for(ulIndex = 0; ulIndex < Node_getNumChildren(oNNode); ulIndex++) {
+        for(ulIndex = 0; ulIndex < Node_getNumChildren(oNNode); 
+            ulIndex++) {
             Node_T oNChild = NULL;
             int iStatus = Node_getChild(oNNode, ulIndex, &oNChild);
    
             if(iStatus != SUCCESS) {
-               fprintf(stderr, "getNumChildren claims more children than getChild returns\n");
+               fprintf(stderr, "getNumChildren claims more"
+                                    "children than getChild returns\n");
                return FALSE;
             }
 
