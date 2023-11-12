@@ -7,8 +7,9 @@
 #include <assert.h>
 #include <string.h>
 #include "dynarray.h"
-#include "nodeDT.h"
-#include "checkerDT.h"
+#include "nodeFT.h"
+#include "a4def.h"
+#include "path.h"
 
 /* A node in a FT */
 struct node {
