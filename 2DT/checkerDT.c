@@ -130,7 +130,7 @@ static boolean check_lexOrder(Node_T oNNode) {
 
    THIS IS FOR LOWER-LEVEL DT FUNCTIONS
 */
-static size_t CheckerDT_treeCheck(Node_T oNNode, size_t ptotalCount, boolean *result) {
+static size_t CheckerDT_treeCheck(Node_T oNNode, size_t ptotalCount, boolean *result, size_t ulCount) {
    size_t ulIndex;
 
     if(oNNode!= NULL && *result != FALSE) {
@@ -176,13 +176,16 @@ static size_t CheckerDT_treeCheck(Node_T oNNode, size_t ptotalCount, boolean *re
 
             /* if recurring down one subtree results in a failed check
                farther down, passes the failure back up immediately */
-            if(!CheckerDT_treeCheck(oNChild, ptotalCount, result))
+            if(!CheckerDT_treeCheck(oNChild, ptotalCount, result, ulCount))
                *result = FALSE;
 
             /* NEW: update index mimic DT_preOrderTraversal */
-            ptotalCount = CheckerDT_treeCheck(oNChild, ptotalCount, result);
+            ptotalCount = CheckerDT_treeCheck(oNChild, ptotalCount, result, ulCount);
       }
    }
+
+   fprintf(stderr, "ulCount (from isValid) %lu, my count (from treecheck) %lu \n", ulCount, ptotalCount);
+
    return ptotalCount;
 }
 
@@ -202,9 +205,9 @@ boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
       }
 
 
-   fprintf(stderr, "ulCount %lu, my count %lu \n", ulCount, totalCount);
+   /*fprintf(stderr, "ulCount %lu, my count %lu \n", ulCount, totalCount);*/
 
-   totalCount = CheckerDT_treeCheck(oNRoot, totalCount, &treecheck_result);
+   totalCount = CheckerDT_treeCheck(oNRoot, totalCount, &treecheck_result, ulCount);
 
    /* NEW: check if ulCount equals the total number of nodes detected*/
    if (ulCount != totalCount){
