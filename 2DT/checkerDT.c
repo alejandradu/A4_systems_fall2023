@@ -117,7 +117,7 @@ static boolean check_lexOrder(Node_T oNNode) {
 }
 
 
-static boolean CheckerDT_count(Node_T oNNode, size_t *my_index) {
+/*static boolean CheckerDT_count(Node_T oNNode, size_t *my_index) {
     size_t i;
 
         for(i = 0; i< Node_getNumChildren(oNNode); i++) {
@@ -136,13 +136,13 @@ static boolean CheckerDT_count(Node_T oNNode, size_t *my_index) {
         if(!CheckerDT_count(oNChild, my_index))
            return FALSE;
         /* NEW: update index mimic DT_preOrderTraversal */
-        /*CheckerDT_treeCheck(oNChild, ptotalCount);*/
+        /*CheckerDT_treeCheck(oNChild, ptotalCount);
         }
 
 
 return TRUE;
 
-}
+}*/
 
 
 
@@ -168,7 +168,7 @@ static boolean CheckerDT_treeCheck(Node_T oNNode, size_t *ptotalCount, size_t ul
 
     if(oNNode!= NULL) {
         (void)CheckerDT_count(oNNode, my_index);
-        fprintf(stderr,"my index is %lu\n\n", my_index);
+        fprintf(stderr,"my index is %lu\n\n", ulIndex);
 
         fprintf(stderr, "Node valid %s\n", Node_toString(oNNode));
 
