@@ -12,7 +12,6 @@
 #include "dt.h"
 
 
-
 boolean CheckerDT_Node_isValid(Node_T oNNode) {
    Node_T oNParent;
    Path_T oPNPath;
@@ -38,17 +37,16 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
          return FALSE;
       }
    }
-
-   /* NEW: if the path */
-
    return TRUE;
 }
 
-/* NEW: check all getchild calls return not null */
+/* Validate Node_getChild calls
+*  Return TRUE if all assigned pointers to children are not
+*  null, return false otherwise */
 static boolean check_GetChildNull(Node_T oNNode) {
     Node_T oNChild = NULL;
     size_t ulIndex = 0;
-    for (ulIndex = 0; ulIndex < Node_getNumChildren(oNNode); ulIndex++) {
+    for (ulIndex = 0; ulIndex < Node_getNumChildren(oNNode); ulIndex++){
         Node_getChild(oNNode, ulIndex, &oNChild);
         if (oNChild == NULL) {
             fprintf(stderr, "Detected a NULL node \n");
@@ -58,36 +56,43 @@ static boolean check_GetChildNull(Node_T oNNode) {
     return TRUE;
 }
 
-/* NEW: check if toString returns the path names of all nodes,
-assuming that node_toString works*/
+/* Validate toString calls
+* Assumes that node_toString works. Return TRUE if the string
+* representation of the tree contains the string representation
+* of all nodes. Return FALSE otherwise */
 static boolean check_toStringComplete(Node_T oNNode) {
     char *stringContain;
-    stringContain= strstr((const char*)DT_toString(), Node_toString(oNNode)); 
+    stringContain= strstr((const char*)DT_toString(), 
+        Node_toString(oNNode)); 
     if (stringContain == NULL) {
-        fprintf(stderr, "DT_toString does not print all the nodes in the DT\n");
+        fprintf(stderr,
+         "DT_toString does not print all the nodes in the DT\n");
         return FALSE;
     }
     return TRUE;
 }
 
-/* NEW: check if every path of each node's children is unique */
+/* Validate uniqueness of paths */
 static boolean check_UniquePaths(Node_T oNNode) {
     size_t ulIndex;
     size_t ulIndex2;
 
-    for (ulIndex = 0; ulIndex < Node_getNumChildren(oNNode)-1; ulIndex++) {
+    for (ulIndex = 0; ulIndex < Node_getNumChildren(oNNode)-1; 
+         ulIndex++) {
         Node_T oNChild = NULL;
         Path_T pathChild1 = NULL;
         Node_getChild(oNNode, ulIndex, &oNChild);
         pathChild1 = Node_getPath(oNChild);
-        /* do pairwise comparisons */
-        for (ulIndex2 = ulIndex +1; ulIndex2 < Node_getNumChildren(oNNode); ulIndex2++){
+        /* compare paths against all other children */
+        for (ulIndex2 = ulIndex +1; 
+             ulIndex2 < Node_getNumChildren(oNNode); ulIndex2++){
            Node_T oNChild2 = NULL;
            Path_T pathChild2 = NULL;
            Node_getChild(oNNode, ulIndex2, &oNChild2);
            pathChild2 = Node_getPath(oNChild2);
             if (!Path_comparePath(pathChild1, pathChild2)){
-                fprintf(stderr, "Detected two identical paths in the DT\n");
+                fprintf(stderr, 
+                        "Detected two identical paths in the DT\n");
                 return FALSE;
             }
         }
@@ -95,11 +100,12 @@ static boolean check_UniquePaths(Node_T oNNode) {
     return TRUE;
 }
 
-/* NEW: check if the children are arranged in lexicographic order */
+/* Validate lexicographic order of children */
 static boolean check_lexOrder(Node_T oNNode) {
     size_t ulIndex;
 
-    for (ulIndex = 0; ulIndex < Node_getNumChildren(oNNode)-1; ulIndex++) {
+    for (ulIndex = 0; ulIndex < Node_getNumChildren(oNNode)-1;
+         ulIndex++) {
         Node_T oNChild1 = NULL;
         Path_T pathChild1 = NULL;
         Node_T oNChild2 = NULL;
@@ -109,7 +115,8 @@ static boolean check_lexOrder(Node_T oNNode) {
         pathChild1 = Node_getPath(oNChild1);
         pathChild2 = Node_getPath(oNChild2);
         if (Path_comparePath(pathChild1, pathChild2)>0){
-           fprintf(stderr, "Children are not arranged in lexicographic order\n");
+           fprintf(stderr, 
+                  "Children are not arranged in lexicographic order\n");
            return FALSE;
         }
     }
@@ -117,7 +124,9 @@ static boolean check_lexOrder(Node_T oNNode) {
 }
 
 
-size_t countValidNodes(Node_T oNRoot) {
+/* Count the number of valid nodes in a tree rooted at oNRoot
+* recursively. Is not affected by the length field of the DT */
+static size_t countValidNodes(Node_T oNRoot) {
     size_t count = 0;
     size_t i;
 
@@ -148,23 +157,9 @@ size_t countValidNodes(Node_T oNRoot) {
    Performs a pre-order traversal of the tree rooted at oNNode.
    Returns FALSE if a broken invariant is found and
    returns TRUE otherwise.
-
-   You may want to change this function's return type or
-   parameter list to facilitate constructing your checks.
-   If you do, you should update this function comment.
-
-   TODO: change function description
-
-   THIS IS FOR LOWER-LEVEL DT FUNCTIONS
 */
-static boolean CheckerDT_treeCheck(Node_T oNNode, size_t *ptotalCount, size_t ulCount) {
+static boolean CheckerDT_treeCheck(Node_T oNNode) {
    size_t ulIndex;
-
-    /* NEW: check minimal size */
-    if (oNNode == NULL && ulCount != 0) {
-        fprintf(stderr, "ulCount is not 0, but the node is NULL\n");
-        return FALSE;
-    }
 
     if(oNNode!= NULL) {
 
@@ -173,23 +168,22 @@ static boolean CheckerDT_treeCheck(Node_T oNNode, size_t *ptotalCount, size_t ul
         if(!CheckerDT_Node_isValid(oNNode))
             return FALSE;
 
-          /* NEW: check all getchild calls return not null */
-        /* QUESTION: isn't this contained in the first function here? */
+        /* check all getchild calls return not null */
         if (Node_getNumChildren(oNNode) > 0) {
             if(!check_GetChildNull(oNNode))
             return FALSE;
         }
 
-        /* NEW: check if toString returns the path names of all nodes,
+        /* check if toString returns the path names of all nodes,
         assuming that node_toString works*/
         if(!check_toStringComplete(oNNode)) 
             return FALSE;
 
         if (Node_getNumChildren(oNNode) > 1) {
-            /* NEW: check if every path of each node's children is unique*/
+            /* check if every path of each node's children is unique*/
             if(!check_UniquePaths(oNNode)) 
                 return FALSE;
-            /* NEW: check if the children are arranged in lexicographic order */
+            /* check if the children are in lexicographic order */
             if(!check_lexOrder(oNNode))
                 return FALSE;
         }
@@ -207,7 +201,7 @@ static boolean CheckerDT_treeCheck(Node_T oNNode, size_t *ptotalCount, size_t ul
 
             /* if recurring down one subtree results in a failed check
                farther down, passes the failure back up immediately */
-            if(!CheckerDT_treeCheck(oNChild, ptotalCount, ulCount))
+            if(!CheckerDT_treeCheck(oNChild))
                return FALSE;
 
         }
@@ -221,11 +215,7 @@ static boolean CheckerDT_treeCheck(Node_T oNNode, size_t *ptotalCount, size_t ul
 boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
                           size_t ulCount) {
 
-   size_t totalCount = 0;
-   boolean treecheck;
-   DynArray_T d;
-   boolean preOrderCheck = TRUE;
-   size_t i;
+   size_t totalCount;
 
    /* Sample check on a top-level data structure invariant:
       if the DT is not initialized, its count should be 0. */
@@ -235,14 +225,22 @@ boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
          return FALSE;
       }
 
-    /* do own traversal */
+    /* check minimal size */
+    if (oNRoot == NULL && ulCount != 0) {
+        fprintf(stderr, "ulCount is not 0, but the root is NULL\n");
+        return FALSE;
+    }
+
+    /* NEW: check length field agrees with node count */
     totalCount = countValidNodes(oNRoot);
     if (totalCount != ulCount) {
-        fprintf(stderr, "ulCount does not equal total number of nodes detected \n");
-        fprintf(stderr, "ulCount is %lu, while total number of nodes detected is %lu\n", ulCount, totalCount);
+        fprintf(stderr, 
+          "DT length does not equal total number of nodes detected \n");
+        fprintf(stderr, "Length: %lu. Nodes detected: %lu\n",
+                ulCount, totalCount);
         return FALSE;
     }   
 
    /* Now checks invariants recursively at each node from the root. */
-   return CheckerDT_treeCheck(oNRoot, &totalCount, ulCount);
+   return CheckerDT_treeCheck(oNRoot);
 }
