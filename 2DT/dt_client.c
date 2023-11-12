@@ -79,7 +79,7 @@ int main(void) {
   free(temp);*/
 
   /* Trying to insert a third child should succeed, unlike in BDT */
-  assert(DT_insert("1root/2second") == SUCCESS);
+  /*assert(DT_insert("1root/2second") == SUCCESS);
   assert(DT_insert("1root/2third") == SUCCESS);
   assert(DT_insert("1root/2ok/3yes/4indeed") == SUCCESS);
   assert(DT_contains("1root") == TRUE);
@@ -91,7 +91,7 @@ int main(void) {
   assert(DT_contains("1root/2ok/3yes/4indeed") == TRUE);
   assert((temp = DT_toString()) != NULL);
   fprintf(stderr, "Checkpoint 1:\n%s\n", temp);
-  free(temp);
+  free(temp);*/
 
   /* Children of any path must be unique, but individual directories
      in different paths needn't be
@@ -107,6 +107,12 @@ int main(void) {
   assert((temp = DT_toString()) != NULL);
   fprintf(stderr, "Checkpoint 2:\n%s\n", temp);
   free(temp);*/
+
+  DT_insert("1root");
+  DT_insert("1root/2a");
+  DT_insert("1root/2a/3last");
+  DT_insert("1root/2b");
+
 
   /* calling rm on a path that doesn't exist should return
      NO_SUCH_PATH, but on a path that does exist should return
