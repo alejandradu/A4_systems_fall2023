@@ -133,6 +133,8 @@ static boolean check_lexOrder(Node_T oNNode) {
 static size_t CheckerDT_treeCheck(Node_T oNNode, size_t ptotalCount, boolean *result, size_t ulCount) {
    size_t ulIndex;
 
+   fprintf(stderr, "ulCount (from isValid) %lu, my count (from treecheck) %lu \n", ulCount, ptotalCount);
+
     if(oNNode!= NULL && *result != FALSE) {
 
         /* Sample check on each node: node must be valid */
@@ -184,8 +186,6 @@ static size_t CheckerDT_treeCheck(Node_T oNNode, size_t ptotalCount, boolean *re
       }
    }
 
-   /* fprintf(stderr, "ulCount (from isValid) %lu, my count (from treecheck) %lu \n", ulCount, ptotalCount);*/
-
    return ptotalCount;
 }
 
@@ -203,9 +203,6 @@ boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
          fprintf(stderr, "Not initialized, but count is not 0\n");
          return FALSE;
       }
-
-
-   fprintf(stderr, "ulCount %lu, my count %lu \n", ulCount, totalCount);
 
    totalCount = CheckerDT_treeCheck(oNRoot, totalCount, &treecheck_result, ulCount);
 
