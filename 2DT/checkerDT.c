@@ -119,6 +119,7 @@ static boolean check_lexOrder(Node_T oNNode) {
 
 size_t countValidNodes(Node_T oNRoot) {
     size_t count = 0;
+    size_t i;
 
     if (oNRoot == NULL) {
         return 0;
@@ -130,7 +131,7 @@ size_t countValidNodes(Node_T oNRoot) {
     }
 
     /* Recursively count the valid nodes in each child subtree */
-    for (size_t i = 0; i < Node_getNumChildren(oNRoot); i++) {
+    for (i = 0; i < Node_getNumChildren(oNRoot); i++) {
         Node_T oNChild = NULL;
         int iStatus = Node_getChild(oNRoot, i, &oNChild);
 
