@@ -156,14 +156,12 @@ static boolean CheckerDT_treeCheck(Node_T oNNode, size_t *ptotalCount, size_t ul
    size_t ulIndex;
    size_t my_index;
 
-    /* HAVE TO TRAVERSE OUTSIDE */
-    /* Recur on every child of oNNode */
-    my_index = CheckerDT_count(oNNode);
-
-    fprintf(stderr, "in ANY node, count is %lu and my index %lu\n", ulCount, my_index);
+    fprintf(stderr, "in ANY node, count is %lu\n", ulCount);
 
 
     if(oNNode!= NULL) {
+        my_index = CheckerDT_count(oNNode);
+        fprintf(stderr,"my index is %lu\n\n", my_index);
 
         fprintf(stderr, "Node valid %s\n", Node_toString(oNNode));
 
