@@ -285,9 +285,6 @@ int DT_rm(const char *pcPath) {
    ulCount -= Node_free(oNFound);
    if(ulCount == 0)
       oNRoot = NULL;
-   
-   /*to be deleted*/
-   printf("i just removed a node\n");
 
    assert(CheckerDT_isValid(bIsInitialized, oNRoot, ulCount));
    return SUCCESS;
