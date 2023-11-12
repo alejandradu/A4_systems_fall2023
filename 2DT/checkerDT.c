@@ -40,9 +40,6 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
       }
    }
 
-   stringVersion = Node_toString(oNNode);
-   fprintf(stderr, "this node is %s\n", stringVersion);
-
    return TRUE;
 }
 
@@ -185,7 +182,6 @@ boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
          fprintf(stderr, "ulCount is %ld, while total number of nodes detected is %ld\n", ulCount, totalCount);
          return FALSE;
       }   
-   
 
    return treecheck;
 }
