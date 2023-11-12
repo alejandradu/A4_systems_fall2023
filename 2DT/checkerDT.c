@@ -39,6 +39,8 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
       }
    }
 
+   /* NEW: if the path */
+
    return TRUE;
 }
 
@@ -160,7 +162,6 @@ static boolean CheckerDT_treeCheck(Node_T oNNode, size_t *ptotalCount) {
         }
 
         /* add to node count */
-        fprintf(stderr, "At node %s\n", Node_toString(oNNode));
         (*ptotalCount)++;
 
         /* Recur on every child of oNNode */
@@ -201,7 +202,12 @@ boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
    treecheck = CheckerDT_treeCheck(oNRoot, &totalCount);
 
    /* NEW: check if ulCount equals the total number of nodes detected*/
-    if (treecheck && (ulCount > 0)) {
+   if (ulCount != totalCount){
+            fprintf(stderr, "ulCount does not equal total number of nodes detected \n");
+            fprintf(stderr, "ulCount is %lu, while total number of nodes detected is %lu\n", ulCount, totalCount);
+            return FALSE;
+        } 
+    /*if (treecheck && (ulCount > 0)) {
         fprintf(stderr, "ulCount %lu, my count %lu \n", ulCount, totalCount);
         if (ulCount != totalCount){
             fprintf(stderr, "ulCount does not equal total number of nodes detected \n");
@@ -209,7 +215,7 @@ boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
             return FALSE;
         }  
     }
-
+*/
    /* Now checks invariants recursively at each node from the root. */
    return treecheck;
 }
