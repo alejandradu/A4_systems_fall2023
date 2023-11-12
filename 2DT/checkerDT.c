@@ -117,6 +117,31 @@ static boolean check_lexOrder(Node_T oNNode) {
 }
 
 
+static size_t CheckerDT_count(Node_T oNNode) {
+    size_t ulIndex;
+
+    if (oNNode == NULL)
+        ulIndex = 0;
+    else {
+        for(ulIndex = 0; ulIndex < Node_getNumChildren(oNNode); ulIndex++) {
+        Node_T oNChild = NULL;
+        int iStatus = Node_getChild(oNNode, ulIndex, &oNChild);
+
+        /* if recurring down one subtree results in a failed check
+           farther down, passes the failure back up immediately */
+        if(!CheckerDT_count(oNChild))
+           return FALSE;
+        /* NEW: update index mimic DT_preOrderTraversal */
+        /*CheckerDT_treeCheck(oNChild, ptotalCount);*/
+        }
+    }
+
+return ulIndex;
+
+}
+
+
+
 /*
    Performs a pre-order traversal of the tree rooted at oNNode.
    Returns FALSE if a broken invariant is found and
@@ -132,16 +157,14 @@ static boolean check_lexOrder(Node_T oNNode) {
 */
 static boolean CheckerDT_treeCheck(Node_T oNNode, size_t *ptotalCount, size_t ulCount) {
    size_t ulIndex;
+   size_t my_index;
 
-     fprintf(stderr, "in ANY node, count is %lu\n", ulCount);
+    /* HAVE TO TRAVERSE OUTSIDE */
+    /* Recur on every child of oNNode */
+    my_index = CheckerDT_count(oNNode);
 
-    if (oNNode == NULL) {
-        fprintf(stderr, "in A NULL node, count is %lu\n", ulCount);
-        if (ulCount != 0) {
-            fprintf(stderr, "ulCount is not 0, but the node is NULL\n");
-            return FALSE;
-        }
-    }
+    fprintf(stderr, "in ANY node, count is %lu and my index %lu\n", ulCount, my_index);
+
 
     if(oNNode!= NULL) {
 
@@ -196,38 +219,6 @@ static boolean CheckerDT_treeCheck(Node_T oNNode, size_t *ptotalCount, size_t ul
       }
    }
    return TRUE;
-}
-
-static size_t CheckerDT_preOrder_isValid(Node_T n, DynArray_T d, size_t i, boolean* ppreOrderCheck, size_t ulCount) {
-   size_t c;
-
-   assert(d != NULL);
-
-   if(n != NULL) {
-    /* BAD: i = 6, length = 6 */
-    /* GOOD: i= 6, length = 7*/
-      /*(void) DynArray_set(d, i, n);*/
-      i++;
-      for(c = 0; c < Node_getNumChildren(n); c++) {
-         int iStatus;
-         Node_T oNChild = NULL;
-         iStatus = Node_getChild(n,c, &oNChild);
-         assert(iStatus == SUCCESS);
-         i = CheckerDT_preOrder_isValid(oNChild, d, i, ppreOrderCheck, ulCount);
-         fprintf(stderr, "ulCount is %lu, index is %lu\n", ulCount, i);
-         if (i == ulCount) {
-            fprintf(stderr, "ulCount is %lu, index is %lu\n", ulCount, i);
-            *ppreOrderCheck = FALSE;
-            /* return CheckerDT_returnBoolean(ppreOrderCheck); */
-         }
-      }
-   }
-   return i;
-
-}
-
-boolean CheckerDT_returnBoolean(boolean* pBoolean) {
-    return *pBoolean;
 }
 
 
