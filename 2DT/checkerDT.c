@@ -40,8 +40,7 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
       }
    }
 
-
-   stringVersion =Node_toString(oNNode);
+   stringVersion = Node_toString(oNNode);
    fprintf(stderr, "this node is %s\n", stringVersion);
 
    return TRUE;
@@ -65,6 +64,8 @@ static boolean CheckerDT_treeCheck(Node_T oNNode, size_t* ptotalCount) {
    
 
    if(oNNode!= NULL) {
+      /* check that the total number of nodes is equal to ulCount*/
+      (*ptotalCount)++;
 
       /* Sample check on each node: node must be valid */
       /* If not, pass that failure back up immediately */
@@ -84,8 +85,6 @@ static boolean CheckerDT_treeCheck(Node_T oNNode, size_t* ptotalCount) {
          }   
       }
 
-      /* check that the total number of nodes is equal to ulCount*/
-      (*ptotalCount)++;
 
       /* check if toString expression contains the path names of all nodes,
        assuming that node_toString works*/
@@ -179,8 +178,6 @@ boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
    treecheck= CheckerDT_treeCheck(oNRoot, &totalCount);
    
    /*check if ulCount equals the total number of nodes detected*/
-
-
       if (ulCount != (totalCount)){
          fprintf(stderr, "ulCount does not equal total number of nodes detected \n");
          fprintf(stderr, "ulCount is %ld, while total number of nodes detected is %ld\n", ulCount, totalCount);
