@@ -185,5 +185,7 @@ boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
       return FALSE;
       } 
 
+   }
    return treecheck;
+
 }
