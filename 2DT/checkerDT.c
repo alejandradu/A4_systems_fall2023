@@ -202,14 +202,20 @@ static size_t CheckerDT_preOrder_isValid(Node_T n, DynArray_T d, size_t i, boole
          iStatus = Node_getChild(n,c, &oNChild);
          assert(iStatus == SUCCESS);
          i = CheckerDT_preOrder_isValid(oNChild, d, i, ppreOrderCheck, ulCount);
+         fprintf(stderr, "ulCount is %lu, index is %lu\n", ulCount, i);
          if (i == ulCount) {
             fprintf(stderr, "ulCount is %lu, index is %lu\n", ulCount, i);
             *ppreOrderCheck = FALSE;
+            /* return CheckerDT_returnBoolean(ppreOrderCheck); */
          }
       }
    }
    return i;
 
+}
+
+boolean CheckerDT_returnBoolean(boolean* pBoolean) {
+    return *pBoolean;
 }
 
 
