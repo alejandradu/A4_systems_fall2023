@@ -180,7 +180,7 @@ static boolean CheckerDT_treeCheck(Node_T oNNode, size_t *ptotalCount, size_t ul
 
             /* if recurring down one subtree results in a failed check
                farther down, passes the failure back up immediately */
-            if(!CheckerDT_treeCheck(oNChild, ptotalCount))
+            if(!CheckerDT_treeCheck(oNChild, ptotalCount, ulCount))
                return FALSE;
 
             /* NEW: update index mimic DT_preOrderTraversal */
