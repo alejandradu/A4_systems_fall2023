@@ -42,7 +42,7 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
 
 
    stringVersion =Node_toString(oNNode);
-   fprintf(stderr, "this node is %s\n", (const*)stringVersion);
+   fprintf(stderr, "this node is %s\n", stringVersion);
 
    return TRUE;
 }
