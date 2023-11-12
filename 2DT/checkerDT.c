@@ -201,9 +201,9 @@ static boolean CheckerDT_preOrder_isValid(Node_T n, DynArray_T d, size_t i, size
          Node_T oNChild = NULL;
          iStatus = Node_getChild(n,c, &oNChild);
          assert(iStatus == SUCCESS);
-         i = DT_preOrderTraversal(oNChild, d, i);
+         i = CheckerDT_preOrder_isValid(oNChild, d, i);
          *pIndex = i;
-         if (i = ulCount) {
+         if (i == ulCount) {
          fprintf(stderr, "ulCount is %lu, index is %lu\n", ulCount, i);
          return FALSE;
         } 
