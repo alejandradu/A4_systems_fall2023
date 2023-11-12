@@ -263,29 +263,3 @@ boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
    /* Now checks invariants recursively at each node from the root. */
    return treecheck;
 }
-
-
-Node valid? 1root
-Node valid? 1root/2child
-Node valid? 1root/2child/3grandchild
-Node valid? 1root/2ok
-Node valid? 1root/2ok/3yes
-Node valid? 1root/2ok/3yes/4indeed
-Node valid? 1root/2second
-Node valid? 1root/2second/3grandchild
-Node valid? 1root/2second/3grandchild/1root
-Node valid? 1root/2third
-ulCount 10, my count 10 
-Node valid? 1root
-Node valid? 1root/2child
-Node valid? 1root/2child/3grandchild
-Node valid? 1root/2ok
-Node valid? 1root/2ok/3yes
-Node valid? 1root/2ok/3yes/4indeed
-Node valid? 1root/2second
-Node valid? 1root/2second/3grandchild
-Node valid? 1root/2second/3grandchild/1root
-Node valid? 1root/2third
-ulCount 10, my count 10 
-
-THE ROOT IS NULL
