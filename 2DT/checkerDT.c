@@ -164,7 +164,6 @@ static boolean CheckerDT_treeCheck(Node_T oNNode, size_t *ptotalCount) {
         (*ptotalCount)++;
 
         /* Recur on every child of oNNode */
-        /* WE HAVE TO DO THIS BC EACH NODE ONLY KNOWS ITS DIRECT CHILDREN */
         for(ulIndex = 0; ulIndex < Node_getNumChildren(oNNode); ulIndex++) {
             Node_T oNChild = NULL;
             int iStatus = Node_getChild(oNNode, ulIndex, &oNChild);
@@ -184,7 +183,6 @@ static boolean CheckerDT_treeCheck(Node_T oNNode, size_t *ptotalCount) {
 }
 
 
-/* THIS IS FOR TOP-LEVEL INVARIANTS of DT */
 boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
                           size_t ulCount) {
 
@@ -202,7 +200,7 @@ boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
    totalCount = 0;
    treecheck = CheckerDT_treeCheck(oNRoot, &totalCount);
 
-   /* check if ulCount equals the total number of nodes detected*/
+   /* NEW: check if ulCount equals the total number of nodes detected*/
     if (treecheck && (ulCount > 0)) {
         fprintf(stderr, "ulCount %lu, my count %lu \n", ulCount, totalCount);
         if (ulCount != totalCount){

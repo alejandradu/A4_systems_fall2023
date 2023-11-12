@@ -176,7 +176,6 @@ size_t Node_free(Node_T oNNode) {
             oNNode, &ulIndex,
             (int (*)(const void *, const void *)) Node_compare)
         )
-        /* IT IS PASSING REMOVEAT*/
          (void) DynArray_removeAt(oNNode->oNParent->oDChildren,
                                   ulIndex);
    }
