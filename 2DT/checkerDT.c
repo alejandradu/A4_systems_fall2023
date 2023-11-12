@@ -211,9 +211,8 @@ static boolean CheckerDT_treeCheck(Node_T oNNode, size_t *ptotalCount, size_t ul
                 return FALSE;
         }
 
-    return TRUE;
-
     }
+    return TRUE;
 }
 
 
