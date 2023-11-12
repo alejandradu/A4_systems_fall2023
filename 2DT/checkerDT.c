@@ -120,9 +120,6 @@ static boolean check_lexOrder(Node_T oNNode) {
 static size_t CheckerDT_count(Node_T oNNode) {
     size_t ulIndex;
 
-    if (oNNode == NULL)
-        ulIndex = 0;
-    else {
         for(ulIndex = 0; ulIndex < Node_getNumChildren(oNNode); ulIndex++) {
         Node_T oNChild = NULL;
         int iStatus = Node_getChild(oNNode, ulIndex, &oNChild);
@@ -134,7 +131,7 @@ static size_t CheckerDT_count(Node_T oNNode) {
         /* NEW: update index mimic DT_preOrderTraversal */
         /*CheckerDT_treeCheck(oNChild, ptotalCount);*/
         }
-    }
+
 
 return ulIndex;
 
