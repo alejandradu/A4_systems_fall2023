@@ -168,7 +168,6 @@ static boolean CheckerDT_treeCheck(Node_T oNNode, size_t *ptotalCount, size_t ul
 
     if(oNNode!= NULL) {
         /*(void)CheckerDT_count(oNNode, my_index);*/
-        fprintf(stderr,"my index is %lu\n\n", ulIndex);
 
         fprintf(stderr, "Node valid %s\n", Node_toString(oNNode));
 
