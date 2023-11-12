@@ -139,7 +139,7 @@ static boolean CheckerDT_treeCheck(Node_T oNNode, size_t* ptotalCount) {
          int iStatus = Node_getChild(oNNode, ulIndex, &oNChild);
 
          if(iStatus != SUCCESS) {
-            fprintf(stderr, "getNumChildren claims more children than getChild returns\n");
+            fprintf(stderr, "getNumChildren claims more children than we detected\n");
             return FALSE;
          }
 
@@ -174,13 +174,12 @@ boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
    
    /*check if ulCount equals the total number of nodes detected*/
    if (treecheck) {
-      if (ulCount > 0) {
+
          if (ulCount != (totalCount)){
             fprintf(stderr, "ulCount does not equal total number of nodes detected \n");
             fprintf(stderr, "ulCount is %ld, while total number of nodes detected is %ld\n", ulCount, totalCount);
             return FALSE;
          }   
-      }  
    }
 
    return treecheck;
