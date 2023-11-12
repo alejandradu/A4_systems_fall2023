@@ -126,7 +126,7 @@ size_t countValidNodes(Node_T oNRoot) {
     }
 
     /* Check if the current node is valid */
-    if (Node_isValid(oNRoot)) {
+    if (CheckerDT_Node_isValid(oNRoot)) {
         count++;
     }
 
