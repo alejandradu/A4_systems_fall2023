@@ -244,6 +244,7 @@ int Path_dup(Path_T oPPath, Path_T *poPResult) {
 
 void Path_free(Path_T oPPath) {
    if(oPPath != NULL) {
+      fprintf(stderr, "I freed the path %s, length of path is %s\n", (char*)oPPath->pcPath, (char*)oPPath->ulLength);
       free((char *)oPPath->pcPath);
 
       if(oPPath->oDComponents != NULL) {
@@ -252,8 +253,6 @@ void Path_free(Path_T oPPath) {
          DynArray_free(oPPath->oDComponents);
       }
    }
-
-      fprintf(stderr, "I freed the path %s, length of path is %s\n", (char*)oPPath->pcPath, (char*)oPPath->ulLength);
 
    free((struct path*) oPPath);
 }
