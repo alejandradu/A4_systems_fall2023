@@ -178,6 +178,9 @@ static boolean CheckerDT_treeCheck(Node_T oNNode, size_t *ptotalCount) {
                farther down, passes the failure back up immediately */
             if(!CheckerDT_treeCheck(oNChild, ptotalCount))
                return FALSE;
+
+            /* NEW: update index mimic DT_preOrderTraversal */
+            CheckerDT_treeCheck(oNChild, ptotalCount);
       }
    }
    return TRUE;
