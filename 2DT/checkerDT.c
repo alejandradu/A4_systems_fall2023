@@ -133,7 +133,12 @@ static boolean check_lexOrder(Node_T oNNode) {
 static size_t CheckerDT_treeCheck(Node_T oNNode, size_t ptotalCount, boolean *result, size_t ulCount) {
    size_t ulIndex;
 
-   fprintf(stderr, "ulCount (from isValid) %lu, my count (from treecheck) %lu \n", ulCount, ptotalCount);
+   /*fprintf(stderr, "ulCount (from isValid) %lu, my count (from treecheck) %lu \n", ulCount, ptotalCount);*/
+   if (ulCount = ptotalCount){
+            fprintf(stderr, "ERROR \n");
+            fprintf(stderr, "ulCount is %lu, while total number of nodes detected is %lu\n", ulCount, ptotalCount);
+        *result = FALSE;
+   }
 
     if(oNNode!= NULL && *result != FALSE) {
 
@@ -198,21 +203,22 @@ boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
 
    /* Sample check on a top-level data structure invariant:
       if the DT is not initialized, its count should be 0. */
-   if(!bIsInitialized)
+   if(!bIsInitialized) {
       if(ulCount != 0) {
          fprintf(stderr, "Not initialized, but count is not 0\n");
          return FALSE;
       }
+   }
 
    totalCount = CheckerDT_treeCheck(oNRoot, totalCount, &treecheck_result, ulCount);
 
    /* NEW: check if ulCount equals the total number of nodes detected*/
-   if (ulCount != totalCount){
+   /* if (ulCount != totalCount){
             fprintf(stderr, "ERROR ulCount does not equal total number of nodes detected \n");
             fprintf(stderr, "ulCount is %lu, while total number of nodes detected is %lu\n", ulCount, totalCount);
             return FALSE;
         } 
-    /*if (treecheck && (ulCount > 0)) {
+    if (treecheck && (ulCount > 0)) {
         fprintf(stderr, "ulCount %lu, my count %lu \n", ulCount, totalCount);
         if (ulCount != totalCount){
             fprintf(stderr, "ulCount does not equal total number of nodes detected \n");
@@ -223,4 +229,5 @@ boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
 */
    /* Now checks invariants recursively at each node from the root. */
    return treecheck_result;
+                          
 }
