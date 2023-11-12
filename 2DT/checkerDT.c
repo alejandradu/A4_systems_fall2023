@@ -170,10 +170,10 @@ boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
    /* Now checks invariants recursively at each node from the root. */
    totalCount = 0;
 
-  /*if ((ulCount != 0) && (oNRoot = NULL)) {
+  if ((ulCount != 0) && (oNRoot = NULL)) {
       fprintf(stderr, "your tree is empty but ulCount says that there's something in it \n");
       return FALSE;
-   } */
+   } 
 
    treecheck = CheckerDT_treeCheck(oNRoot, &totalCount);
    /*check if ulCount equals the total number of nodes detected*/
