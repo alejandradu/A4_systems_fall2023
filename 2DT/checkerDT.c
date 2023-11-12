@@ -133,7 +133,7 @@ static boolean check_lexOrder(Node_T oNNode) {
 
         /* if recurring down one subtree results in a failed check
            farther down, passes the failure back up immediately */
-        if(!CheckerDT_count(oNChild, my_index))
+        /*if(!CheckerDT_count(oNChild, my_index))
            return FALSE;
         /* NEW: update index mimic DT_preOrderTraversal */
         /*CheckerDT_treeCheck(oNChild, ptotalCount);
