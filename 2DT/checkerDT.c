@@ -174,24 +174,8 @@ static boolean CheckerDT_treeCheck(Node_T oNNode, size_t *ptotalCount, size_t ul
         (*ptotalCount)++;
         fprintf(stderr, "LOOK ulCount is %lu, index is %lu\n", ulCount, *ptotalCount);
 
-        /* Recur on every child of oNNode */
-        for(ulIndex = 0; ulIndex < Node_getNumChildren(oNNode); ulIndex++) {
-            Node_T oNChild = NULL;
-            int iStatus = Node_getChild(oNNode, ulIndex, &oNChild);
-   
-            if(iStatus != SUCCESS) {
-               fprintf(stderr, "getNumChildren claims more children than getChild returns\n");
-               return FALSE;
-            }
 
-            /* if recurring down one subtree results in a failed check
-               farther down, passes the failure back up immediately */
-            if(!CheckerDT_treeCheck(oNChild, ptotalCount, ulCount))
-               return FALSE;
-        }
-
-
-                /* NEW: check all getchild calls return not null */
+          /* NEW: check all getchild calls return not null */
         /* QUESTION: isn't this contained in the first function here? */
         if (Node_getNumChildren(oNNode) > 0) {
             if(!check_GetChildNull(oNNode))
@@ -210,6 +194,23 @@ static boolean CheckerDT_treeCheck(Node_T oNNode, size_t *ptotalCount, size_t ul
             /* NEW: check if the children are arranged in lexicographic order */
             if(!check_lexOrder(oNNode))
                 return FALSE;
+        }
+
+
+        /* Recur on every child of oNNode */
+        for(ulIndex = 0; ulIndex < Node_getNumChildren(oNNode); ulIndex++) {
+            Node_T oNChild = NULL;
+            int iStatus = Node_getChild(oNNode, ulIndex, &oNChild);
+   
+            if(iStatus != SUCCESS) {
+               fprintf(stderr, "getNumChildren claims more children than getChild returns\n");
+               return FALSE;
+            }
+
+            /* if recurring down one subtree results in a failed check
+               farther down, passes the failure back up immediately */
+            if(!CheckerDT_treeCheck(oNChild, ptotalCount, ulCount))
+               return FALSE;
         }
 
     }
