@@ -135,6 +135,7 @@ static size_t CheckerDT_treeCheck(Node_T oNNode, size_t ptotalCount, boolean *re
 
    /*fprintf(stderr, "ulCount (from isValid) %lu, my count (from treecheck) %lu \n", ulCount, ptotalCount);*/
    if (ulCount > 0) {
+    fprintf(stderr, "ulCount is %lu, while total number of nodes detected is %lu\n", ulCount, ptotalCount);
     if (ulCount == ptotalCount){
                 fprintf(stderr, "ERROR \n");
                 fprintf(stderr, "ulCount is %lu, while total number of nodes detected is %lu\n", ulCount, ptotalCount);
