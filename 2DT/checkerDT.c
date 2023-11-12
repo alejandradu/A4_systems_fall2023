@@ -172,6 +172,7 @@ static boolean CheckerDT_treeCheck(Node_T oNNode, size_t *ptotalCount, size_t ul
 
         /* add to node count */
         (*ptotalCount)++;
+        fprintf(stderr, "LOOK ulCount is %lu, index is %lu\n", ulCount, *ptotalCount);
 
         /* Recur on every child of oNNode */
         for(ulIndex = 0; ulIndex < Node_getNumChildren(oNNode); ulIndex++) {
