@@ -373,7 +373,7 @@ size_t Node_getNumChildrenFiles(Node_T oNParent) {
 
 /*-------------------------------------------------------------------------*/
 
-size_t Node_getNumChildrenDir(Node_T oNParent) {
+size_t Node_getNumChildrenDirs(Node_T oNParent) {
    assert(oNParent != NULL);
    assert(!oNParent->isFile);
 
