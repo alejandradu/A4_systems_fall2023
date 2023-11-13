@@ -27,6 +27,8 @@ struct node {
    boolean isFile;
    /* a void pointer to file content*/
    void* FileContent;
+   /* length of the file contents */
+   size_t ulContLength;
 };
 
 /*-------------------------------------------------------------------------*/
@@ -69,7 +71,7 @@ static int Node_addChild(Node_T oNParent, Node_T oNChild,
 /*-------------------------------------------------------------------------*/
 
 int Node_new(Path_T oPPath, Node_T oNParent, boolean isFile, 
-        void* FileContent, Node_T *poNResult) {
+        void* FileContent, size_t ulContLength, Node_T *poNResult) {
    Node_T psNew;
    Path_T oPParentPath = NULL;
    Path_T oPNewPath = NULL;
@@ -157,10 +159,27 @@ int Node_new(Path_T oPPath, Node_T oNParent, boolean isFile,
     /*specifying if this node is a file or not and initialize accordingly*/
    psNew->isFile = isFile;
 
-   if (isFile) {
-    psNew->FileContent = FileContent;
-    psNew->oDChildren = NULL;
-    psNew->oFChildren = NULL;
+    if (isFile) {
+        /*psNew->FileContent = FileContent;*/
+        psNew->oDChildren = NULL;
+        psNew->oFChildren = NULL;
+
+        /* HERE: would it be useful to track the lenght of the
+        file content?? */
+    
+        /* allocate memory for contents */
+        psNew->FileContent = malloc(ulContLength);
+        if(psNew->FileContent == NULL) {
+            Path_free(psNew->oPPath);
+            free(psNew);
+            *poNResult = NULL;
+            return MEMORY_ERROR;
+        } else {
+            /* copy (void) contents to the memory space */
+            memcpy(psNew->FileContent, FileContent, ulContLength);
+            psNew->ulContLength = ulContLength;
+        }
+    
    } else {
         psNew->oDChildren = DynArray_new(0);
         if(psNew->oDChildren == NULL) {
@@ -194,6 +213,14 @@ boolean Node_isFile(Node_T oNNode) {
     return oNNode->isFile;
 }
 
+void Node_getContent(Node_T oNNode) {
+    assert (oNNode != NULL);
+
+    /* this content might be NULL 
+    HERE: should this dereference? */
+    return oNNode->FileContent;
+}
+
 /*-------------------------------------------------------------------------*/
 
 
@@ -203,14 +230,27 @@ boolean Node_isFile(Node_T oNNode) {
   Returns the old contents if successful. (Note: contents may be NULL.)
   Returns NULL if unable to complete the request for any reason.
 */
-void *Node_ReplaceFileContent (Node_T oNNode, void* NewFileContent) {
+void *Node_ReplaceFileContent (Node_T oNNode, void* NewFileContent, size_t ulNewLength) {
     void* oldContent;
     
     assert(oNNode != NULL);
     assert(oNNode->isFile);
 
+    /* reorder pointers */
     oldContent = oNNode->FileContent;
-    oNNode->FileContent = NewFileContent;
+
+    /* re-allocate memory for contents */
+    void* temp = realloc(oNNode->FileContent, ulNewLength);
+    if(temp == NULL) {
+        /* revert reordering */
+        oNNode->FileContent = oldContent;
+        return NULL;
+    } else {
+        oNNode->FileContent = temp;
+        /* copy new contents */
+        memcpy(oNNode->FileContent, NewFileContent, ulNewLength);
+        oNNode->ulContLength = ulNewLength;
+    }
 
     return oldContent;
 }
@@ -288,6 +328,9 @@ size_t Node_File_free(Node_T oNNode) {
 
    assert(oNNode != NULL);
    assert(oNNode->isFile);
+
+    /* Free space of file content */
+    free(oNNode->FileContent);
 
     /* remove from parent's list */
     if(oNNode->oNParent != NULL) {
