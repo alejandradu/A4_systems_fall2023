@@ -18,12 +18,12 @@
 
 
 
-/* A Node_T is a node in a Directory Tree */
+/* A Node_T is a node in a File Tree */
 typedef struct node *Node_T;
 
 /*
-  Creates a new node in the Directory Tree, with path oPPath and
-  parent oNParent. Returns an int SUCCESS status and sets *poNResult
+  Creates a new node in the File Tree, with path oPPath and
+  parent oNParent, boolean isFile, FileContent. Returns an int SUCCESS status and sets *poNResult
   to be the new node if successful. Otherwise, sets *poNResult to NULL
   and returns status:
   * MEMORY_ERROR if memory could not be allocated to complete request
@@ -35,12 +35,29 @@ typedef struct node *Node_T;
 */
 int Node_new(Path_T oPPath, Node_T oNParent, boolean isFile, void* FileContent, Node_T *poNResult);
 
+/* Takes in a Node and returns True if it is a file, false if it is a directory*/
+boolean Node_isFile(Node_T oNNode);
+
+/*
+  Replaces current contents of the file at the node oNNode with new FileContent 
+  Returns the old contents if successful. (Note: contents may be NULL.)
+  Returns NULL if unable to complete the request for any reason.
+  Fails if a non-file Node is pluged into this function
+*/
+void *Node_ReplaceFileContent (Node_T oNNode, void* NewFileContent);
+
 /*
   Destroys and frees all memory allocated for the subtree rooted at
   oNNode, i.e., deletes this node and all its descendents. Returns the
   number of nodes deleted.
 */
-size_t Node_free(Node_T oNNode);
+size_t Node_Dir_free(Node_T oNNode);
+
+/*
+  Destroys and frees all memory allocated for the file of
+  oNNode. Returns the number of nodes deleted.
+*/
+size_t Node_File_free(Node_T oNNode);
 
 /* Returns the path object representing oNNode's absolute path. */
 Path_T Node_getPath(Node_T oNNode); 
@@ -53,21 +70,36 @@ Path_T Node_getPath(Node_T oNNode);
   identifier (as used in Node_getChild). If oNParent does not have
   such a child, stores in *pulChildID the identifier that such a
   child _would_ have if inserted.
+
+  stores TRUE in *pisFile if the child identified is a File, false if it is
+  not a file or if it is not existent 
 */
-boolean Node_hasChild(Node_T oNParent, Path_T oPPath,
+boolean Node_hasChild(Node_T oNParent, Path_T oPPath, boolean *pisFile,
                          size_t *pulChildID);
 
-/* Returns the number of children that oNParent has. */
-size_t Node_getNumChildren(Node_T oNParent); 
+/* Returns the number of file children that oNParent has. */
+size_t Node_getNumChildrenFiles(Node_T oNParent); 
+
+/* Returns the number of Directory children that oNParent has. */
+size_t Node_getNumChildrenDirs(Node_T oNParent); 
 
 /*
   Returns an int SUCCESS status and sets *poNResult to be the child
-  node of oNParent with identifier ulChildID, if one exists.
+  file node of oNParent with identifier ulChildID, if one exists.
   Otherwise, sets *poNResult to NULL and returns status:
   * NO_SUCH_PATH if ulChildID is not a valid child for oNParent
 */
-int Node_getChild(Node_T oNParent, size_t ulChildID,
-                  Node_T *poNResult); 
+int  Node_getFileChild(Node_T oNParent, size_t ulChildID,
+                   Node_T *poNResult);
+
+/*
+  Returns an int SUCCESS status and sets *poNResult to be the child
+  directory node of oNParent with identifier ulChildID, if one exists.
+  Otherwise, sets *poNResult to NULL and returns status:
+  * NO_SUCH_PATH if ulChildID is not a valid child for oNParent
+*/
+int  Node_getDirChild(Node_T oNParent, size_t ulChildID,
+                   Node_T *poNResult);
 
 /*
   Returns a the parent node of oNNode.
