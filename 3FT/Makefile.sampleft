@@ -20,3 +20,5 @@ sampleft: sampleft.o ft_client.o
 
 ft_client.o: ft_client.c ft.h a4def.h
 	$(CC) -c ft_client.c
+
+sampleleft.o: dtGood.o: dtGood.c dynarray.h checkerDT.h nodeDT.h dt.h path.h a4def.h

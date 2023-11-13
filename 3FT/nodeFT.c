@@ -70,8 +70,8 @@ static int Node_addChild(Node_T oNParent, Node_T oNChild,
 
 /*-------------------------------------------------------------------------*/
 
-int Node_new(Path_T oPPath, Node_T oNParent, boolean isFile, 
-        void* FileContent, size_t ulContLength, Node_T *poNResult) {
+int Node_new(Path_T oPPath, Node_T oNParent, 
+      boolean isFile, void* FileContent, size_t ulContLength, Node_T *poNResult) {
    Node_T psNew;
    Path_T oPParentPath = NULL;
    Path_T oPNewPath = NULL;
@@ -213,6 +213,8 @@ boolean Node_isFile(Node_T oNNode) {
     return oNNode->isFile;
 }
 
+/*-------------------------------------------------------------------------*/
+
 void Node_getContent(Node_T oNNode) {
     assert (oNNode != NULL);
 
@@ -230,7 +232,7 @@ void Node_getContent(Node_T oNNode) {
   Returns the old contents if successful. (Note: contents may be NULL.)
   Returns NULL if unable to complete the request for any reason.
 */
-void *Node_ReplaceFileContent (Node_T oNNode, void* NewFileContent, size_t ulNewLength) {
+void *Node_ReplaceFileContent(Node_T oNNode, void* NewFileContent, size_t ulNewLength) {
     void* oldContent;
     
     assert(oNNode != NULL);
@@ -438,7 +440,7 @@ int Node_compare(Node_T oNFirst, Node_T oNSecond) {
 
 /*-------------------------------------------------------------------------*/
 
-char *Node_toString(Node_T oNNode) {
+char* Node_toString(Node_T oNNode) {
    char *copyPath;
 
    assert(oNNode != NULL);
