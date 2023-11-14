@@ -638,7 +638,7 @@ char *FT_toString(void) {
   inserting each payload to DynArray_T d beginning at index i.
   Returns the next unused index in d after the insertion(s).
 */
-/*not yet modified for FT*/
+
 static size_t FT_preOrderTraversal(Node_T oNRoot, DynArray_T AllNodesArray, size_t index) {
    size_t c;
    size_t fileChildIndex;
