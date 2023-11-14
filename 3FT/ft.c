@@ -113,7 +113,6 @@ static int FT_traversePath(Path_T oPPath, Node_T *poNFurthest) {
             }
             /* file can't have children - end all loops */
             oNCurr = oNChild;
-            Path_free(oPPrefix);
             *poNFurthest = oNCurr;
             return SUCCESS;
 
@@ -124,13 +123,14 @@ static int FT_traversePath(Path_T oPPath, Node_T *poNFurthest) {
                return iStatus;
             }
             oNCurr = oNChild;
-         }
-         
+         }    
       }
       else {
          /* oNCurr doesn't have child with path oPPrefix:
             this is as far as we can go */
-         break;
+         Path_free(oPPrefix);
+         *poNFurthest = oNCurr;
+         return SUCCESS;
       }
    }
 
