@@ -5,29 +5,29 @@
 # Author: Siling Song & Alejandra Duran
 #--------------------------------------------------------------------
 
+CC = gcc217
+CFLAGS = -Wall -Wextra -pedantic -std=c99
+LDFLAGS =
 
 all: testFT
 
 clean:
-	rm -f testFT meminfo*.out
-
-clobber: clean
-	rm -f ft_client.o dynarray.o path.o nodeFT.o ft.o *~
+	rm -f testFT meminfo*.out *.o
 
 testFT: ft_client.o dynarray.o path.o nodeFT.o ft.o
-	gcc217 ft_client.o dynarray.o path.o nodeFT.o ft.o -o testFT
+	$(CC) $(CFLAGS) -g $^ -o $@ $(LDFLAGS)
 
 ft_client.o: ft_client.c ft.h a4def.h
-	gcc217 -c ft_client.c
+	$(CC) $(CFLAGS) -g -c $< -o $@
 
 dynarray.o: dynarray.c dynarray.h
-	gcc217 -c dynarray.c	
+	$(CC) $(CFLAGS) -g -c $< -o $@
 
 path.o: path.c dynarray.h path.h a4def.h
-	gcc217 -c path.c
+	$(CC) $(CFLAGS) -g -c $< -o $@
 
 nodeFT.o: nodeFT.c dynarray.h path.h ft.h a4def.h
-	gcc217 -c nodeFT.c	
+	$(CC) $(CFLAGS) -g -c $< -o $@
 
 ft.o: ft.c dynarray.h path.h ft.h a4def.h	
-	gcc217 -c ft.c
+	$(CC) $(CFLAGS) -g -c $< -o $@
