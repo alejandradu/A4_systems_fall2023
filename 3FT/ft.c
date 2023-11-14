@@ -225,6 +225,11 @@ static int FT_insertions(const char *pcPath, boolean isFile, void* FileContent, 
         return iStatus;
     }
 
+    /* no ancestor and root not NULL, pcPath isn't underneath root. */
+    if(oNCurr == NULL && oNRoot != NULL) {
+        Path_free(oPPath);
+        return CONFLICTING_PATH;
+    }
   
      /* fails if the closest ancestor is a file */
     if (oNCurr != NULL) {
@@ -232,12 +237,6 @@ static int FT_insertions(const char *pcPath, boolean isFile, void* FileContent, 
         Path_free(oPPath);
         return NOT_A_DIRECTORY;
     }
-    }
-  
-     /* no ancestor and root not NULL, pcPath isn't underneath root. */
-    if(oNCurr == NULL && oNRoot != NULL) {
-        Path_free(oPPath);
-        return CONFLICTING_PATH;
     }
   
     ulDepth = Path_getDepth(oPPath);
