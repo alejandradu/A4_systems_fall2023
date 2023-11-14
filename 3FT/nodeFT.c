@@ -53,7 +53,13 @@ static int Node_addChild(Node_T oNParent, Node_T oNChild,
                          size_t ulIndex) {
    /* assert(oNParent != NULL);*/ /* PARENT CAN BE NULL IF IT'S THE ROOT */
    assert(oNChild != NULL);
-   assert(!oNParent->isFile);
+   
+
+/*or CONFLICTING PATH???*/
+   if (oNParent->isFile) {
+      return NO_SUCH_PATH; 
+   }
+
 
     if (oNChild->isFile){
         if(DynArray_addAt(oNParent->oFChildren, ulIndex, oNChild))
@@ -269,14 +275,9 @@ boolean Node_hasChild(Node_T oNParent, Path_T oPPath, boolean *pisFile,
    assert(oPPath != NULL);
    assert(pulChildID != NULL);
 
-    /* special case for root node 
-    if (oNParent != NULL && Path_getDepth(oPPath) == 1) {
-      *pisFile = FALSE;
-      *pulChildID = 0;
-      return TRUE;
-    }*/
-
-   assert(!oNParent->isFile);
+    if((oNParent->isFile)) {
+      return FALSE;
+    }
 
     /* *pulChildID is the index into oNParent->oDChildren */
     hasDirChild = DynArray_bsearch(oNParent->oDChildren,

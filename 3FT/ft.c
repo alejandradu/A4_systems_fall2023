@@ -24,9 +24,9 @@
 
 /* Global static flags */
 /* 1. a flag for being in an initialized state */
-static boolean isInitialized;
+static boolean isInitialized = FALSE;
 /* 2. a pointer to the root of the hierarchy */
-static Node_T oNRoot;
+static Node_T oNRoot = NULL;
 /* 3. a counter for the files */
 static size_t fileCounter = 0;
 /* 4. a counter for the directories */
@@ -113,9 +113,7 @@ static int FT_traversePath(Path_T oPPath, Node_T *poNFurthest) {
             }
             /* file can't have children - end all loops */
             oNCurr = oNChild;
-            *poNFurthest = oNCurr;
-            return SUCCESS;
-
+            break;
          } else {
             iStatus = Node_getDirChild(oNCurr, ulChildID, &oNChild);
             if(iStatus != SUCCESS) {
@@ -128,9 +126,7 @@ static int FT_traversePath(Path_T oPPath, Node_T *poNFurthest) {
       else {
          /* oNCurr doesn't have child with path oPPrefix:
             this is as far as we can go */
-         Path_free(oPPrefix);
-         *poNFurthest = oNCurr;
-         return SUCCESS;
+         break;
       }
    }
 
@@ -190,6 +186,7 @@ static int FT_findNode(const char *pcPath, Node_T *poNResult, boolean isFile) {
    }
 
    /* check the type of the node at path matched */
+assert(oNFound != NULL);
    if(((isFile) && (!Node_isFile(oNFound))) || ((!isFile) && (Node_isFile(oNFound)))) {
       Path_free(oPPath);
       *poNResult = NULL;
@@ -228,6 +225,12 @@ static int FT_insertions(const char *pcPath, boolean isFile, void* FileContent, 
         return iStatus;
     }    
  
+/*validate that a root exists if we are trying to insert a file*/
+    if (isFile) {
+      if (oNRoot == NULL)
+         return CONFLICTING_PATH;
+    }
+ 
     /* find the closest ancestor of oPPath already in the tree */
     iStatus= FT_traversePath(oPPath, &oNCurr);
     if(iStatus != SUCCESS)
@@ -237,20 +240,14 @@ static int FT_insertions(const char *pcPath, boolean isFile, void* FileContent, 
     }
 
     /* no ancestor and root not NULL, pcPath isn't underneath root. */
-    if(oNCurr == NULL){
-        if(isFile) {  /* fails in any case: if inserted at root too */
-            Path_free(oPPath);
-            return CONFLICTING_PATH;
-        } else if(oNRoot != NULL) {
+    if(oNCurr == NULL && oNRoot != NULL) {
             Path_free(oPPath);
             return CONFLICTING_PATH;
         }
-    }
-  
-     /* NULL ancestor must be a directory */
-    if(oNCurr != NULL) {
-        /* fails if any other closest ancestor is a file */
-        if(oNCurr != NULL && Node_isFile(oNCurr)) {
+    
+        /* fails if the closest ancestor is a file */
+    if (oNCurr != NULL) {
+       if(Node_isFile(oNCurr)) {
             Path_free(oPPath);
             return NOT_A_DIRECTORY;
         }
@@ -267,7 +264,7 @@ static int FT_insertions(const char *pcPath, boolean isFile, void* FileContent, 
  
          /* fails if there is already a node (any type) with that 
         path at that depth */
-        if(ulIndex == ulDepth && !Path_comparePath(oPPath,
+        if(ulIndex == ulDepth+1 && !Path_comparePath(oPPath,
                                          Node_getPath(oNCurr))) {
            Path_free(oPPath);
            return ALREADY_IN_TREE;
@@ -636,6 +633,7 @@ int FT_stat(const char *pcPath, boolean *pbIsFile, size_t *pulSize) {
    }
 
    Path_free(oPPath);
+   assert(oNFound != NULL);
    isFile = Node_isFile(oNFound);
    if (isFile) {
       *pbIsFile = TRUE;
