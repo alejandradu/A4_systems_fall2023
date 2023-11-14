@@ -291,6 +291,7 @@ static int FT_insertions(const char *pcPath, boolean isFile, void* FileContent, 
         /* all levels up to depth - 1 must be directories */
         if (ulIndex < ulDepth) {
            iStatus = Node_new(oPPrefix, oNCurr, FALSE, FileContent, fileLength, &oNNewNode);
+           fprintf(stderr, "should not be file %d\n", Node_isFile(oNNewNode));
         } else {
             iStatus = Node_new(oPPrefix, oNCurr, isFile, FileContent, fileLength, &oNNewNode);
         }
@@ -317,6 +318,7 @@ static int FT_insertions(const char *pcPath, boolean isFile, void* FileContent, 
         ulIndex++;
 
     fprintf(stderr, "path depth of inserted node %zu\n", Path_getDepth(Node_getPath(oNCurr)));
+
 
     }
 
