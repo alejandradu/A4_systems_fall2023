@@ -100,12 +100,23 @@ static int FT_traversePath(Path_T oPPath, Node_T *poNFurthest) {
          /* go to that child and continue with next prefix */
          Path_free(oPPrefix);
          oPPrefix = NULL;
-         iStatus = Node_getDirChild(oNCurr, ulChildID, &oNChild);
-         if(iStatus != SUCCESS) {
-            *poNFurthest = NULL;
-            return iStatus;
+         if (isFile) {
+            iStatus = Node_getFileChild(oNCurr, ulChildID, &oNChild);
+            if(iStatus != SUCCESS) {
+               *poNFurthest = NULL;
+               return iStatus;
+            }
+            oNCurr = oNChild;
+            break;
+         } else {
+            iStatus = Node_getDirChild(oNCurr, ulChildID, &oNChild);
+            if(iStatus != SUCCESS) {
+               *poNFurthest = NULL;
+               return iStatus;
+            }
+            oNCurr = oNChild;
          }
-         oNCurr = oNChild;
+         
       }
       else {
          /* oNCurr doesn't have child with path oPPrefix:
@@ -114,40 +125,9 @@ static int FT_traversePath(Path_T oPPath, Node_T *poNFurthest) {
       }
    }
 
-   /*if we did not get to level ulDepth -1, then this node
-   does not exist yet, we return the furthest directory node that 
-   we can reach*/
-
-   if (Path_getDepth(oPPrefix) < (ulDepth -1)) {
-         Path_free(oPPrefix);
-         oPPrefix = NULL;
-         *poNFurthest = oNCurr;
-         return SUCCESS;
-   } else { /*if it reached ulDepth, we need to check if this is the
-      furthest node, or if this has a file child with the path, or if
-      this node has a directory child with the path*/
-      Path_free(oPPrefix);
-      oPPrefix = NULL;
-      if(Node_hasChild(oNCurr, oPPath, &isFile,&ulChildID)) {
-         if (isFile) {
-            iStatus = Node_getFileChild(oNCurr, ulChildID, &oNChild);
-            if(iStatus != SUCCESS) {
-               *poNFurthest = NULL;
-               return iStatus;
-            }         
-         } else {
-            iStatus = Node_getDirChild(oNCurr, ulChildID, &oNChild);
-            if(iStatus != SUCCESS) {
-               *poNFurthest = NULL;
-               return iStatus;
-            }
-         }
-         oNCurr = oNChild;
-         return SUCCESS;
-         
-      }
-
-   }
+  Path_free(oPPrefix);
+  *poNFurthest = oNCurr;
+  return SUCCESS;
 
 }
 
