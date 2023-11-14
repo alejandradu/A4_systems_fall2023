@@ -53,7 +53,11 @@ static int Node_addChild(Node_T oNParent, Node_T oNChild,
                          size_t ulIndex) {
    assert(oNParent != NULL);
    assert(oNChild != NULL);
-   assert(!oNParent->isFile);
+
+   if (oNParent->isFile) {
+      return NO_SUCH_PATH; /*or CONFLICTING PATH???*/
+   }
+
 
     if (oNChild->isFile){
         if(DynArray_addAt(oNParent->oFChildren, ulIndex, oNChild))
