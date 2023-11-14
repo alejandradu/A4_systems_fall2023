@@ -56,9 +56,9 @@ static int Node_addChild(Node_T oNParent, Node_T oNChild,
 
 
 /*or CONFLICTING PATH???*/
-   /*if (oNParent->isFile) {
+   if (oNParent->isFile) {
       return NO_SUCH_PATH; 
-   }*/
+   }
 
 
     if (oNChild->isFile){
@@ -151,7 +151,7 @@ int Node_new(Path_T oPPath, Node_T oNParent,
 
    /* initialize the new node */
    /* Link into parent's children list */
-   if(oNParent != NULL) {
+   if(oNParent != NULL && (!oNParent->isFile)) {
       iStatus = Node_addChild(oNParent, psNew, ulIndex);
       if(iStatus != SUCCESS) {
          Path_free(psNew->oPPath);
