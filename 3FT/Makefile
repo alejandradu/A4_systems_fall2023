@@ -12,12 +12,12 @@ clean:
 	rm -f testFT meminfo*.out
 
 clobber: clean
-	rm -f ft_client.o dynarray.o path.o nodeFT.o FT.o *~
+	rm -f ft_client.o dynarray.o path.o nodeFT.o ft.o *~
 
-testFT: ft_client.o dynarray.o path.o nodeFT.o FT.o
-	gcc217 ft_client.o dynarray.o path.o nodeFT.o FT.o -o testFT
+testFT: ft_client.o dynarray.o path.o nodeFT.o ft.o
+	gcc217 ft_client.o dynarray.o path.o nodeFT.o ft.o -o testFT
 
-ft_client.o: ft_client.c FT.h a4def.h
+ft_client.o: ft_client.c ft.h a4def.h
 	gcc217 -c ft_client.c
 
 dynarray.o: dynarray.c dynarray.h
@@ -26,10 +26,10 @@ dynarray.o: dynarray.c dynarray.h
 path.o: path.c dynarray.h path.h a4def.h
 	gcc217 -c path.c
 
-nodeFT.o: nodeFT.c dynarray.h path.h FT.h a4def.h
+nodeFT.o: nodeFT.c dynarray.h path.h ft.h a4def.h
 	gcc217 -c nodeFT.c	
 
-FT.o: FT.c dynarray.h path.h FT.h a4def.h	
-	gcc217 -c FT.c
+ft.o: ft.c dynarray.h path.h ft.h a4def.h	
+	gcc217 -c ft.c
 
 
