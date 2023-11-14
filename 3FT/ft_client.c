@@ -87,7 +87,6 @@ int main(void) {
   /*assert(FT_containsDir("1root/2second/3gfile") == FALSE);*/
   fprintf(stderr, "containFile 1root/2second/3gfile should be 1, but is %d\n", FT_containsFile("1root/2second"));
   /*assert(FT_containsFile("1root/2second/3gfile") == TRUE);*/
-  fprintf(stderr, "FT_containsFile(1root/2second) is %d\n", FT_containsFile("1root/2second"));
   assert(FT_getFileContents("1root/2second/3gfile") == NULL);
   assert(FT_insertDir("1root/2child/3gkid") == ALREADY_IN_TREE);
   assert(FT_insertFile("1root/2child/3gkid", NULL, 0) ==
