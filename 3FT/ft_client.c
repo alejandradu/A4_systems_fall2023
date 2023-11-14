@@ -74,7 +74,7 @@ int main(void) {
   */
 
   assert(FT_insertDir("1root/2child/3gkid") == SUCCESS);
-  fprintf(stderr, "FIRST INSERTION");
+  fprintf(stderr, "FIRST INSERTION\n\n");
   assert(FT_containsDir("1root") == TRUE);
   assert(FT_containsFile("1root") == FALSE);
   assert(FT_containsDir("1root/2child") == TRUE);   /* HERE */
