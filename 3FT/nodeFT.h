@@ -53,7 +53,7 @@ void *Node_ReplaceFileContent(Node_T oNNode, void* NewFileContent, size_t ulNewL
 
 /*
   Returns TRUE if oNParent has a child with path oPPath. Returns
-  FALSE if it does not.
+  FALSE if it does not or oNParent is a FileNode
 
   If oNParent has such a child, stores in *pulChildID the child's
   identifier (as used in Node_getChild). If oNParent does not have
