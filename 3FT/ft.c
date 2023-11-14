@@ -180,6 +180,7 @@ static int FT_findNode(const char *pcPath, Node_T *poNResult, boolean isFile) {
    }
 
    /* check the type of the node at path matched */
+   assert(oNFound != NULL);
    if(((isFile) && (!Node_isFile(oNFound))) || ((!isFile) && (Node_isFile(oNFound)))) {
       Path_free(oPPath);
       *poNResult = NULL;
@@ -226,6 +227,7 @@ static int FT_insertions(const char *pcPath, boolean isFile, void* FileContent, 
         return iStatus;
     }
   
+    assert(oNCurr != NULL);
      /* fails if the closest ancestor is a file */
     if(Node_isFile(oNCurr)) {
         Path_free(oPPath);
@@ -608,6 +610,7 @@ int FT_stat(const char *pcPath, boolean *pbIsFile, size_t *pulSize) {
    }
 
    Path_free(oPPath);
+   assert(oNFound != NULL);
    isFile = Node_isFile(oNFound);
    if (isFile) {
       *pbIsFile = TRUE;
