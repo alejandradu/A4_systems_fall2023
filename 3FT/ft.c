@@ -211,6 +211,13 @@ static int FT_insertions(const char *pcPath, boolean isFile, void* FileContent, 
     if(!isInitialized) {
         return INITIALIZATION_ERROR; 
     }    
+
+    /*validate that a root exists if we are trying to insert a file*/
+    if (isFile) {
+      if (oNRoot == NULL)
+         return CONFLICTING_PATH;
+    }
+
     /* create path for the (potential) insertion */
     iStatus = Path_new(pcPath, &oPPath);    
     if(iStatus != SUCCESS) {
@@ -464,10 +471,6 @@ int FT_insertFile(const char *pcPath, void *pvContents,
                   size_t ulLength) {
     
     assert(pcPath != NULL);
-
-    if (oNRoot == NULL) {
-      return CONFLICTING_PATH;
-    }
 
     return FT_insertions(pcPath, TRUE, pvContents, ulLength);
 }
