@@ -20,6 +20,7 @@ int main(void) {
   size_t l;
   char arr[ARRLEN];
   arr[0] = '\0';
+  int test;
 
   /* Before the data structure is initialized:
      * insert*, rm*, and destroy should all return INITIALIZATION_ERROR
@@ -71,7 +72,8 @@ int main(void) {
      ALREADY_IN_TREE, and trying to insert some other root should
      return CONFLICTING_PATH.
   */
-  FT_insertDir("1root/2child/3gkid");
+  test = FT_insertDir("1root/2child/3gkid");
+  fprintf(stderr, "FT_insertDir(\"1root/2child/3gkid\") returned %d\n", test);
   assert(FT_insertDir("1root/2child/3gkid") == SUCCESS);
 
   return 0;
