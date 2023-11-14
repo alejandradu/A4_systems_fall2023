@@ -261,7 +261,7 @@ static int FT_insertions(const char *pcPath, boolean isFile, void* FileContent, 
  
          /* fails if there is already a node (any type) with that 
         path at that depth */
-        printf("in else");
+        fprintf(stderr, "in else");
         if(ulIndex == ulDepth+1 && !Path_comparePath(oPPath,
                                          Node_getPath(oNCurr))) {
            Path_free(oPPath);
