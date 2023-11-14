@@ -159,14 +159,14 @@ int Node_new(Path_T oPPath, Node_T oNParent,
    psNew->isFile = isFile;
 
     if (isFile) {
-        /*psNew->FileContent = FileContent;*/
+        psNew->FileContent = FileContent;
         psNew->oDChildren = NULL;
         psNew->oFChildren = NULL;
 
         /* HERE: would it be useful to track the lenght of the
         file content?? */
     
-        /* allocate memory for contents */
+        /* allocate memory for contents 
         psNew->FileContent = malloc(ulContLength);
         if(psNew->FileContent == NULL) {
             Path_free(psNew->oPPath);
@@ -174,10 +174,9 @@ int Node_new(Path_T oPPath, Node_T oNParent,
             *poNResult = NULL;
             return MEMORY_ERROR;
         } else {
-            /* copy (void) contents to the memory space */
             memcpy(psNew->FileContent, FileContent, ulContLength);
             psNew->ulContLength = ulContLength;
-        }
+        }*/
     
    } else {
         psNew->oDChildren = DynArray_new(0);
@@ -233,7 +232,7 @@ void *Node_getContent(Node_T oNNode) {
 */
 void *Node_ReplaceFileContent(Node_T oNNode, void* NewFileContent, size_t ulNewLength) {
     void* oldContent;
-    void* temp;
+    /* void* temp; */
     
     assert(oNNode != NULL);
     assert(oNNode->isFile);
@@ -241,18 +240,18 @@ void *Node_ReplaceFileContent(Node_T oNNode, void* NewFileContent, size_t ulNewL
     /* reorder pointers */
     oldContent = oNNode->FileContent;
 
-    /* re-allocate memory for contents */
+    /* re-allocate memory for contents 
     temp = realloc(oNNode->FileContent, ulNewLength);
     if(temp == NULL) {
-        /* revert reordering */
         oNNode->FileContent = oldContent;
         return NULL;
     } else {
         oNNode->FileContent = temp;
-        /* copy new contents */
         memcpy(oNNode->FileContent, NewFileContent, ulNewLength);
         oNNode->ulContLength = ulNewLength;
-    }
+    }*/
+
+    oNNode->ulContLength = ulNewLength;
 
     return oldContent;
 }
