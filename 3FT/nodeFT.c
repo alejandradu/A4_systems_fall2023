@@ -82,7 +82,6 @@ int Node_new(Path_T oPPath, Node_T oNParent,
 
    assert(oPPath != NULL);
    assert(oNParent == NULL);
-   assert(isFile != NULL);
 
    /* allocate space for a new node */
    psNew = malloc(sizeof(struct node));
@@ -234,6 +233,7 @@ void *Node_getContent(Node_T oNNode) {
 */
 void *Node_ReplaceFileContent(Node_T oNNode, void* NewFileContent, size_t ulNewLength) {
     void* oldContent;
+    void* temp;
     
     assert(oNNode != NULL);
     assert(oNNode->isFile);
@@ -242,7 +242,7 @@ void *Node_ReplaceFileContent(Node_T oNNode, void* NewFileContent, size_t ulNewL
     oldContent = oNNode->FileContent;
 
     /* re-allocate memory for contents */
-    void* temp = realloc(oNNode->FileContent, ulNewLength);
+    temp = realloc(oNNode->FileContent, ulNewLength);
     if(temp == NULL) {
         /* revert reordering */
         oNNode->FileContent = oldContent;
@@ -463,6 +463,6 @@ char* Node_toString(Node_T oNNode) {
 size_t Node_FileLength(Node_T oNNode) {
    assert (oNNode != NULL);
    assert (oNNode->isFile);
-   
+
    return (oNNode->ulContLength);
 }

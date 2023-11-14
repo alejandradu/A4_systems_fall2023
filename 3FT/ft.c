@@ -12,7 +12,7 @@
 #include "dynarray.h"
 #include "path.h"
 #include "nodeFT.h"
-#include "FT.h"
+#include "ft.h"
 #include "a4def.h"
 #include "nodeFT.c"
 
