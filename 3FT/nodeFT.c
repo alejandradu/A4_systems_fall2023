@@ -307,9 +307,15 @@ size_t Node_Dir_free(Node_T oNNode) {
                                     ulIndex);
     }
 
-    /* recursively remove children */
+    /* remove file children*/
+    while(DynArray_getLength(oNNode->oFChildren) != 0) {
+        ulCount += Node_File_free(DynArray_get(oNNode->oFChildren, 0));
+    }
+    DynArray_free(oNNode->oFChildren);
+
+    /* recursively remove directory children */
     while(DynArray_getLength(oNNode->oDChildren) != 0) {
-        ulCount += Node_free(DynArray_get(oNNode->oDChildren, 0));
+        ulCount += Node_Dir_free(DynArray_get(oNNode->oDChildren, 0));
     }
     DynArray_free(oNNode->oDChildren);
 

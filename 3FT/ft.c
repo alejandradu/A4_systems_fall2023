@@ -32,6 +32,8 @@ static Node_T oNRoot = NULL;
 static size_t fileCounter = 0;
 /* 4. a counter for the directories */
 static size_t dirCounter = 0;
+/* 4. a counter for all the nodes */
+static size_t NodeCounter = 0;
 
 
 
@@ -490,7 +492,50 @@ void *FT_replaceFileContents(const char *pcPath, void *pvNewContents,
 
   When returning another status, *pbIsFile and *pulSize are unchanged.
 */
-int FT_stat(const char *pcPath, boolean *pbIsFile, size_t *pulSize);
+int FT_stat(const char *pcPath, boolean *pbIsFile, size_t *pulSize) {
+   Path_T oPPath = NULL;
+   Node_T oNFound = NULL;
+   int iStatus;
+
+   assert(pcPath != NULL);
+   assert(poNResult != NULL);
+
+   if(!bIsInitialized) {
+      return INITIALIZATION_ERROR;
+   }
+
+   iStatus = Path_new(pcPath, &oPPath);
+   if(iStatus != SUCCESS) {
+      return iStatus;
+   }
+
+   iStatus = DT_traversePath(oPPath, &oNFound);
+   if(iStatus != SUCCESS)
+   {
+      Path_free(oPPath);
+      return iStatus;
+   }
+
+   if(oNFound == NULL) {
+      Path_free(oPPath);
+      return NO_SUCH_PATH;
+   }
+
+   if(Path_comparePath(Node_getPath(oNFound), oPPath) != 0) {
+      Path_free(oPPath);
+      return NO_SUCH_PATH;
+   }
+
+   Path_free(oPPath);
+   if (oNFound->isFile) {
+      *pbIsFile = TRUE;
+      *pulSize = /*length of the file*/;
+   } else {
+      *pbIsFile = FALSE;
+   }
+   *poNResult = oNFound;
+   return SUCCESS;
+}
 
 /*
   Sets the FT data structure to an initialized state.
@@ -498,7 +543,18 @@ int FT_stat(const char *pcPath, boolean *pbIsFile, size_t *pulSize);
   Returns INITIALIZATION_ERROR if already initialized,
   and SUCCESS otherwise.
 */
-int FT_init(void);
+int FT_init(void) {
+   if(bIsInitialized)
+      return INITIALIZATION_ERROR;
+
+   bIsInitialized = TRUE;
+   oNRoot = NULL;
+   fileCounter = 0;
+   dirCounter = 0;
+   NodeCounter = 0;
+
+   return SUCCESS;
+}
 
 /*
   Removes all contents of the data structure and
@@ -506,7 +562,20 @@ int FT_init(void);
   Returns INITIALIZATION_ERROR if not already initialized,
   and SUCCESS otherwise.
 */
-int FT_destroy(void);
+int FT_destroy(void) {
+
+   if(!bIsInitialized)
+      return INITIALIZATION_ERROR;
+
+   if(oNRoot) {
+      ulCount -= Node_Dir_free(oNRoot);
+      oNRoot = NULL;
+   }
+
+   bIsInitialized = FALSE;
+
+   return SUCCESS;
+}
 
 /*
   Returns a string representation of the
@@ -520,4 +589,56 @@ int FT_destroy(void);
   Allocates memory for the returned string,
   which is then owned by client!
 */
-char *FT_toString(void);
+char *FT_toString(void) {
+   DynArray_T nodes;
+   size_t totalStrlen = 1;
+   char *result = NULL;
+
+   if(!bIsInitialized)
+      return NULL;
+
+   nodes = DynArray_new(ulCount);
+   (void) FT_preOrderTraversal(oNRoot, nodes, 0);
+
+   DynArray_map(nodes, (void (*)(void *, void*)) DT_strlenAccumulate,
+                (void*) &totalStrlen);
+
+   result = malloc(totalStrlen);
+   if(result == NULL) {
+      DynArray_free(nodes);
+      return NULL;
+   }
+   *result = '\0';
+
+   DynArray_map(nodes, (void (*)(void *, void*)) DT_strcatAccumulate,
+                (void *) result);
+
+   DynArray_free(nodes);
+
+   return result;
+}
+
+
+/*
+  Performs a pre-order traversal of the tree rooted at n,
+  inserting each payload to DynArray_T d beginning at index i.
+  Returns the next unused index in d after the insertion(s).
+*/
+static size_t FT_preOrderTraversal(Node_T n, DynArray_T d, size_t i) {
+   size_t c;
+
+   assert(d != NULL);
+
+   if(n != NULL) {
+      (void) DynArray_set(d, i, n);
+      i++;
+      for(c = 0; c < Node_getNumChildren(n); c++) {
+         int iStatus;
+         Node_T oNChild = NULL;
+         iStatus = Node_getChild(n,c, &oNChild);
+         assert(iStatus == SUCCESS);
+         i = DT_preOrderTraversal(oNChild, d, i);
+      }
+   }
+   return i;
+}
