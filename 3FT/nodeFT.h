@@ -15,7 +15,7 @@
 #include "a4def.h"
 #include "dynarray.h"
 #include "path.h"
-#include "nodeFT.h"
+
 
 
 /* A Node_T is a node in a File Tree */
@@ -33,10 +33,15 @@ typedef struct node *Node_T;
                  or oNParent is NULL but oPPath is not of depth 1
   * ALREADY_IN_TREE if oNParent already has a child with this path
 */
-int Node_new(Path_T oPPath, Node_T oNParent, boolean isFile, void* FileContent, Node_T *poNResult);
+int Node_new(Path_T oPPath, Node_T oNParent, 
+      boolean isFile, void* FileContent, size_t ulContLength, Node_T *poNResult);
 
 /* Takes in a Node and returns True if it is a file, false if it is a directory*/
 boolean Node_isFile(Node_T oNNode);
+
+
+/* Takes in a File Node and returns its file content*/
+void *Node_getContent(Node_T oNNode);
 
 /*
   Replaces current contents of the file at the node oNNode with new FileContent 
@@ -44,7 +49,23 @@ boolean Node_isFile(Node_T oNNode);
   Returns NULL if unable to complete the request for any reason.
   Fails if a non-file Node is pluged into this function
 */
-void *Node_ReplaceFileContent(Node_T oNNode, void* NewFileContent);
+void *Node_ReplaceFileContent(Node_T oNNode, void* NewFileContent, size_t ulNewLength);
+
+/*
+  Returns TRUE if oNParent has a child with path oPPath. Returns
+  FALSE if it does not.
+
+  If oNParent has such a child, stores in *pulChildID the child's
+  identifier (as used in Node_getChild). If oNParent does not have
+  such a child, stores in *pulChildID the identifier that such a
+  child _would_ have if inserted.
+
+  stores TRUE in *pisFile if the child identified is a File, false if it is
+  not a file or if it is not existent 
+*/
+boolean Node_hasChild(Node_T oNParent, Path_T oPPath, boolean *pisFile,
+                         size_t *pulChildID);
+
 
 /*
   Destroys and frees all memory allocated for the subtree rooted at
@@ -61,21 +82,6 @@ size_t Node_File_free(Node_T oNNode);
 
 /* Returns the path object representing oNNode's absolute path. */
 Path_T Node_getPath(Node_T oNNode); 
-
-/*
-  Returns TRUE if oNParent has a child with path oPPath. Returns
-  FALSE if it does not.
-
-  If oNParent has such a child, stores in *pulChildID the child's
-  identifier (as used in Node_getChild). If oNParent does not have
-  such a child, stores in *pulChildID the identifier that such a
-  child _would_ have if inserted.
-
-  stores TRUE in *pisFile if the child identified is a File, false if it is
-  not a file or if it is not existent 
-*/
-boolean Node_hasChild(Node_T oNParent, Path_T oPPath, boolean *pisFile,
-                         size_t *pulChildID);
 
 /* Returns the number of file children that oNParent has. */
 size_t Node_getNumChildrenFiles(Node_T oNParent); 
@@ -122,5 +128,8 @@ int Node_compare(Node_T oNFirst, Node_T oNSecond);
   the caller!
 */
 char *Node_toString(Node_T oNNode);
+
+/*get a Node, check if it's a file, and return the Length of the file */
+size_t Node_FileLength(Node_T oNNode);
 
 #endif
