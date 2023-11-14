@@ -51,7 +51,7 @@ static int Node_compareString(const Node_T oNFirst,
 
 static int Node_addChild(Node_T oNParent, Node_T oNChild,
                          size_t ulIndex) {
-   assert(oNParent != NULL);
+   /* assert(oNParent != NULL);*/ /* PARENT CAN BE NULL IF IT'S THE ROOT */
    assert(oNChild != NULL);
    assert(!oNParent->isFile);
 
@@ -267,12 +267,12 @@ boolean Node_hasChild(Node_T oNParent, Path_T oPPath, boolean *pisFile,
    assert(oPPath != NULL);
    assert(pulChildID != NULL);
 
-    /* special case for root node */
+    /* special case for root node 
     if (oNParent != NULL && Path_getDepth(oPPath) == 1) {
       *pisFile = FALSE;
       *pulChildID = 0;
       return TRUE;
-    }
+    }*/
 
    assert(!oNParent->isFile);
 
