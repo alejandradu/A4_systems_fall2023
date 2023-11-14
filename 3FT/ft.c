@@ -105,8 +105,12 @@ static int FT_traversePath(Path_T oPPath, Node_T *poNFurthest) {
                *poNFurthest = NULL;
                return iStatus;
             }
+            /* file can't have children - end all loops */
             oNCurr = oNChild;
-            break;
+            Path_free(oPPrefix);
+            *poNFurthest = oNCurr;
+            return SUCCESS;
+
          } else {
             iStatus = Node_getDirChild(oNCurr, ulChildID, &oNChild);
             if(iStatus != SUCCESS) {
