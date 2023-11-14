@@ -264,12 +264,13 @@ static int FT_insertions(const char *pcPath, boolean isFile, void* FileContent, 
         iStatus = Path_prefix(oPPath, ulIndex, &oPPrefix);
         if(iStatus != SUCCESS) {
            Path_free(oPPath);
-           if(oNFirstNew != NULL)
+           if(oNFirstNew != NULL){
                if (oNFirstNew->isFile)
                   (void) Node_File_free(oNFirstNew);
                else {
                   (void) Node_Dir_free(oNFirstNew);
                }
+           } 
            /*assert(CheckerFT_isValid(bIsInitialized, oNRoot, ulCount));*/
            return iStatus;
         }
@@ -312,6 +313,30 @@ static int FT_insertions(const char *pcPath, boolean isFile, void* FileContent, 
 
 }
 
+/*not modified for FT*/
+static void FT_strlenAccumulate(Node_T oNNode, size_t *pulAcc) {
+   assert(pulAcc != NULL);
+
+   if(oNNode != NULL)
+      *pulAcc += (Path_getStrLength(Node_getPath(oNNode)) + 1);
+}
+
+
+/*
+  Alternate version of strcat that inverts the typical argument
+  order, appending oNNode's path onto pcAcc, and also always adds one
+  newline at the end of the concatenated string.
+*/
+/*not yet modified for FT*/
+static void FT_strcatAccumulate(Node_T oNNode, char *pcAcc) {
+   assert(pcAcc != NULL);
+
+   if(oNNode != NULL) {
+      strcat(pcAcc, Path_getPathname(Node_getPath(oNNode)));
+      strcat(pcAcc, "\n");
+   }
+}
+
 
 
 /*
@@ -329,7 +354,7 @@ int FT_insertDir(const char *pcPath) {
 
     assert(pcPath != NULL);
 
-    return FT_insertions(pcPath, FALSE, NULL, NULL);
+    return FT_insertions(pcPath, FALSE, NULL, 0);
 }
 
 
@@ -525,7 +550,7 @@ int FT_stat(const char *pcPath, boolean *pbIsFile, size_t *pulSize) {
       return iStatus;
    }
 
-   iStatus = DT_traversePath(oPPath, &oNFound);
+   iStatus = FT_traversePath(oPPath, &oNFound);
    if(iStatus != SUCCESS)
    {
       Path_free(oPPath);
@@ -677,26 +702,3 @@ static size_t FT_preOrderTraversal(Node_T oNRoot, DynArray_T AllNodesArray, size
   oNNode's path, and also always adds one addition byte to the sum.
 */
 
-/*not modified for FT*/
-static void FT_strlenAccumulate(Node_T oNNode, size_t *pulAcc) {
-   assert(pulAcc != NULL);
-
-   if(oNNode != NULL)
-      *pulAcc += (Path_getStrLength(Node_getPath(oNNode)) + 1);
-}
-
-
-/*
-  Alternate version of strcat that inverts the typical argument
-  order, appending oNNode's path onto pcAcc, and also always adds one
-  newline at the end of the concatenated string.
-*/
-/*not yet modified for FT*/
-static void FT_strcatAccumulate(Node_T oNNode, char *pcAcc) {
-   assert(pcAcc != NULL);
-
-   if(oNNode != NULL) {
-      strcat(pcAcc, Path_getPathname(Node_getPath(oNNode)));
-      strcat(pcAcc, "\n");
-   }
-}
