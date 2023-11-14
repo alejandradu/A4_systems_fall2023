@@ -71,6 +71,7 @@ int main(void) {
      ALREADY_IN_TREE, and trying to insert some other root should
      return CONFLICTING_PATH.
   */
+  FT_insertDir("1root/2child/3gkid");
   assert(FT_insertDir("1root/2child/3gkid") == SUCCESS);
 
   return 0;
