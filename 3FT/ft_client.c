@@ -71,6 +71,7 @@ int main(void) {
      ALREADY_IN_TREE, and trying to insert some other root should
      return CONFLICTING_PATH.
   */
+  fprintf(stderr, "BEFORE\n");
   assert(FT_insertDir("1root/2child/3gkid") == SUCCESS);
   fprintf(stderr, "passed first successful insert\n");
 
