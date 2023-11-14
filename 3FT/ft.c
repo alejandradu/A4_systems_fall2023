@@ -268,7 +268,7 @@ static int FT_insertions(const char *pcPath, boolean isFile, void* FileContent, 
                if (oNFirstNew->isFile)
                   (void) Node_File_free(oNFirstNew);
                else {
-                  (void) Node_free(oNFirstNew);
+                  (void) Node_Dir_free(oNFirstNew);
                }
            /*assert(CheckerFT_isValid(bIsInitialized, oNRoot, ulCount));*/
            return iStatus;
