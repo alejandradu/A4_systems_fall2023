@@ -237,10 +237,13 @@ static int FT_insertions(const char *pcPath, boolean isFile, void* FileContent, 
         }
     }
   
-     /* fails if the closest ancestor is a file */
-    if(Node_isFile(oNCurr)) {
-        Path_free(oPPath);
-        return NOT_A_DIRECTORY;
+     /* NULL ancestor must be a directory */
+    if(oNCurr != NULL) {
+        /* fails if any other closest ancestor is a file */
+        if(oNCurr != NULL && Node_isFile(oNCurr)) {
+            Path_free(oPPath);
+            return NOT_A_DIRECTORY;
+        }
     }
   
     ulDepth = Path_getDepth(oPPath);
