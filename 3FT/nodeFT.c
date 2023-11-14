@@ -70,8 +70,7 @@ static int Node_addChild(Node_T oNParent, Node_T oNChild,
 
 /*-------------------------------------------------------------------------*/
 
-int Node_new(Path_T oPPath, Node_T oNParent, 
-      boolean isFile, void* FileContent, size_t ulContLength, Node_T *poNResult) {
+int Node_new(Path_T oPPath, Node_T oNParent, boolean isFile, void* FileContent, size_t ulContLength, Node_T *poNResult) {
    Node_T psNew;
    Path_T oPParentPath = NULL;
    Path_T oPNewPath = NULL;
