@@ -15,7 +15,7 @@
 #include "a4def.h"
 #include "dynarray.h"
 #include "path.h"
-
+#include "nodeFT.h"
 
 
 /* A Node_T is a node in a File Tree */
