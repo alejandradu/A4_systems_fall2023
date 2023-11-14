@@ -63,7 +63,6 @@ int main(void) {
   assert(FT_insertFile("1root//2child", NULL, 0) == BAD_PATH);
 
   /* putting a file at the root is illegal */
-  fprintf(stderr,"insertFile returns %d\n", FT_insertFile("A",NULL,0));
   assert(FT_insertFile("A",NULL,0) == CONFLICTING_PATH);
 
   /* After insertion, the data structure should contain every prefix
