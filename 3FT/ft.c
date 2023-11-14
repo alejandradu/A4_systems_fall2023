@@ -465,6 +465,10 @@ int FT_insertFile(const char *pcPath, void *pvContents,
     
     assert(pcPath != NULL);
 
+    if (oNRoot == NULL) {
+      return CONFLICTING_PATH;
+    }
+
     return FT_insertions(pcPath, TRUE, pvContents, ulLength);
 }
 
