@@ -70,8 +70,8 @@ static int Node_addChild(Node_T oNParent, Node_T oNChild,
 
 /*-------------------------------------------------------------------------*/
 
-int Node_new(Path_T oPPath, Node_T oNParent, boolean isFile, 
-        void* FileContent, size_t ulContLength, Node_T *poNResult) {
+int Node_new(Path_T oPPath, Node_T oNParent, 
+      boolean isFile, void* FileContent, size_t ulContLength, Node_T *poNResult) {
    Node_T psNew;
    Path_T oPParentPath = NULL;
    Path_T oPNewPath = NULL;
@@ -82,7 +82,6 @@ int Node_new(Path_T oPPath, Node_T oNParent, boolean isFile,
 
    assert(oPPath != NULL);
    assert(oNParent == NULL);
-   assert(isFile != NULL);
 
    /* allocate space for a new node */
    psNew = malloc(sizeof(struct node));
@@ -213,7 +212,9 @@ boolean Node_isFile(Node_T oNNode) {
     return oNNode->isFile;
 }
 
-void Node_getContent(Node_T oNNode) {
+/*-------------------------------------------------------------------------*/
+
+void *Node_getContent(Node_T oNNode) {
     assert (oNNode != NULL);
 
     /* this content might be NULL 
@@ -230,8 +231,9 @@ void Node_getContent(Node_T oNNode) {
   Returns the old contents if successful. (Note: contents may be NULL.)
   Returns NULL if unable to complete the request for any reason.
 */
-void *Node_ReplaceFileContent (Node_T oNNode, void* NewFileContent, size_t ulNewLength) {
+void *Node_ReplaceFileContent(Node_T oNNode, void* NewFileContent, size_t ulNewLength) {
     void* oldContent;
+    void* temp;
     
     assert(oNNode != NULL);
     assert(oNNode->isFile);
@@ -240,7 +242,7 @@ void *Node_ReplaceFileContent (Node_T oNNode, void* NewFileContent, size_t ulNew
     oldContent = oNNode->FileContent;
 
     /* re-allocate memory for contents */
-    void* temp = realloc(oNNode->FileContent, ulNewLength);
+    temp = realloc(oNNode->FileContent, ulNewLength);
     if(temp == NULL) {
         /* revert reordering */
         oNNode->FileContent = oldContent;
@@ -305,9 +307,15 @@ size_t Node_Dir_free(Node_T oNNode) {
                                     ulIndex);
     }
 
-    /* recursively remove children */
+    /* remove file children*/
+    while(DynArray_getLength(oNNode->oFChildren) != 0) {
+        ulCount += Node_File_free(DynArray_get(oNNode->oFChildren, 0));
+    }
+    DynArray_free(oNNode->oFChildren);
+
+    /* recursively remove directory children */
     while(DynArray_getLength(oNNode->oDChildren) != 0) {
-        ulCount += Node_free(DynArray_get(oNNode->oDChildren, 0));
+        ulCount += Node_Dir_free(DynArray_get(oNNode->oDChildren, 0));
     }
     DynArray_free(oNNode->oDChildren);
 
@@ -371,7 +379,7 @@ size_t Node_getNumChildrenFiles(Node_T oNParent) {
 
 /*-------------------------------------------------------------------------*/
 
-size_t Node_getNumChildrenDir(Node_T oNParent) {
+size_t Node_getNumChildrenDirs(Node_T oNParent) {
    assert(oNParent != NULL);
    assert(!oNParent->isFile);
 
@@ -438,7 +446,7 @@ int Node_compare(Node_T oNFirst, Node_T oNSecond) {
 
 /*-------------------------------------------------------------------------*/
 
-char *Node_toString(Node_T oNNode) {
+char* Node_toString(Node_T oNNode) {
    char *copyPath;
 
    assert(oNNode != NULL);
@@ -451,3 +459,10 @@ char *Node_toString(Node_T oNNode) {
 }
 
 /*-------------------------------------------------------------------------*/
+
+size_t Node_FileLength(Node_T oNNode) {
+   assert (oNNode != NULL);
+   assert (oNNode->isFile);
+
+   return (oNNode->ulContLength);
+}

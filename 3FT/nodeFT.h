@@ -44,7 +44,7 @@ boolean Node_isFile(Node_T oNNode);
   Returns NULL if unable to complete the request for any reason.
   Fails if a non-file Node is pluged into this function
 */
-void *Node_ReplaceFileContent (Node_T oNNode, void* NewFileContent);
+void *Node_ReplaceFileContent(Node_T oNNode, void* NewFileContent);
 
 /*
   Destroys and frees all memory allocated for the subtree rooted at
