@@ -80,19 +80,16 @@ int main(void) {
   assert(FT_containsFile("1root/2child") == FALSE);
   assert(FT_containsDir("1root/2child/3gkid") == TRUE);
   assert(FT_containsFile("1robot/2child/3gkid") == FALSE);
-
-  test = FT_insertFile("1root/2second/3gfile", NULL, 0);
-  /*fprintf(stderr, "test1: %d\n", test);*/
-  assert(test == SUCCESS);
-  fprintf(stderr, "SECOND INSERTION");
+  assert(FT_insertFile("1root/2second/3gfile", NULL, 0) == SUCCESS);
 
   assert(FT_containsDir("1root/2second") == TRUE);
   assert(FT_containsFile("1root/2second") == FALSE);
   assert(FT_containsDir("1root/2second/3gfile") == FALSE);
   assert(FT_containsFile("1root/2second/3gfile") == TRUE);
   assert(FT_getFileContents("1root/2second/3gfile") == NULL);
-   fprintf(stderr, "START 3RD INSERT");
+  
   test = FT_insertDir("1root/2child/3gkid");
+  fprintf(stderr, "output %d\n", test);
   assert(test == ALREADY_IN_TREE);
   assert(FT_insertFile("1root/2child/3gkid", NULL, 0) ==
          ALREADY_IN_TREE);
