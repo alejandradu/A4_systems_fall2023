@@ -257,7 +257,7 @@ static int FT_insertions(const char *pcPath, boolean isFile, void* FileContent, 
         ulIndex = 1;
     else {
         /* index to insert the node */
-        ulIndex = Path_getDepth(Node_getPath(oNCurr));
+        ulIndex = Path_getDepth(Node_getPath(oNCurr))+1;
  
          /* fails if there is already a node (any type) with that 
         path at that depth */
