@@ -63,6 +63,7 @@ static int FT_traversePath(Path_T oPPath, Node_T *poNFurthest) {
    size_t ulDepth;
    size_t i;
    size_t ulChildID;
+   boolean isFile;
 
    assert(oPPath != NULL);
    assert(poNFurthest != NULL);
@@ -89,17 +90,17 @@ static int FT_traversePath(Path_T oPPath, Node_T *poNFurthest) {
 
    oNCurr = oNRoot;
    ulDepth = Path_getDepth(oPPath);
-   for(i = 2; i <= ulDepth; i++) {
+   for(i = 2; i < ulDepth; i++) { /*at most reaching level ulDepth - 1*/
       iStatus = Path_prefix(oPPath, i, &oPPrefix);
       if(iStatus != SUCCESS) {
          *poNFurthest = NULL;
          return iStatus;
       }
-      if(Node_hasChild(oNCurr, oPPrefix, &ulChildID)) {
+      if(Node_hasChild(oNCurr, oPPrefix, &isFile,&ulChildID)) {
          /* go to that child and continue with next prefix */
          Path_free(oPPrefix);
          oPPrefix = NULL;
-         iStatus = Node_getChild(oNCurr, ulChildID, &oNChild);
+         iStatus = Node_getDirChild(oNCurr, ulChildID, &oNChild);
          if(iStatus != SUCCESS) {
             *poNFurthest = NULL;
             return iStatus;
@@ -113,9 +114,41 @@ static int FT_traversePath(Path_T oPPath, Node_T *poNFurthest) {
       }
    }
 
-   Path_free(oPPrefix);
-   *poNFurthest = oNCurr;
-   return SUCCESS;
+   /*if we did not get to level ulDepth -1, then this node
+   does not exist yet, we return the furthest directory node that 
+   we can reach*/
+
+   if (Path_getDepth(oPPrefix) < (ulDepth -1)) {
+         Path_free(oPPrefix);
+         oPPrefix = NULL;
+         *poNFurthest = oNCurr;
+         return SUCCESS;
+   } else { /*if it reached ulDepth, we need to check if this is the
+      furthest node, or if this has a file child with the path, or if
+      this node has a directory child with the path*/
+      Path_free(oPPrefix);
+      oPPrefix = NULL;
+      if(Node_hasChild(oNCurr, oPPath, &isFile,&ulChildID)) {
+         if (isFile) {
+            iStatus = Node_getFileChild(oNCurr, ulChildID, &oNChild);
+            if(iStatus != SUCCESS) {
+               *poNFurthest = NULL;
+               return iStatus;
+            }         
+         } else {
+            iStatus = Node_getDirChild(oNCurr, ulChildID, &oNChild);
+            if(iStatus != SUCCESS) {
+               *poNFurthest = NULL;
+               return iStatus;
+            }
+         }
+         oNCurr = oNChild;
+         return SUCCESS;
+         
+      }
+
+   }
+
 }
 
 /*
@@ -186,7 +219,7 @@ static int FT_findNode(const char *pcPath, Node_T *poNResult, boolean isFile) {
 
 /* Encapsulation of the algorithm to insert a new node accounting
 for the differences between a file and a directory */
-static int FT_insertions(const char *pcPath, boolean isFile, void* FileContent) {
+static int FT_insertions(const char *pcPath, boolean isFile, void* FileContent, size_t fileLength) {
     int iStatus;
     Path_T oPPath = NULL;
     Node_T oNFirstNew = NULL;
@@ -259,7 +292,7 @@ static int FT_insertions(const char *pcPath, boolean isFile, void* FileContent) 
         }
   
         /* insert the new node for this level */
-        iStatus = Node_new(oPPrefix, oNCurr, isFile, FileContent, &oNNewNode);
+        iStatus = Node_new(oPPrefix, oNCurr, isFile, FileContent, fileLength, &oNNewNode);
         if(iStatus != SUCCESS) {
            Path_free(oPPath);
            Path_free(oPPrefix);
@@ -313,7 +346,7 @@ int FT_insertDir(const char *pcPath) {
 
     assert(pcPath != NULL);
 
-    return FT_insertions(pcPath, FALSE, NULL);
+    return FT_insertions(pcPath, FALSE, NULL, NULL);
 }
 
 
@@ -384,7 +417,7 @@ int FT_insertFile(const char *pcPath, void *pvContents,
     assert(pvContents != NULL);  /* HERE revise later */
     assert(ulLength > 0); 
 
-    return FT_insertions(pcPath, TRUE, pvContents);
+    return FT_insertions(pcPath, TRUE, pvContents, ulLength);
 }
 
 /*
