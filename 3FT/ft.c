@@ -181,7 +181,7 @@ static int FT_findNode(const char *pcPath, Node_T *poNResult, boolean isFile) {
    }
 
    /* check the type of the node at path matched */
-   if(isFile && !Node_isFile(oNFound) || !isFile && Node_isFile(oNFound)) {
+   if(((isFile) && (!Node_isFile(oNFound))) || ((!isFile) && (Node_isFile(oNFound)))) {
       Path_free(oPPath);
       *poNResult = NULL;
       return NOT_A_DIRECTORY;
@@ -206,7 +206,6 @@ static int FT_insertions(const char *pcPath, boolean isFile, void* FileContent, 
     Node_T oNCurr = NULL;
     size_t ulDepth, ulIndex;
     size_t ulNewNodes = 0;
-    boolean isFile;
 
     assert(pcPath != NULL);
  
@@ -266,7 +265,11 @@ static int FT_insertions(const char *pcPath, boolean isFile, void* FileContent, 
         if(iStatus != SUCCESS) {
            Path_free(oPPath);
            if(oNFirstNew != NULL)
-              (void) Node_free(oNFirstNew);
+               if (oNFirstNew->isFile)
+                  (void) Node_File_free(oNFirstNew);
+               else {
+                  (void) Node_free(oNFirstNew);
+               }
            /*assert(CheckerFT_isValid(bIsInitialized, oNRoot, ulCount));*/
            return iStatus;
         }
