@@ -264,7 +264,7 @@ static int FT_insertions(const char *pcPath, boolean isFile, void* FileContent, 
         if(iStatus != SUCCESS) {
            Path_free(oPPath);
            if(oNFirstNew != NULL){
-               if (oNFirstNew->isFile)
+               if (isFile)
                   (void) Node_File_free(oNFirstNew);
                else {
                   (void) Node_Dir_free(oNFirstNew);
