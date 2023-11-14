@@ -70,7 +70,6 @@ static int FT_traversePath(Path_T oPPath, Node_T *poNFurthest) {
    /* root is NULL -> won't find anything */
    if(oNRoot == NULL) {
       *poNFurthest = NULL;
-      *isFile = FALSE;  /* roots must be directories */
       return SUCCESS;
    }
 
@@ -138,7 +137,7 @@ static int FT_findNode(const char *pcPath, Node_T *poNResult, boolean isFile) {
    assert(pcPath != NULL);
    assert(poNResult != NULL);
 
-   if(!bIsInitialized) {
+   if(!isInitialized) {
       *poNResult = NULL;
       return INITIALIZATION_ERROR;
    }
@@ -383,7 +382,7 @@ int FT_insertFile(const char *pcPath, void *pvContents,
     
     assert(pcPath != NULL);
     assert(pvContents != NULL);  /* HERE revise later */
-    assert(uLength > 0); 
+    assert(ulLength > 0); 
 
     return FT_insertions(pcPath, TRUE, pvContents);
 }
@@ -498,9 +497,10 @@ int FT_stat(const char *pcPath, boolean *pbIsFile, size_t *pulSize) {
    int iStatus;
 
    assert(pcPath != NULL);
-   assert(poNResult != NULL);
+   assert(pbIsFile != NULL);
+   assert(pulSize != NULL);
 
-   if(!bIsInitialized) {
+   if(!isInitialized) {
       return INITIALIZATION_ERROR;
    }
 
@@ -529,11 +529,10 @@ int FT_stat(const char *pcPath, boolean *pbIsFile, size_t *pulSize) {
    Path_free(oPPath);
    if (oNFound->isFile) {
       *pbIsFile = TRUE;
-      *pulSize = /*length of the file*/;
+      *pulSize = Node_FileLength(oNFound);
    } else {
       *pbIsFile = FALSE;
    }
-   *poNResult = oNFound;
    return SUCCESS;
 }
 
@@ -544,10 +543,10 @@ int FT_stat(const char *pcPath, boolean *pbIsFile, size_t *pulSize) {
   and SUCCESS otherwise.
 */
 int FT_init(void) {
-   if(bIsInitialized)
+   if(isInitialized)
       return INITIALIZATION_ERROR;
 
-   bIsInitialized = TRUE;
+   isInitialized = TRUE;
    oNRoot = NULL;
    fileCounter = 0;
    dirCounter = 0;
@@ -564,15 +563,15 @@ int FT_init(void) {
 */
 int FT_destroy(void) {
 
-   if(!bIsInitialized)
+   if(!isInitialized)
       return INITIALIZATION_ERROR;
 
    if(oNRoot) {
-      ulCount -= Node_Dir_free(oNRoot);
+      NodeCounter -= Node_Dir_free(oNRoot);
       oNRoot = NULL;
    }
 
-   bIsInitialized = FALSE;
+   isInitialized = FALSE;
 
    return SUCCESS;
 }
@@ -589,18 +588,20 @@ int FT_destroy(void) {
   Allocates memory for the returned string,
   which is then owned by client!
 */
+
+/*not yet modified for FT*/
 char *FT_toString(void) {
    DynArray_T nodes;
    size_t totalStrlen = 1;
    char *result = NULL;
 
-   if(!bIsInitialized)
+   if(!isInitialized)
       return NULL;
 
-   nodes = DynArray_new(ulCount);
+   nodes = DynArray_new(NodeCounter);
    (void) FT_preOrderTraversal(oNRoot, nodes, 0);
 
-   DynArray_map(nodes, (void (*)(void *, void*)) DT_strlenAccumulate,
+   DynArray_map(nodes, (void (*)(void *, void*)) FT_strlenAccumulate,
                 (void*) &totalStrlen);
 
    result = malloc(totalStrlen);
@@ -610,7 +611,7 @@ char *FT_toString(void) {
    }
    *result = '\0';
 
-   DynArray_map(nodes, (void (*)(void *, void*)) DT_strcatAccumulate,
+   DynArray_map(nodes, (void (*)(void *, void*)) FT_strcatAccumulate,
                 (void *) result);
 
    DynArray_free(nodes);
@@ -641,4 +642,35 @@ static size_t FT_preOrderTraversal(Node_T n, DynArray_T d, size_t i) {
       }
    }
    return i;
+}
+
+
+/*
+  Alternate version of strlen that uses pulAcc as an in-out parameter
+  to accumulate a string length, rather than returning the length of
+  oNNode's path, and also always adds one addition byte to the sum.
+*/
+
+/*not modified for FT*/
+static void FT_strlenAccumulate(Node_T oNNode, size_t *pulAcc) {
+   assert(pulAcc != NULL);
+
+   if(oNNode != NULL)
+      *pulAcc += (Path_getStrLength(Node_getPath(oNNode)) + 1);
+}
+
+
+/*
+  Alternate version of strcat that inverts the typical argument
+  order, appending oNNode's path onto pcAcc, and also always adds one
+  newline at the end of the concatenated string.
+*/
+/*not yet modified for FT*/
+static void FT_strcatAccumulate(Node_T oNNode, char *pcAcc) {
+   assert(pcAcc != NULL);
+
+   if(oNNode != NULL) {
+      strcat(pcAcc, Path_getPathname(Node_getPath(oNNode)));
+      strcat(pcAcc, "\n");
+   }
 }

@@ -215,7 +215,7 @@ boolean Node_isFile(Node_T oNNode) {
 
 /*-------------------------------------------------------------------------*/
 
-void Node_getContent(Node_T oNNode) {
+void *Node_getContent(Node_T oNNode) {
     assert (oNNode != NULL);
 
     /* this content might be NULL 
@@ -459,3 +459,10 @@ char* Node_toString(Node_T oNNode) {
 }
 
 /*-------------------------------------------------------------------------*/
+
+size_t Node_FileLength(Node_T oNNode) {
+   assert (oNNode != NULL);
+   assert (oNNode->isFile);
+   
+   return (oNNode->ulContLength);
+}

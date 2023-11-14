@@ -41,7 +41,7 @@ boolean Node_isFile(Node_T oNNode);
 
 
 /* Takes in a File Node and returns its file content*/
-void Node_getContent(Node_T oNNode);
+void *Node_getContent(Node_T oNNode);
 
 /*
   Replaces current contents of the file at the node oNNode with new FileContent 
@@ -128,5 +128,8 @@ int Node_compare(Node_T oNFirst, Node_T oNSecond);
   the caller!
 */
 char *Node_toString(Node_T oNNode);
+
+/*get a Node, check if it's a file, and return the Length of the file */
+size_t Node_FileLength(Node_T oNNode);
 
 #endif
