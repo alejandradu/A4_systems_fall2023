@@ -115,7 +115,6 @@ static int FT_traversePath(Path_T oPPath, Node_T *poNFurthest) {
             }
             oNCurr = oNChild;
          }
-         
       }
       else {
          /* oNCurr doesn't have child with path oPPrefix:
