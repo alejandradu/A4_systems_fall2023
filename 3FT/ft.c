@@ -45,13 +45,12 @@ static size_t NodeCounter = 0;
 */
 
 /*
-  Traverses the FT to find a node with absolute path pcPath. Returns a
-  int SUCCESS status and sets *poNResult to be the node, if found.
-  Otherwise, sets *poNResult to NULL and returns with status:
-  * INITIALIZATION_ERROR if the FT is not in an initialized state
-  * BAD_PATH if pcPath does not represent a well-formatted path
-  * CONFLICTING_PATH if the root's path is not a prefix of pcPath
-  * NO_SUCH_PATH if no node with pcPath exists in the hierarchy
+     Traverses the FT starting at the root as far as possible towards
+  absolute path oPPath. If able to traverse, returns an int SUCCESS
+  status and sets *poNFurthest to the furthest node reached (which may
+  be only a prefix of oPPath, or even NULL if the root is NULL).
+  Otherwise, sets *poNFurthest to NULL and returns with status:
+  * CONFLICTING_PATH if the root's path is not a prefix of oPPath
   * MEMORY_ERROR if memory could not be allocated to complete request
  */
 static int FT_traversePath(Path_T oPPath, Node_T *poNFurthest) {
@@ -225,12 +224,14 @@ static int FT_insertions(const char *pcPath, boolean isFile, void* FileContent, 
         Path_free(oPPath);
         return iStatus;
     }
+
   
-    assert(oNCurr != NULL);
      /* fails if the closest ancestor is a file */
-    if(Node_isFile(oNCurr)) {
+    if (oNCurr != NULL) {
+      if(Node_isFile(oNCurr)) {
         Path_free(oPPath);
         return NOT_A_DIRECTORY;
+    }
     }
   
      /* no ancestor and root not NULL, pcPath isn't underneath root. */
