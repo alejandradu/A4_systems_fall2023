@@ -316,7 +316,8 @@ static int FT_insertions(const char *pcPath, boolean isFile, void* FileContent, 
            oNFirstNew = oNCurr;
         ulIndex++;
 
-    fprintf(stderr, "Inserted a child, should be zero %d\n", Node_hasChild(oNCurr, oPPath, &isFile, &ulIndex));
+    fprintf(stderr, "path depth of inserted node %zu\n", Path_getDepth(Node_getPath(oNCurr)));
+
     }
 
     Path_free(oPPath);
