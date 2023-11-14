@@ -418,6 +418,7 @@ boolean FT_containsDir(const char *pcPath) {
     assert(pcPath != NULL);
 
     iStatus = FT_findNode(pcPath, &oNFound, FALSE);
+    fprintf(stderr, "iStatus: %d\n", iStatus);
     return (iStatus == SUCCESS);
 }
 
