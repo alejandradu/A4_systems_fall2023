@@ -282,7 +282,7 @@ boolean Node_hasChild(Node_T oNParent, Path_T oPPath, boolean *pisFile,
     /* *pulChildID is the index into oNParent->oDChildren */
     hasDirChild = DynArray_bsearch(oNParent->oDChildren,
             (char*) Path_getPathname(oPPath), pulChildID,
-            (int (*)(const void*,const void*)) Node_compare);
+            (int (*)(const void*,const void*)) Node_compareString);
     
     if (hasDirChild) {
         *pisFile = FALSE;
@@ -291,7 +291,7 @@ boolean Node_hasChild(Node_T oNParent, Path_T oPPath, boolean *pisFile,
         /* *pulChildID is the index into oNParent->oDChildren */
         hasFileChild = DynArray_bsearch(oNParent->oFChildren,
             (char*) Path_getPathname(oPPath), pulChildID,
-            (int (*)(const void*,const void*)) Node_compare);
+            (int (*)(const void*,const void*)) Node_compareString);
         *pisFile = hasFileChild;
         return hasFileChild;
     }   
