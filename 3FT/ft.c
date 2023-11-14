@@ -14,7 +14,6 @@
 #include "nodeFT.h"
 #include "ft.h"
 #include "a4def.h"
-#include "nodeFT.c"
 
 
 /*
