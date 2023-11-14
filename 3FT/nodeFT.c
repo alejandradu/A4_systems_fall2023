@@ -81,7 +81,7 @@ int Node_new(Path_T oPPath, Node_T oNParent,
    int iStatus;
 
    assert(oPPath != NULL);
-   assert(oNParent == NULL);
+   /* assert(oNParent == NULL); PARENT CAN BE NULL IF IT'S THE ROOT - maybe validate another way */
 
    /* allocate space for a new node */
    psNew = malloc(sizeof(struct node));

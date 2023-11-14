@@ -228,7 +228,7 @@ static int FT_insertions(const char *pcPath, boolean isFile, void* FileContent, 
 
     /* no ancestor and root not NULL, pcPath isn't underneath root. */
     if(oNCurr == NULL){
-        if(isFile) {/* fails in any case: if inserted at root too */
+        if(isFile) {  /* fails in any case: if inserted at root too */
             Path_free(oPPath);
             return CONFLICTING_PATH;
         } else if(oNRoot != NULL) {
