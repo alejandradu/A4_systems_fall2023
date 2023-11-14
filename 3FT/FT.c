@@ -24,9 +24,9 @@
 
 /* Global static flags */
 /* 1. a flag for being in an initialized state */
-static boolean isInitialized = FALSE;
+static boolean isInitialized;
 /* 2. a pointer to the root of the hierarchy */
-static Node_T oNRoot = NULL;
+static Node_T oNRoot;
 /* 3. a counter for the files */
 static size_t fileCounter = 0;
 /* 4. a counter for the directories */
@@ -95,11 +95,11 @@ static int FT_traversePath(Path_T oPPath, Node_T *poNFurthest) {
          *poNFurthest = NULL;
          return iStatus;
       }
-      if(Node_hasChild(oNCurr, oPPrefix, &isFile,&ulChildID)) {
+      if(Node_hasChild(oNCurr, oPPrefix, &isFile, &ulChildID)) {
          /* go to that child and continue with next prefix */
          Path_free(oPPrefix);
          oPPrefix = NULL;
-         if (isFile) {
+         if(isFile) {
             iStatus = Node_getFileChild(oNCurr, ulChildID, &oNChild);
             if(iStatus != SUCCESS) {
                *poNFurthest = NULL;
@@ -233,9 +233,13 @@ static int FT_insertions(const char *pcPath, boolean isFile, void* FileContent, 
     }
   
      /* no ancestor and root not NULL, pcPath isn't underneath root. */
-    if(oNCurr == NULL && oNRoot != NULL) {
-        Path_free(oPPath);
-        return CONFLICTING_PATH;
+    if(oNCurr == NULL) {
+        if(isFile) /* fails in any case: if inserted at root too */
+            Path_free(oPPath);
+            return NOT_A_DIRECTORY;
+        else if(oNRoot != NULL) {
+            Path_free(oPPath);
+            return CONFLICTING_PATH;
     }
   
     ulDepth = Path_getDepth(oPPath);
