@@ -99,7 +99,6 @@ static int FT_traversePath(Path_T oPPath, Node_T *poNFurthest) {
 
       /* index to insert the node */
         ulIndex = Path_getDepth(Node_getPath(oNCurr));
-        fprintf(stderr, "ulIndex in traversing: %zu\n", ulIndex);
 
       if(Node_hasChild(oNCurr, oPPrefix, &isFile, &ulChildID)) {
          /* go to that child and continue with next prefix */
