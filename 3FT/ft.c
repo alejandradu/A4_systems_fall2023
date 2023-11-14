@@ -275,29 +275,24 @@ static int FT_insertions(const char *pcPath, boolean isFile, void* FileContent, 
         iStatus = Path_prefix(oPPath, ulIndex, &oPPrefix);
         if(iStatus != SUCCESS) {
            Path_free(oPPath);
-           if(oNFirstNew != NULL){
-               if (isFile)
-                  (void) Node_File_free(oNFirstNew);
-               else {
-                  (void) Node_Dir_free(oNFirstNew);
-               }
-           } 
+           if(oNFirstNew != NULL)
+               (void) Node_free(oNFirstNew); 
            /*assert(CheckerFT_isValid(bIsInitialized, oNRoot, ulCount));*/
            return iStatus;
         }
   
-        /* insert the new node for this level */
-        iStatus = Node_new(oPPrefix, oNCurr, isFile, FileContent, fileLength, &oNNewNode);
+        /* all levels up to depth - 1 must be directories */
+        if (ulIndex < ulDepth) {
+           iStatus = Node_new(oPPrefix, oNCurr, FALSE, FileContent, fileLength, &oNNewNode);
+        } else {
+            iStatus = Node_new(oPPrefix, oNCurr, isFile, FileContent, fileLength, &oNNewNode);
+        }
         if(iStatus != SUCCESS) {
            Path_free(oPPath);
            Path_free(oPPrefix);
-           if(oNFirstNew != NULL) {
-              if(isFile)
-                 (void) Node_File_free(oNFirstNew);
-              else
-                 (void) Node_Dir_free(oNFirstNew);
-           }
-           /*assert(CheckerFT_isValid(bIsInitialized, oNRoot, ulCount));*/
+           if(oNFirstNew != NULL)
+               (void) Node_free(oNFirstNew);
+               /*assert(CheckerFT_isValid(bIsInitialized, oNRoot, ulCount));*/
            return iStatus;
         }
   
@@ -314,14 +309,16 @@ static int FT_insertions(const char *pcPath, boolean isFile, void* FileContent, 
     /* update FT state variables to reflect insertion */
     if(oNRoot == NULL)
       oNRoot = oNFirstNew;
-    if(isFile)
-        fileCounter += ulNewNodes;
-    else
-        dirCounter += ulNewNodes;
+    if(ulIndex < ulDepth) {
+        dirCounter += ulNewNodes-1;
+    } else if (isFile){
+        dirCounter += 1;
+    } else {
+        fileCounter += 1;
+    }
 
    /*assert(CheckerFT_isValid(bIsInitialized, oNRoot, ulCount));*/
    return SUCCESS;
-
 }
 
 
