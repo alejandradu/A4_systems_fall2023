@@ -63,7 +63,7 @@ static int FT_traversePath(Path_T oPPath, Node_T *poNFurthest) {
    size_t i;
    size_t ulChildID;
    boolean isFile;
-   size_t uLIndex;
+   size_t ulIndex;
 
    assert(oPPath != NULL);
    assert(poNFurthest != NULL);
