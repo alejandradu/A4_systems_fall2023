@@ -331,7 +331,6 @@ static int FT_insertions(const char *pcPath, boolean isFile, void* FileContent, 
 
    /*assert(CheckerFT_isValid(bIsInitialized, oNRoot, ulCount));*/
 
-    fprintf(stderr, "FT_insertions: SUCCESS\n");
     fprintf(stderr, "dirCounter: %zu\n", dirCounter);
     fprintf(stderr, "fileCounter: %zu\n", fileCounter);
     fprintf(stderr, "ulNewNodes: %zu\n", ulNewNodes);
