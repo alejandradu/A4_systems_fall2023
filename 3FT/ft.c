@@ -274,11 +274,16 @@ static int FT_insertions(const char *pcPath, boolean isFile, void* FileContent, 
         /* generate a Path_T for this level */
         iStatus = Path_prefix(oPPath, ulIndex, &oPPrefix);
         if(iStatus != SUCCESS) {
-           Path_free(oPPath);
-           if(oNFirstNew != NULL)
-               (void) Node_free(oNFirstNew); 
-           /*assert(CheckerFT_isValid(bIsInitialized, oNRoot, ulCount));*/
-           return iStatus;
+            Path_free(oPPath);
+            if(oNFirstNew != NULL) {
+                if(ulIndex < ulDepth)
+                   (void) Node_Dir_free(oNFirstNew);
+                else if(isFile)
+                   (void) Node_File_free(oNFirstNew);
+                else
+                   (void) Node_Dir_free(oNFirstNew);
+            }
+            return iStatus;
         }
   
         /* all levels up to depth - 1 must be directories */
@@ -288,11 +293,16 @@ static int FT_insertions(const char *pcPath, boolean isFile, void* FileContent, 
             iStatus = Node_new(oPPrefix, oNCurr, isFile, FileContent, fileLength, &oNNewNode);
         }
         if(iStatus != SUCCESS) {
-           Path_free(oPPath);
-           Path_free(oPPrefix);
-           if(oNFirstNew != NULL)
-               (void) Node_free(oNFirstNew);
-               /*assert(CheckerFT_isValid(bIsInitialized, oNRoot, ulCount));*/
+            Path_free(oPPath);
+            Path_free(oPPrefix);
+            if(oNFirstNew != NULL) {
+                if(ulIndex < ulDepth)
+                   (void) Node_Dir_free(oNFirstNew);
+                else if(isFile)
+                   (void) Node_File_free(oNFirstNew);
+                else
+                   (void) Node_Dir_free(oNFirstNew);
+            }
            return iStatus;
         }
   
