@@ -89,7 +89,7 @@ static int FT_traversePath(Path_T oPPath, Node_T *poNFurthest) {
 
    oNCurr = oNRoot;
    ulDepth = Path_getDepth(oPPath);
-   for(i = 2; i < ulDepth; i++) { /*at most reaching level ulDepth - 1*/
+   for(i = 2; i <= ulDepth; i++) { 
       iStatus = Path_prefix(oPPath, i, &oPPrefix);
       if(iStatus != SUCCESS) {
          *poNFurthest = NULL;
