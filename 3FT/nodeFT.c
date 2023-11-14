@@ -54,9 +54,11 @@ static int Node_addChild(Node_T oNParent, Node_T oNChild,
    assert(oNParent != NULL);
    assert(oNChild != NULL);
 
-   if (oNParent->isFile) {
-      return NO_SUCH_PATH; /*or CONFLICTING PATH???*/
-   }
+
+/*or CONFLICTING PATH???*/
+   /*if (oNParent->isFile) {
+      return NO_SUCH_PATH; 
+   }*/
 
 
     if (oNChild->isFile){
