@@ -313,6 +313,48 @@ static int FT_insertions(const char *pcPath, boolean isFile, void* FileContent, 
 
 }
 
+
+/*
+  Performs a pre-order traversal of the tree rooted at n,
+  inserting each payload to DynArray_T d beginning at index i.
+  Returns the next unused index in d after the insertion(s).
+*/
+
+static size_t FT_preOrderTraversal(Node_T oNRoot, DynArray_T AllNodesArray, size_t index) {
+   size_t c;
+   size_t fileChildIndex;
+
+   assert(AllNodesArray != NULL);
+
+   if(oNRoot != NULL) {
+      (void) DynArray_set(AllNodesArray, index, oNRoot);
+      index++;
+      for( fileChildIndex = 0; fileChildIndex < Node_getNumChildrenFiles(oNRoot); fileChildIndex++) {
+         int iStatus;
+         Node_T oNChild = NULL;
+         iStatus = Node_getDirChild(oNRoot,c, &oNChild);
+         assert(iStatus == SUCCESS);
+         (void) DynArray_set(AllNodesArray, index, oNChild);
+         index++;
+      }
+      for(c = 0; c < Node_getNumChildrenDirs(oNRoot); c++) {
+         int iStatus;
+         Node_T oNChild = NULL;
+         iStatus = Node_getDirChild(oNRoot,c, &oNChild);
+         assert(iStatus == SUCCESS);
+         index = DT_preOrderTraversal(oNChild, AllNodesArray, index);
+      }
+   }
+   return index;
+}
+
+
+/*
+  Alternate version of strlen that uses pulAcc as an in-out parameter
+  to accumulate a string length, rather than returning the length of
+  oNNode's path, and also always adds one addition byte to the sum.
+*/
+
 /*not modified for FT*/
 static void FT_strlenAccumulate(Node_T oNNode, size_t *pulAcc) {
    assert(pulAcc != NULL);
@@ -661,44 +703,4 @@ char *FT_toString(void) {
 }
 
 
-/*
-  Performs a pre-order traversal of the tree rooted at n,
-  inserting each payload to DynArray_T d beginning at index i.
-  Returns the next unused index in d after the insertion(s).
-*/
-
-static size_t FT_preOrderTraversal(Node_T oNRoot, DynArray_T AllNodesArray, size_t index) {
-   size_t c;
-   size_t fileChildIndex;
-
-   assert(AllNodesArray != NULL);
-
-   if(oNRoot != NULL) {
-      (void) DynArray_set(AllNodesArray, index, oNRoot);
-      index++;
-      for( fileChildIndex = 0; fileChildIndex < Node_getNumChildrenFiles(oNRoot); fileChildIndex++) {
-         int iStatus;
-         Node_T oNChild = NULL;
-         iStatus = Node_getDirChild(oNRoot,c, &oNChild);
-         assert(iStatus == SUCCESS);
-         (void) DynArray_set(AllNodesArray, index, oNChild);
-         index++;
-      }
-      for(c = 0; c < Node_getNumChildrenDirs(oNRoot); c++) {
-         int iStatus;
-         Node_T oNChild = NULL;
-         iStatus = Node_getDirChild(oNRoot,c, &oNChild);
-         assert(iStatus == SUCCESS);
-         index = DT_preOrderTraversal(oNChild, AllNodesArray, index);
-      }
-   }
-   return index;
-}
-
-
-/*
-  Alternate version of strlen that uses pulAcc as an in-out parameter
-  to accumulate a string length, rather than returning the length of
-  oNNode's path, and also always adds one addition byte to the sum.
-*/
 
