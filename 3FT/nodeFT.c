@@ -266,6 +266,14 @@ boolean Node_hasChild(Node_T oNParent, Path_T oPPath, boolean *pisFile,
    assert(oNParent != NULL);
    assert(oPPath != NULL);
    assert(pulChildID != NULL);
+
+    /* special case for root node */
+    if (oNParent != NULL && Path_getDepth(oPPath) == 1) {
+      *pisFile = FALSE;
+      *pulChildID = 0;
+      return TRUE;
+    }
+
    assert(!oNParent->isFile);
 
     /* *pulChildID is the index into oNParent->oDChildren */
