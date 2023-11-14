@@ -230,9 +230,11 @@ static int FT_insertions(const char *pcPath, boolean isFile, void* FileContent, 
     if(oNCurr == NULL){
         if(isFile) /* fails in any case: if inserted at root too */
             Path_free(oPPath);
-        else if(oNRoot != NULL)
+            return CONFLICTING_PATH;
+        else if(oNRoot != NULL) {
             Path_free(oPPath);
-        return CONFLICTING_PATH;
+            return CONFLICTING_PATH;
+        }
     }
   
      /* fails if the closest ancestor is a file */
