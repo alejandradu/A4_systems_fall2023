@@ -255,13 +255,13 @@ static int FT_insertions(const char *pcPath, boolean isFile, void* FileContent, 
         ulIndex = 1;
     else {
         /* index to insert the node */
-        ulIndex = Path_getDepth(Node_getPath(oNCurr))+1;
+        ulIndex = Path_getDepth(Node_getPath(oNCurr));
         fprintf(stderr, "ulIndex: %zu\n", ulIndex); 
         fprintf(stderr, "ulDepth: %zu\n", ulDepth); 
  
          /* fails if there is already a node (any type) with that 
         path at that depth */
-        if(ulIndex == ulDepth+1 && !Path_comparePath(oPPath,
+        if(ulIndex == ulDepth && !Path_comparePath(oPPath,
                                          Node_getPath(oNCurr))) {
            Path_free(oPPath);
            return ALREADY_IN_TREE;
