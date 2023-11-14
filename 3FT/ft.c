@@ -212,17 +212,17 @@ static int FT_insertions(const char *pcPath, boolean isFile, void* FileContent, 
         return INITIALIZATION_ERROR; 
     }    
 
-    /*validate that a root exists if we are trying to insert a file*/
-    if (isFile) {
-      if (oNRoot == NULL)
-         return CONFLICTING_PATH;
-    }
-
     /* create path for the (potential) insertion */
     iStatus = Path_new(pcPath, &oPPath);    
     if(iStatus != SUCCESS) {
         return iStatus;
     }    
+
+   /*validate that a root exists if we are trying to insert a file*/
+    if (isFile) {
+      if (oNRoot == NULL)
+         return CONFLICTING_PATH;
+    }
  
     /* find the closest ancestor of oPPath already in the tree */
     iStatus= FT_traversePath(oPPath, &oNCurr);
