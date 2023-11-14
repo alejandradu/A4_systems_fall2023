@@ -72,9 +72,26 @@ int main(void) {
      ALREADY_IN_TREE, and trying to insert some other root should
      return CONFLICTING_PATH.
   */
-  test = FT_insertDir("1root/2child/3gkid");
-  fprintf(stderr, "FT_insertDir(\"1root/2child/3gkid\") returned %d\n", test);
+
   assert(FT_insertDir("1root/2child/3gkid") == SUCCESS);
+  assert(FT_containsDir("1root") == TRUE);
+  assert(FT_containsFile("1root") == FALSE);
+  assert(FT_containsDir("1root/2child") == TRUE);
+  assert(FT_containsFile("1root/2child") == FALSE);
+  assert(FT_containsDir("1root/2child/3gkid") == TRUE);
+  assert(FT_containsFile("1root/2child/3gkid") == FALSE);
+  assert(FT_insertFile("1root/2second/3gfile", NULL, 0) == SUCCESS);
+  assert(FT_containsDir("1root/2second") == TRUE);
+  assert(FT_containsFile("1root/2second") == FALSE);
+  assert(FT_containsDir("1root/2second/3gfile") == FALSE);
+  assert(FT_containsFile("1root/2second/3gfile") == TRUE);
+  assert(FT_getFileContents("1root/2second/3gfile") == NULL);
+  assert(FT_insertDir("1root/2child/3gkid") == ALREADY_IN_TREE);
+  assert(FT_insertFile("1root/2child/3gkid", NULL, 0) ==
+         ALREADY_IN_TREE);
+  assert(FT_insertDir("1otherroot") == CONFLICTING_PATH);
+  assert(FT_insertDir("1otherroot/2d") == CONFLICTING_PATH);
+  assert(FT_insertFile("1otherroot/2f", NULL, 0) == CONFLICTING_PATH);
 
   return 0;
 }
