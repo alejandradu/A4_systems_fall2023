@@ -145,15 +145,6 @@ int Node_new(Path_T oPPath, Node_T oNParent,
 
    /* initialize the new node */
    /* Link into parent's children list */
-   if(oNParent != NULL) {
-      iStatus = Node_addChild(oNParent, psNew, ulIndex);
-      if(iStatus != SUCCESS) {
-         Path_free(psNew->oPPath);
-         free(psNew);
-         *poNResult = NULL;
-         return iStatus;
-      }
-   }
 
     /*specifying if this node is a file or not and initialize accordingly*/
    psNew->isFile = isFile;
@@ -194,6 +185,17 @@ int Node_new(Path_T oPPath, Node_T oNParent,
             return MEMORY_ERROR;
         }
         psNew->FileContent = NULL;
+   }
+
+    /* Link into parent's children list */
+    if(oNParent != NULL) {
+       iStatus = Node_addChild(oNParent, psNew, ulIndex);
+       if(iStatus != SUCCESS) {
+          Path_free(psNew->oPPath);
+          free(psNew);
+          *poNResult = NULL;
+          return iStatus;
+       }
    }
 
    *poNResult = psNew;
