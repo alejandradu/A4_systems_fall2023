@@ -7,7 +7,6 @@
 
 CC = gcc217
 CFLAGS = -Wall -Wextra -pedantic -std=c99
-LDFLAGS =
 
 all: testFT
 
@@ -15,7 +14,7 @@ clean:
 	rm -f testFT meminfo*.out *.o
 
 testFT: ft_client.o dynarray.o path.o nodeFT.o ft.o
-	$(CC) $(CFLAGS) -g $^ -o $@ $(LDFLAGS)
+	$(CC) $(CFLAGS) -g $^ -o $@ 
 
 ft_client.o: ft_client.c ft.h a4def.h
 	$(CC) $(CFLAGS) -g -c $< -o $@
