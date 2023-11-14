@@ -267,7 +267,7 @@ boolean Node_hasChild(Node_T oNParent, Path_T oPPath, boolean *pisFile,
    assert(oNParent != NULL);
    assert(oPPath != NULL);
    assert(pulChildID != NULL);
-   assert(oNParent->isFile != TRUE);
+   assert(!oNParent->isFile);
 
     /* *pulChildID is the index into oNParent->oDChildren */
     hasDirChild = DynArray_bsearch(oNParent->oDChildren,
