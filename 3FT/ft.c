@@ -259,8 +259,6 @@ static int FT_insertions(const char *pcPath, boolean isFile, void* FileContent, 
     else {
         /* index to insert the node */
         ulIndex = Path_getDepth(Node_getPath(oNCurr));
-        fprintf(stderr, "ulIndex: %zu\n", ulIndex); 
-        fprintf(stderr, "ulDepth: %zu\n", ulDepth); 
  
          /* fails if there is already a node (any type) with that 
         path at that depth */
@@ -333,6 +331,14 @@ static int FT_insertions(const char *pcPath, boolean isFile, void* FileContent, 
     }
 
    /*assert(CheckerFT_isValid(bIsInitialized, oNRoot, ulCount));*/
+
+    fprintf(stderr, "FT_insertions: SUCCESS\n");
+    fprintf(stderr, "dirCounter: %zu\n", dirCounter);
+    fprintf(stderr, "fileCounter: %zu\n", fileCounter);
+    fprintf(stderr, "ulNewNodes: %zu\n", ulNewNodes);
+    fprintf(stderr, "isFile: %d\n", isFile);
+    fprintf(stderr, "fileLength: %zu\n", fileLength);
+
    return SUCCESS;
 }
 
