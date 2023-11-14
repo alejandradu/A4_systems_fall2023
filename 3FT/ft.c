@@ -294,6 +294,7 @@ static int FT_insertions(const char *pcPath, boolean isFile, void* FileContent, 
            fprintf(stderr, "should not be file %d\n", Node_isFile(oNNewNode));
         } else {
             iStatus = Node_new(oPPrefix, oNCurr, isFile, FileContent, fileLength, &oNNewNode);
+            fprintf(stderr, "should be file %d\n", Node_isFile(oNNewNode));
         }
         if(iStatus != SUCCESS) {
             Path_free(oPPath);
