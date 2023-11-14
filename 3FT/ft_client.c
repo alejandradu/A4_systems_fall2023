@@ -80,7 +80,9 @@ int main(void) {
   assert(FT_containsFile("1root/2child") == FALSE);
   assert(FT_containsDir("1root/2child/3gkid") == TRUE);
   assert(FT_containsFile("1robot/2child/3gkid") == FALSE);
-  assert(FT_insertFile("1root/2second/3gfile", NULL, 0) == SUCCESS);
+  test = FT_insertFile("1root/2second/3gfile", NULL, 0);
+  assert(test == SUCCESS);
+fprintf(stderr, "test1: %d\n", test);
   assert(FT_containsDir("1root/2second") == TRUE);
   assert(FT_containsFile("1root/2second") == FALSE);
   assert(FT_containsDir("1root/2second/3gfile") == FALSE);
