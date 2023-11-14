@@ -224,7 +224,7 @@ static int FT_insertions(const char *pcPath, boolean isFile, void* FileContent, 
         return iStatus;
     }    
  
-/*validate that a root exists if we are trying to insert a file*/
+    /*validate that a root exists if we are trying to insert a file*/
     if (isFile) {
       if (oNRoot == NULL)
          return CONFLICTING_PATH;
@@ -321,9 +321,9 @@ static int FT_insertions(const char *pcPath, boolean isFile, void* FileContent, 
     /* update FT state variables to reflect insertion */
     if(oNRoot == NULL)
       oNRoot = oNFirstNew;
-    if(ulIndex < ulDepth) {
-        dirCounter += ulNewNodes-1;
-    } else if (isFile){
+
+    dirCounter += ulNewNodes-1;
+    if (isFile){
         dirCounter += 1;
     } else {
         fileCounter += 1;
