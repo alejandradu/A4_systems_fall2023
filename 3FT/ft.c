@@ -323,7 +323,7 @@ static int FT_insertions(const char *pcPath, boolean isFile, void* FileContent, 
       oNRoot = oNFirstNew;
 
     dirCounter += ulNewNodes-1;
-    if (isFile){
+    if (!isFile){
         dirCounter += 1;
     } else {
         fileCounter += 1;
