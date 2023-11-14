@@ -199,7 +199,7 @@ int Node_new(Path_T oPPath, Node_T oNParent,
 
    *poNResult = psNew;
 
-   assert(oNParent == NULL);
+   /*assert(oNParent == NULL);*/
 
    return SUCCESS;
 }
