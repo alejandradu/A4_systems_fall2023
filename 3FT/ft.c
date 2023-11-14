@@ -658,23 +658,33 @@ char *FT_toString(void) {
   inserting each payload to DynArray_T d beginning at index i.
   Returns the next unused index in d after the insertion(s).
 */
-static size_t FT_preOrderTraversal(Node_T n, DynArray_T d, size_t i) {
+/*not yet modified for FT*/
+static size_t FT_preOrderTraversal(Node_T oNRoot, DynArray_T AllNodesArray, size_t index) {
    size_t c;
+   size_t fileChildIndex;
 
-   assert(d != NULL);
+   assert(AllNodesArray != NULL);
 
-   if(n != NULL) {
-      (void) DynArray_set(d, i, n);
-      i++;
-      for(c = 0; c < Node_getNumChildren(n); c++) {
+   if(oNRoot != NULL) {
+      (void) DynArray_set(AllNodesArray, index, oNRoot);
+      index++;
+      for( fileChildIndex = 0; fileChildIndex < Node_getNumChildrenFiles(oNRoot); fileChildIndex++) {
          int iStatus;
          Node_T oNChild = NULL;
-         iStatus = Node_getChild(n,c, &oNChild);
+         iStatus = Node_getDirChild(oNRoot,c, &oNChild);
          assert(iStatus == SUCCESS);
-         i = DT_preOrderTraversal(oNChild, d, i);
+         (void) DynArray_set(AllNodesArray, index, oNChild);
+         index++;
+      }
+      for(c = 0; c < Node_getNumChildrenDirs(oNRoot); c++) {
+         int iStatus;
+         Node_T oNChild = NULL;
+         iStatus = Node_getDirChild(oNRoot,c, &oNChild);
+         assert(iStatus == SUCCESS);
+         index = DT_preOrderTraversal(oNChild, AllNodesArray, index);
       }
    }
-   return i;
+   return index;
 }
 
 
