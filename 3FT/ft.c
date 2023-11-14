@@ -576,6 +576,7 @@ void *FT_replaceFileContents(const char *pcPath, void *pvNewContents,
 int FT_stat(const char *pcPath, boolean *pbIsFile, size_t *pulSize) {
    Path_T oPPath = NULL;
    Node_T oNFound = NULL;
+   boolean isFile;
    int iStatus;
 
    assert(pcPath != NULL);
@@ -609,7 +610,8 @@ int FT_stat(const char *pcPath, boolean *pbIsFile, size_t *pulSize) {
    }
 
    Path_free(oPPath);
-   if (oNFound->isFile) {
+   isFile = Node_isFile(oNFound);
+   if (isFile) {
       *pbIsFile = TRUE;
       *pulSize = Node_FileLength(oNFound);
    } else {
