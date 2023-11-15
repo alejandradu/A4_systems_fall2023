@@ -334,8 +334,8 @@ size_t Node_Dir_free(Node_T oNNode, size_t* numFreedFiles) {
     DynArray_free(oNNode->oFChildren);
 
     /* recursively remove directory children */
+    fprintf(stderr, "at node %sdetected %zu children\n", Node_toString(oNNode), DynArray_getLength(oNNode->oDChildren));
     while(DynArray_getLength(oNNode->oDChildren) != 0) {
-        fprintf(stderr, "Tried to remove D children at %s\n", Path_getPathname(oNNode->oPPath));
         ulCount += Node_Dir_free(DynArray_get(oNNode->oDChildren, 0), numFreedFiles);
         /* TODO ARRAY OF DCHILDREN HAS LENGTH UPDATING INCORRECTLY */
     }
@@ -344,7 +344,6 @@ size_t Node_Dir_free(Node_T oNNode, size_t* numFreedFiles) {
     /* remove path */
     fprintf(stderr, "Trying to free path at node %s\n", Node_toString(oNNode));
     Path_free(oNNode->oPPath);
-    fprintf(stderr, "Trying to get path at node %s\n", Node_toString(oNNode));
     dummy = oNNode->oPPath;
 
     /* finally, free the struct node */
