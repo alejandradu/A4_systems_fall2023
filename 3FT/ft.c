@@ -135,6 +135,8 @@ static int FT_traversePath(Path_T oPPath, Node_T *poNFurthest) {
 
 }
 
+/* this is a dummy comment */
+
 /*
   Traverses the FT to find a node with absolute path pcPath. Returns a
   int SUCCESS status and sets *poNResult to be the node, if found.

@@ -11,7 +11,7 @@
 #include "a4def.h"
 #include "path.h"
 
-
+/* dummy */
 
 /* A node in a FT */
 struct node {
