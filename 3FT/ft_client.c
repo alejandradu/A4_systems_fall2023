@@ -10,6 +10,8 @@
 #include <string.h>
 #include "ft.h"
 
+/* dummy */
+
 /* Tests the FT implementation with an assortment of checks.
    Prints the status of the data structure along the way to stderr.
    Returns 0. */
@@ -147,7 +149,7 @@ int main(void) {
   assert(FT_rmFile("1root/2child/3nope") == NO_SUCH_PATH);
 
   assert(FT_rmFile("1root/2child/3gkid") == NOT_A_FILE);
-  
+
   assert(FT_rmDir("1root/2child/3gkid") == SUCCESS);
   assert(FT_rmFile("1root/2second/3gfile") == SUCCESS);
   assert(FT_containsDir("1root/2child/3gkid") == FALSE);
