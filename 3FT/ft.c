@@ -99,7 +99,6 @@ static int FT_traversePath(Path_T oPPath, Node_T *poNFurthest) {
 
       /* index to insert the node */
         ulIndex = Path_getDepth(Node_getPath(oNCurr));
-        fprintf(stderr, "ulIndex in traversing: %zu\n", ulIndex);
 
       if(Node_hasChild(oNCurr, oPPrefix, &isFile, &ulChildID)) {
          /* go to that child and continue with next prefix */
@@ -225,7 +224,7 @@ static int FT_insertions(const char *pcPath, boolean isFile, void* FileContent, 
         return iStatus;
     }    
  
-/*validate that a root exists if we are trying to insert a file*/
+    /*validate that a root exists if we are trying to insert a file*/
     if (isFile) {
       if (oNRoot == NULL)
          return CONFLICTING_PATH;
@@ -258,12 +257,11 @@ static int FT_insertions(const char *pcPath, boolean isFile, void* FileContent, 
         ulIndex = 1;
     else {
         /* index to insert the node */
-        ulIndex = Path_getDepth(Node_getPath(oNCurr));
-        fprintf(stderr, "ulIndex: %zu\n", ulIndex); 
-        fprintf(stderr, "ulDepth: %zu\n", ulDepth); 
+        ulIndex = Path_getDepth(Node_getPath(oNCurr))+1;
  
          /* fails if there is already a node (any type) with that 
         path at that depth */
+        fprintf(stderr, "in else, index %zu, depth %zu\n", ulIndex, ulDepth);
         if(ulIndex == ulDepth+1 && !Path_comparePath(oPPath,
                                          Node_getPath(oNCurr))) {
            Path_free(oPPath);
@@ -318,21 +316,32 @@ static int FT_insertions(const char *pcPath, boolean isFile, void* FileContent, 
         if(oNFirstNew == NULL)
            oNFirstNew = oNCurr;
         ulIndex++;
+
+    fprintf(stderr, "path depth of inserted node %zu\n", Path_getDepth(Node_getPath(oNCurr)));
+
+
     }
 
     Path_free(oPPath);
     /* update FT state variables to reflect insertion */
     if(oNRoot == NULL)
       oNRoot = oNFirstNew;
-    if(ulIndex < ulDepth) {
-        dirCounter += ulNewNodes-1;
-    } else if (isFile){
+
+    dirCounter += ulNewNodes-1;
+    if (!isFile){
         dirCounter += 1;
     } else {
         fileCounter += 1;
     }
 
    /*assert(CheckerFT_isValid(bIsInitialized, oNRoot, ulCount));*/
+
+    fprintf(stderr, "dirCounter: %zu\n", dirCounter);
+    fprintf(stderr, "fileCounter: %zu\n", fileCounter);
+    fprintf(stderr, "ulNewNodes: %zu\n", ulNewNodes);
+    fprintf(stderr, "isFile: %d\n", isFile);
+    fprintf(stderr, "fileLength: %zu\n", fileLength);
+
    return SUCCESS;
 }
 
