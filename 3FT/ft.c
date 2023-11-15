@@ -1,6 +1,6 @@
 /*--------------------------------------------------------------------*/
 /* ft.c                                                               */
-/* Author: Christopher Moretti                                        */
+/* Author: Alejandra & Siling                                         */
 /*--------------------------------------------------------------------*/
 
 #include <stddef.h>
@@ -63,7 +63,7 @@ static int FT_traversePath(Path_T oPPath, Node_T *poNFurthest) {
    size_t i;
    size_t ulChildID;
    boolean isFile;
-   /*size_t ulIndex;*/ /*maybe this is redundant*/
+   size_t ulIndex;
 
    assert(oPPath != NULL);
    assert(poNFurthest != NULL);
@@ -193,7 +193,7 @@ assert(oNFound != NULL);
       Path_free(oPPath);
       *poNResult = NULL;
       return NOT_A_DIRECTORY;
-   } else if ((isFile) && (!Node_isFile(oNFound))) {
+} else if ((isFile) && (!Node_isFile(oNFound))) {
       Path_free(oPPath);
       *poNResult = NULL;
       return NOT_A_FILE;
@@ -218,11 +218,11 @@ static int FT_insertions(const char *pcPath, boolean isFile, void* FileContent, 
     Node_T oNCurr = NULL;
     size_t ulDepth, ulIndex;
     size_t ulNewNodes = 0;
-    size_t* freedFileNumbers;
+size_t* freedFileNumbers;
 
     assert(pcPath != NULL);
  
-   freedFileNumbers = 0;
+freedFileNumbers = 0;
      /* validate initialization */
     if(!isInitialized) {
         return INITIALIZATION_ERROR; 
@@ -301,11 +301,11 @@ static int FT_insertions(const char *pcPath, boolean isFile, void* FileContent, 
         /* all levels up to depth - 1 must be directories */
         if (ulIndex < ulDepth) {
            iStatus = Node_new(oPPrefix, oNCurr, FALSE, FileContent, fileLength, &oNNewNode);
-           NodeCounter++;
+NodeCounter++;
            dirCounter++;
         } else {
             iStatus = Node_new(oPPrefix, oNCurr, isFile, FileContent, fileLength, &oNNewNode);
-            NodeCounter++;
+NodeCounter++;
             fileCounter++;
         }
         if(iStatus != SUCCESS) {
@@ -340,7 +340,7 @@ static int FT_insertions(const char *pcPath, boolean isFile, void* FileContent, 
     if(oNRoot == NULL)
       oNRoot = oNFirstNew;
 
-   /*we might have to update these within the loop*/
+    /*we might have to update these within the loop*/
     /*dirCounter += ulNewNodes-1;
     if (!isFile){
         dirCounter += 1;
@@ -472,7 +472,7 @@ boolean FT_containsDir(const char *pcPath) {
   * NO_SUCH_PATH if absolute path pcPath does not exist in the FT
   * NOT_A_DIRECTORY if pcPath is in the FT as a file not a directory
   * MEMORY_ERROR if memory could not be allocated to complete request
-  * 
+* 
 */
 int FT_rmDir(const char *pcPath) {
    int iStatus;
@@ -554,10 +554,10 @@ boolean FT_containsFile(const char *pcPath) {
 int FT_rmFile(const char *pcPath) {
    int iStatus;
    Node_T oNFound = NULL;
-   size_t numFilesDeleted;
+size_t numFilesDeleted;
 
    assert(pcPath != NULL);
-
+   
    if (!isInitialized)
       return INITIALIZATION_ERROR;
 
@@ -706,14 +706,14 @@ int FT_init(void) {
   and SUCCESS otherwise.
 */
 int FT_destroy(void) {
-   size_t numFreedFiles;
+size_t numFreedFiles;
 
    if(!isInitialized)
       return INITIALIZATION_ERROR;
 
    if(oNRoot) {
       dirCounter -= Node_Dir_free(oNRoot, &numFreedFiles);
-      fileCounter -= numFreedFiles;
+fileCounter -= numFreedFiles;
       NodeCounter = 0;
       
       oNRoot = NULL;

@@ -1,6 +1,6 @@
 /*--------------------------------------------------------------------*/
-/* nodeDT.c                                                           */
-/* Author: Christopher Moretti                                        */
+/* nodeFT.c                                                           */
+/* Author: Alejandra & Siling                                         */
 /*--------------------------------------------------------------------*/
 
 #include <stdlib.h>
@@ -10,8 +10,6 @@
 #include "nodeFT.h"
 #include "a4def.h"
 #include "path.h"
-
-/* dummy */
 
 /* A node in a FT */
 struct node {
@@ -308,6 +306,7 @@ size_t Node_Dir_free(Node_T oNNode, size_t* numFreedFiles) {
    size_t ulCount = 0;
    size_t numFileChildren;
    size_t ulIndexFile;
+   Path_T dummy;
 
    assert(oNNode != NULL);
    assert(!oNNode->isFile);
@@ -328,18 +327,21 @@ size_t Node_Dir_free(Node_T oNNode, size_t* numFreedFiles) {
     *numFreedFiles += numFileChildren;
 
     for(ulIndexFile=0; ulIndexFile < numFileChildren; ulIndexFile++) {
-         Node_File_free(DynArray_get(oNNode->oFChildren, ulIndexFile));
+        Node_File_free(DynArray_get(oNNode->oFChildren, ulIndexFile));
     }
     DynArray_free(oNNode->oFChildren);
 
     /* recursively remove directory children */
     while(DynArray_getLength(oNNode->oDChildren) != 0) {
+        fprintf(stderr, "Tried to remove D children at %s\n", Path_getPathname(oNNode->oPPath));
         ulCount += Node_Dir_free(DynArray_get(oNNode->oDChildren, 0), numFreedFiles);
     }
     DynArray_free(oNNode->oDChildren);
 
     /* remove path */
     Path_free(oNNode->oPPath);
+    fprintf(stderr, "This might be a segfault\n");
+    dummy = oNNode->oPPath;
 
     /* finally, free the struct node */
     free(oNNode);
