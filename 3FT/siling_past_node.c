@@ -11,7 +11,7 @@
 #include "a4def.h"
 #include "path.h"
 
-
+/* dummy */
 
 /* A node in a FT */
 struct node {
@@ -51,27 +51,31 @@ static int Node_compareString(const Node_T oNFirst,
 
 static int Node_addChild(Node_T oNParent, Node_T oNChild,
                          size_t ulIndex) {
-   assert(oNParent != NULL);
+   /* assert(oNParent != NULL);*/ /* PARENT CAN BE NULL IF IT'S THE ROOT */
    assert(oNChild != NULL);
-
+   
 
 /*or CONFLICTING PATH???*/
    if (oNParent->isFile) {
       return NO_SUCH_PATH; 
    }
 
-
     if (oNChild->isFile){
-        if(DynArray_addAt(oNParent->oFChildren, ulIndex, oNChild))
+        if(DynArray_addAt(oNParent->oFChildren, ulIndex, oNChild)) {
+            DynArray_sort(oNParent->oFChildren, (int (*)(const void *, const void *)) Node_compare);
             return SUCCESS;
+        }
         else
             return MEMORY_ERROR;
     } else {
-        if(DynArray_addAt(oNParent->oDChildren, ulIndex, oNChild))
+        if(DynArray_addAt(oNParent->oDChildren, ulIndex, oNChild)) {
+            DynArray_sort(oNParent->oDChildren, (int (*)(const void *, const void *)) Node_compare);
             return SUCCESS;
+        }
         else
             return MEMORY_ERROR;
     }
+
 }
 
 /*-------------------------------------------------------------------------*/
@@ -87,7 +91,7 @@ int Node_new(Path_T oPPath, Node_T oNParent,
    int iStatus;
 
    assert(oPPath != NULL);
-   /*assert(oNParent == NULL);*/
+   /* assert(oNParent == NULL); PARENT CAN BE NULL IF IT'S THE ROOT - maybe validate another way */
 
    /* allocate space for a new node */
    psNew = malloc(sizeof(struct node));
@@ -151,28 +155,19 @@ int Node_new(Path_T oPPath, Node_T oNParent,
 
    /* initialize the new node */
    /* Link into parent's children list */
-   if(oNParent != NULL && (!oNParent->isFile)) {
-      iStatus = Node_addChild(oNParent, psNew, ulIndex);
-      if(iStatus != SUCCESS) {
-         Path_free(psNew->oPPath);
-         free(psNew);
-         *poNResult = NULL;
-         return iStatus;
-      }
-   }
 
     /*specifying if this node is a file or not and initialize accordingly*/
    psNew->isFile = isFile;
 
     if (isFile) {
-        /*psNew->FileContent = FileContent;*/
+        psNew->FileContent = FileContent;
         psNew->oDChildren = NULL;
         psNew->oFChildren = NULL;
 
         /* HERE: would it be useful to track the lenght of the
         file content?? */
     
-        /* allocate memory for contents */
+        /* allocate memory for contents 
         psNew->FileContent = malloc(ulContLength);
         if(psNew->FileContent == NULL) {
             Path_free(psNew->oPPath);
@@ -180,10 +175,9 @@ int Node_new(Path_T oPPath, Node_T oNParent,
             *poNResult = NULL;
             return MEMORY_ERROR;
         } else {
-            /* copy (void) contents to the memory space */
             memcpy(psNew->FileContent, FileContent, ulContLength);
             psNew->ulContLength = ulContLength;
-        }
+        }*/
     
    } else {
         psNew->oDChildren = DynArray_new(0);
@@ -203,9 +197,20 @@ int Node_new(Path_T oPPath, Node_T oNParent,
         psNew->FileContent = NULL;
    }
 
+    /* Link into parent's children list */
+    if(oNParent != NULL) {
+       iStatus = Node_addChild(oNParent, psNew, ulIndex);
+       if(iStatus != SUCCESS) {
+          Path_free(psNew->oPPath);
+          free(psNew);
+          *poNResult = NULL;
+          return iStatus;
+       }
+   }
+
    *poNResult = psNew;
 
-   /*assert(oNParent == NULL);*/
+   /* assert(oNParent == NULL); */
 
    return SUCCESS;
 }
@@ -239,7 +244,7 @@ void *Node_getContent(Node_T oNNode) {
 */
 void *Node_ReplaceFileContent(Node_T oNNode, void* NewFileContent, size_t ulNewLength) {
     void* oldContent;
-    void* temp;
+    /* void* temp; */
     
     assert(oNNode != NULL);
     assert(oNNode->isFile);
@@ -247,18 +252,18 @@ void *Node_ReplaceFileContent(Node_T oNNode, void* NewFileContent, size_t ulNewL
     /* reorder pointers */
     oldContent = oNNode->FileContent;
 
-    /* re-allocate memory for contents */
+    /* re-allocate memory for contents 
     temp = realloc(oNNode->FileContent, ulNewLength);
     if(temp == NULL) {
-        /* revert reordering */
         oNNode->FileContent = oldContent;
         return NULL;
     } else {
         oNNode->FileContent = temp;
-        /* copy new contents */
         memcpy(oNNode->FileContent, NewFileContent, ulNewLength);
         oNNode->ulContLength = ulNewLength;
-    }
+    }*/
+
+    oNNode->ulContLength = ulNewLength;
 
     return oldContent;
 }
@@ -273,10 +278,10 @@ boolean Node_hasChild(Node_T oNParent, Path_T oPPath, boolean *pisFile,
    assert(oNParent != NULL);
    assert(oPPath != NULL);
    assert(pulChildID != NULL);
-   
-   if((oNParent->isFile)) {
+
+    if((oNParent->isFile)) {
       return FALSE;
-   }
+    }
 
     /* *pulChildID is the index into oNParent->oDChildren */
     hasDirChild = DynArray_bsearch(oNParent->oDChildren,
@@ -292,15 +297,17 @@ boolean Node_hasChild(Node_T oNParent, Path_T oPPath, boolean *pisFile,
             (char*) Path_getPathname(oPPath), pulChildID,
             (int (*)(const void*,const void*)) Node_compareString);
         *pisFile = hasFileChild;
-        return (hasFileChild);
+        return hasFileChild;
     }   
 }
 
 /*-------------------------------------------------------------------------*/
 
-size_t Node_Dir_free(Node_T oNNode) {
+size_t Node_Dir_free(Node_T oNNode, size_t* numFreedFiles) {
    size_t ulIndex;
    size_t ulCount = 0;
+   size_t numFileChildren;
+   size_t ulIndexFile;
 
    assert(oNNode != NULL);
    assert(!oNNode->isFile);
@@ -317,14 +324,17 @@ size_t Node_Dir_free(Node_T oNNode) {
     }
 
     /* remove file children*/
-    while(DynArray_getLength(oNNode->oFChildren) != 0) {
-        ulCount += Node_File_free(DynArray_get(oNNode->oFChildren, 0));
+    numFileChildren = DynArray_getLength(oNNode->oFChildren);
+    *numFreedFiles += numFileChildren;
+
+    for(ulIndexFile=0; ulIndexFile < numFileChildren; ulIndexFile++) {
+         Node_File_free(DynArray_get(oNNode->oFChildren, ulIndexFile));
     }
     DynArray_free(oNNode->oFChildren);
 
     /* recursively remove directory children */
     while(DynArray_getLength(oNNode->oDChildren) != 0) {
-        ulCount += Node_Dir_free(DynArray_get(oNNode->oDChildren, 0));
+        ulCount += Node_Dir_free(DynArray_get(oNNode->oDChildren, 0), numFreedFiles);
     }
     DynArray_free(oNNode->oDChildren);
 
@@ -347,7 +357,7 @@ size_t Node_File_free(Node_T oNNode) {
    assert(oNNode->isFile);
 
     /* Free space of file content */
-    free(oNNode->FileContent);
+    /*free(oNNode->FileContent);*/ /*might not be needed if we are not mallocing*/
 
     /* remove from parent's list */
     if(oNNode->oNParent != NULL) {

@@ -97,8 +97,8 @@ static int FT_traversePath(Path_T oPPath, Node_T *poNFurthest) {
          return iStatus;
       }
 
-      /* index to insert the node */
-        ulIndex = Path_getDepth(Node_getPath(oNCurr));
+      /* index to insert the node . maybe this is redundant*/
+        /*ulIndex = Path_getDepth(Node_getPath(oNCurr));*/
 
       if(Node_hasChild(oNCurr, oPPrefix, &isFile, &ulChildID)) {
          /* go to that child and continue with next prefix */
@@ -146,7 +146,8 @@ static int FT_traversePath(Path_T oPPath, Node_T *poNFurthest) {
   * CONFLICTING_PATH if the root's path is not a prefix of pcPath
   * NO_SUCH_PATH if no node with pcPath exists in the hierarchy
   * MEMORY_ERROR if memory could not be allocated to complete request
-  * NOT_A_DIRECTORY if the node at pcPath is not of the correct type
+  * NOT_A_DIRECTORY if we want to find a Directory but instead found a file
+  * NOT_A_FILE if we want to find a file but instead found a directory
  */
 static int FT_findNode(const char *pcPath, Node_T *poNResult, boolean isFile) {
    Path_T oPPath = NULL;
@@ -188,10 +189,14 @@ static int FT_findNode(const char *pcPath, Node_T *poNResult, boolean isFile) {
 
    /* check the type of the node at path matched */
 assert(oNFound != NULL);
-   if(((isFile) && (!Node_isFile(oNFound))) || ((!isFile) && (Node_isFile(oNFound)))) {
+   if((!isFile) && (Node_isFile(oNFound))) {
       Path_free(oPPath);
       *poNResult = NULL;
       return NOT_A_DIRECTORY;
+} else if ((isFile) && (!Node_isFile(oNFound))) {
+      Path_free(oPPath);
+      *poNResult = NULL;
+      return NOT_A_FILE;
    }
 
    Path_free(oPPath);
@@ -213,9 +218,11 @@ static int FT_insertions(const char *pcPath, boolean isFile, void* FileContent, 
     Node_T oNCurr = NULL;
     size_t ulDepth, ulIndex;
     size_t ulNewNodes = 0;
+size_t* freedFileNumbers;
 
     assert(pcPath != NULL);
  
+freedFileNumbers = 0;
      /* validate initialization */
     if(!isInitialized) {
         return INITIALIZATION_ERROR; 
@@ -282,11 +289,11 @@ static int FT_insertions(const char *pcPath, boolean isFile, void* FileContent, 
             Path_free(oPPath);
             if(oNFirstNew != NULL) {
                 if(ulIndex < ulDepth)
-                   (void) Node_Dir_free(oNFirstNew);
+                   (void) Node_Dir_free(oNFirstNew, freedFileNumbers);
                 else if(isFile)
                    (void) Node_File_free(oNFirstNew);
                 else
-                   (void) Node_Dir_free(oNFirstNew);
+                   (void) Node_Dir_free(oNFirstNew, freedFileNumbers);
             }
             return iStatus;
         }
@@ -294,19 +301,23 @@ static int FT_insertions(const char *pcPath, boolean isFile, void* FileContent, 
         /* all levels up to depth - 1 must be directories */
         if (ulIndex < ulDepth) {
            iStatus = Node_new(oPPrefix, oNCurr, FALSE, FileContent, fileLength, &oNNewNode);
+NodeCounter++;
+           dirCounter++;
         } else {
             iStatus = Node_new(oPPrefix, oNCurr, isFile, FileContent, fileLength, &oNNewNode);
+NodeCounter++;
+            fileCounter++;
         }
         if(iStatus != SUCCESS) {
             Path_free(oPPath);
             Path_free(oPPrefix);
             if(oNFirstNew != NULL) {
                 if(ulIndex < ulDepth)
-                   (void) Node_Dir_free(oNFirstNew);
+                   (void) Node_Dir_free(oNFirstNew, freedFileNumbers);
                 else if(isFile)
                    (void) Node_File_free(oNFirstNew);
                 else
-                   (void) Node_Dir_free(oNFirstNew);
+                   (void) Node_Dir_free(oNFirstNew, freedFileNumbers);
             }
            return iStatus;
         }
@@ -329,12 +340,13 @@ static int FT_insertions(const char *pcPath, boolean isFile, void* FileContent, 
     if(oNRoot == NULL)
       oNRoot = oNFirstNew;
 
-    dirCounter += ulNewNodes-1;
+    /*we might have to update these within the loop*/
+    /*dirCounter += ulNewNodes-1;
     if (!isFile){
         dirCounter += 1;
     } else {
         fileCounter += 1;
-    }
+    }*/
 
    /*assert(CheckerFT_isValid(bIsInitialized, oNRoot, ulCount));*/
 
@@ -460,10 +472,16 @@ boolean FT_containsDir(const char *pcPath) {
   * NO_SUCH_PATH if absolute path pcPath does not exist in the FT
   * NOT_A_DIRECTORY if pcPath is in the FT as a file not a directory
   * MEMORY_ERROR if memory could not be allocated to complete request
+* 
 */
 int FT_rmDir(const char *pcPath) {
    int iStatus;
    Node_T oNFound = NULL;
+size_t numFileDeleted;
+   size_t numDirDeleted;
+
+   numDirDeleted = 0;
+   numFileDeleted = 0;
 
    assert(pcPath != NULL);
    /*assert(CheckerFT_isValid(bIsInitialized, oNRoot, ulCount));*/
@@ -473,7 +491,12 @@ int FT_rmDir(const char *pcPath) {
    if(iStatus != SUCCESS)
        return iStatus;
 
-   dirCounter -= Node_Dir_free(oNFound);
+   /*updates counters of the number of nodes presenting in the tree*/
+   numDirDeleted = Node_Dir_free(oNFound, &numFileDeleted);
+dirCounter -= numDirDeleted;
+   fileCounter -= numFileDeleted;
+   NodeCounter -= numDirDeleted;
+   NodeCounter -= numFileDeleted;
    if(dirCounter == 0)
       oNRoot = NULL;
 
@@ -531,20 +554,22 @@ boolean FT_containsFile(const char *pcPath) {
 int FT_rmFile(const char *pcPath) {
    int iStatus;
    Node_T oNFound = NULL;
+size_t numFilesDeleted;
 
    assert(pcPath != NULL);
-   /*assert(CheckerFT_isValid(bIsInitialized, oNRoot, ulCount));*/
+   
+   if (!isInitialized)
+      return INITIALIZATION_ERROR;
 
    iStatus = FT_findNode(pcPath, &oNFound, TRUE);
 
    if(iStatus != SUCCESS)
        return iStatus;
 
-   fileCounter -= Node_File_free(oNFound);
-   if(fileCounter == 0)
-      oNRoot = NULL;
+   numFilesDeleted = Node_File_free(oNFound);
+   fileCounter -= numFilesDeleted;
+   NodeCounter -= numFilesDeleted;
 
-   /*assert(CheckerDT_isValid(bIsInitialized, oNRoot, ulCount));*/
    return SUCCESS;
 }
 
@@ -681,12 +706,16 @@ int FT_init(void) {
   and SUCCESS otherwise.
 */
 int FT_destroy(void) {
+size_t numFreedFiles;
 
    if(!isInitialized)
       return INITIALIZATION_ERROR;
 
    if(oNRoot) {
-      NodeCounter -= Node_Dir_free(oNRoot);
+      dirCounter -= Node_Dir_free(oNRoot, &numFreedFiles);
+fileCounter -= numFreedFiles;
+      NodeCounter = 0;
+      
       oNRoot = NULL;
    }
 
