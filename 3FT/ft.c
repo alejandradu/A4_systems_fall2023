@@ -301,12 +301,12 @@ freedFileNumbers = 0;
         /* all levels up to depth - 1 must be directories */
         if (ulIndex < ulDepth) {
            iStatus = Node_new(oPPrefix, oNCurr, FALSE, FileContent, fileLength, &oNNewNode);
-NodeCounter++;
-           dirCounter++;
+            /*NodeCounter++;
+            dirCounter++;*/
         } else {
             iStatus = Node_new(oPPrefix, oNCurr, isFile, FileContent, fileLength, &oNNewNode);
-NodeCounter++;
-            fileCounter++;
+            /*NodeCounter++;
+            fileCounter++;*/
         }
         if(iStatus != SUCCESS) {
             Path_free(oPPath);
