@@ -343,7 +343,7 @@ size_t Node_Dir_free(Node_T oNNode, size_t* numFreedFiles) {
 
     /* remove path */
     Path_free(oNNode->oPPath);
-    fprintf(stderr, "Trying to get path at node %s", Node_toString(oNNode));
+    fprintf(stderr, "Trying to get path at node %s\n", Node_toString(oNNode));
     dummy = oNNode->oPPath;
 
     /* finally, free the struct node */
