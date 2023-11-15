@@ -480,6 +480,8 @@ int FT_rmDir(const char *pcPath) {
    size_t numFileDeleted;
    size_t numDirDeleted;
 
+   numDirDeleted = 0;
+
    assert(pcPath != NULL);
    /*assert(CheckerFT_isValid(bIsInitialized, oNRoot, ulCount));*/
 
