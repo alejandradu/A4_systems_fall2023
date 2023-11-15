@@ -72,7 +72,7 @@ boolean Node_hasChild(Node_T oNParent, Path_T oPPath, boolean *pisFile,
   oNNode, i.e., deletes this node and all its descendents. Returns the
   number of nodes deleted.
 */
-size_t Node_Dir_free(Node_T oNNode);
+size_t Node_Dir_free(Node_T oNNode, size_t *numFreedFiles);
 
 /*
   Destroys and frees all memory allocated for the file of
