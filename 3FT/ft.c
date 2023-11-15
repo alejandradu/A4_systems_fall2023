@@ -477,7 +477,7 @@ boolean FT_containsDir(const char *pcPath) {
 int FT_rmDir(const char *pcPath) {
    int iStatus;
    Node_T oNFound = NULL;
-size_t numFileDeleted;
+   size_t numFileDeleted;
    size_t numDirDeleted;
 
    numDirDeleted = 0;
@@ -493,7 +493,7 @@ size_t numFileDeleted;
 
    /*updates counters of the number of nodes presenting in the tree*/
    numDirDeleted = Node_Dir_free(oNFound, &numFileDeleted);
-dirCounter -= numDirDeleted;
+   dirCounter -= numDirDeleted;
    fileCounter -= numFileDeleted;
    NodeCounter -= numDirDeleted;
    NodeCounter -= numFileDeleted;

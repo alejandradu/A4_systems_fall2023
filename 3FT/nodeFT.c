@@ -306,8 +306,9 @@ boolean Node_hasChild(Node_T oNParent, Path_T oPPath, boolean *pisFile,
 size_t Node_Dir_free(Node_T oNNode, size_t* numFreedFiles) {
    size_t ulIndex;
    size_t ulCount = 0;
-size_t numFileChildren;
+   size_t numFileChildren;
    size_t ulIndexFile;
+   Path_T dummy;
 
    assert(oNNode != NULL);
    assert(!oNNode->isFile);
@@ -334,12 +335,15 @@ size_t numFileChildren;
 
     /* recursively remove directory children */
     while(DynArray_getLength(oNNode->oDChildren) != 0) {
+        fprintf(stderr, "Tried to remove D children at %s\n", Path_getPathname(oNNode->oPPath));
         ulCount += Node_Dir_free(DynArray_get(oNNode->oDChildren, 0), numFreedFiles);
     }
     DynArray_free(oNNode->oDChildren);
 
     /* remove path */
     Path_free(oNNode->oPPath);
+    fprintf(stderr, "This might be a segfault\n");
+    dummy = oNNode->oPPath;
 
     /* finally, free the struct node */
     free(oNNode);
