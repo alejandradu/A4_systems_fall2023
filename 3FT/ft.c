@@ -63,7 +63,6 @@ static int FT_traversePath(Path_T oPPath, Node_T *poNFurthest) {
    size_t i;
    size_t ulChildID;
    boolean isFile;
-   size_t ulIndex;
 
    assert(oPPath != NULL);
    assert(poNFurthest != NULL);
@@ -301,13 +300,18 @@ freedFileNumbers = 0;
         /* all levels up to depth - 1 must be directories */
         if (ulIndex < ulDepth) {
            iStatus = Node_new(oPPrefix, oNCurr, FALSE, FileContent, fileLength, &oNNewNode);
-            /*NodeCounter++;
-            dirCounter++;*/
+            if (iStatus == SUCCESS) {
+               NodeCounter++;
+               dirCounter++;
+            }
         } else {
             iStatus = Node_new(oPPrefix, oNCurr, isFile, FileContent, fileLength, &oNNewNode);
-            /*NodeCounter++;
-            fileCounter++;*/
+            if (iStatus == SUCCESS) {
+               NodeCounter++;
+               fileCounter++;
+            }
         }
+        
         if(iStatus != SUCCESS) {
             Path_free(oPPath);
             Path_free(oPPrefix);
@@ -353,6 +357,7 @@ freedFileNumbers = 0;
     fprintf(stderr, "dirCounter: %zu\n", dirCounter);
     fprintf(stderr, "fileCounter: %zu\n", fileCounter);
     fprintf(stderr, "ulNewNodes: %zu\n", ulNewNodes);
+    fprintf(stderr, "ulNewNodes: %zu\n", NodeCounter);
     fprintf(stderr, "isFile: %d\n", isFile);
     fprintf(stderr, "fileLength: %zu\n", fileLength);
 
