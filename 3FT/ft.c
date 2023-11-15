@@ -146,7 +146,8 @@ static int FT_traversePath(Path_T oPPath, Node_T *poNFurthest) {
   * CONFLICTING_PATH if the root's path is not a prefix of pcPath
   * NO_SUCH_PATH if no node with pcPath exists in the hierarchy
   * MEMORY_ERROR if memory could not be allocated to complete request
-  * NOT_A_DIRECTORY if the node at pcPath is not of the correct type
+  * NOT_A_DIRECTORY if we want to find a Directory but instead found a file
+  * NOT_A_FILE if we want to find a file but instead found a directory
  */
 static int FT_findNode(const char *pcPath, Node_T *poNResult, boolean isFile) {
    Path_T oPPath = NULL;
@@ -188,10 +189,14 @@ static int FT_findNode(const char *pcPath, Node_T *poNResult, boolean isFile) {
 
    /* check the type of the node at path matched */
 assert(oNFound != NULL);
-   if(((isFile) && (!Node_isFile(oNFound))) || ((!isFile) && (Node_isFile(oNFound)))) {
+   if((!isFile) && (Node_isFile(oNFound))) {
       Path_free(oPPath);
       *poNResult = NULL;
       return NOT_A_DIRECTORY;
+   } else if ((isFile) && (!Node_isFile(oNFound))) {
+      Path_free(oPPath);
+      *poNResult = NULL;
+      return NOT_A_FILE;
    }
 
    Path_free(oPPath);
