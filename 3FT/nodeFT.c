@@ -60,18 +60,22 @@ static int Node_addChild(Node_T oNParent, Node_T oNChild,
       return NO_SUCH_PATH; 
    }
 
-
     if (oNChild->isFile){
-        if(DynArray_addAt(oNParent->oFChildren, ulIndex, oNChild))
+        if(DynArray_addAt(oNParent->oFChildren, ulIndex, oNChild)) {
+            DynArray_sort(oNParent->oFChildren, (int (*)(const void *, const void *)) Node_compare);
             return SUCCESS;
+        }
         else
             return MEMORY_ERROR;
     } else {
-        if(DynArray_addAt(oNParent->oDChildren, ulIndex, oNChild))
+        if(DynArray_addAt(oNParent->oDChildren, ulIndex, oNChild)) {
+            DynArray_sort(oNParent->oDChildren, (int (*)(const void *, const void *)) Node_compare);
             return SUCCESS;
+        }
         else
             return MEMORY_ERROR;
     }
+
 }
 
 /*-------------------------------------------------------------------------*/
