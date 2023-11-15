@@ -222,6 +222,7 @@ static int FT_insertions(const char *pcPath, boolean isFile, void* FileContent, 
 
     assert(pcPath != NULL);
  
+   freedFileNumbers = 0;
      /* validate initialization */
     if(!isInitialized) {
         return INITIALIZATION_ERROR; 
@@ -339,12 +340,13 @@ static int FT_insertions(const char *pcPath, boolean isFile, void* FileContent, 
     if(oNRoot == NULL)
       oNRoot = oNFirstNew;
 
-    dirCounter += ulNewNodes-1;
+   /*we might have to update these within the loop*/
+    /*dirCounter += ulNewNodes-1;
     if (!isFile){
         dirCounter += 1;
     } else {
         fileCounter += 1;
-    }
+    }*/
 
    /*assert(CheckerFT_isValid(bIsInitialized, oNRoot, ulCount));*/
 
