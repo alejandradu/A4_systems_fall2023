@@ -63,7 +63,7 @@ static int FT_traversePath(Path_T oPPath, Node_T *poNFurthest) {
    size_t i;
    size_t ulChildID;
    boolean isFile;
-   size_t ulIndex;
+   /*size_t ulIndex;*/ /*maybe this is redundant*/
 
    assert(oPPath != NULL);
    assert(poNFurthest != NULL);
@@ -97,8 +97,8 @@ static int FT_traversePath(Path_T oPPath, Node_T *poNFurthest) {
          return iStatus;
       }
 
-      /* index to insert the node */
-        ulIndex = Path_getDepth(Node_getPath(oNCurr));
+      /* index to insert the node . maybe this is redundant*/
+        /*ulIndex = Path_getDepth(Node_getPath(oNCurr));*/
 
       if(Node_hasChild(oNCurr, oPPrefix, &isFile, &ulChildID)) {
          /* go to that child and continue with next prefix */
