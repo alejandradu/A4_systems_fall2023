@@ -306,6 +306,8 @@ boolean Node_hasChild(Node_T oNParent, Path_T oPPath, boolean *pisFile,
 size_t Node_Dir_free(Node_T oNNode) {
    size_t ulIndex;
    size_t ulCount = 0;
+   size_t numFileChildren;
+   size_t ulIndexFile;
 
    assert(oNNode != NULL);
    assert(!oNNode->isFile);
@@ -322,8 +324,10 @@ size_t Node_Dir_free(Node_T oNNode) {
     }
 
     /* remove file children*/
-    while(DynArray_getLength(oNNode->oFChildren) != 0) {
-        ulCount += Node_File_free(DynArray_get(oNNode->oFChildren, 0));
+    numFileChildren = DynArray_getLength(oNNode->oFChildren);
+
+    for(ulIndexFile=0; ulIndexFile < numFileChildren; ulIndexFile++) {
+        ulCount += Node_File_free(DynArray_get(oNNode->oFChildren, ulIndexFile));
     }
     DynArray_free(oNNode->oFChildren);
 
@@ -352,7 +356,7 @@ size_t Node_File_free(Node_T oNNode) {
    assert(oNNode->isFile);
 
     /* Free space of file content */
-    free(oNNode->FileContent);
+    /*free(oNNode->FileContent);*/ /*might not be needed if we are not mallocing*/
 
     /* remove from parent's list */
     if(oNNode->oNParent != NULL) {
