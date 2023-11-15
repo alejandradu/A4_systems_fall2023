@@ -51,7 +51,6 @@ int main(void) {
 
   FT_insertDir("1root/2second/3third");
   FT_insertFile("1root/2second/3file", NULL, 0);
-  FT_rmDir("1root/2second");
   FT_rmDir("1root");
 
   return 0;
