@@ -497,6 +497,7 @@ int FT_rmDir(const char *pcPath) {
    fileCounter -= numFileDeleted;
    NodeCounter -= numDirDeleted;
    NodeCounter -= numFileDeleted;
+   fprintf(stderr, "FINAL dirCounter: %zu\n", dirCounter);
    if(dirCounter == 0)
       oNRoot = NULL;
 
