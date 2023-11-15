@@ -342,6 +342,7 @@ size_t Node_Dir_free(Node_T oNNode, size_t* numFreedFiles) {
     DynArray_free(oNNode->oDChildren);
 
     /* remove path */
+    fprintf(stderr, "Trying to free path at node %s\n", Node_toString(oNNode));
     Path_free(oNNode->oPPath);
     fprintf(stderr, "Trying to get path at node %s\n", Node_toString(oNNode));
     dummy = oNNode->oPPath;
