@@ -337,12 +337,13 @@ size_t Node_Dir_free(Node_T oNNode, size_t* numFreedFiles) {
     while(DynArray_getLength(oNNode->oDChildren) != 0) {
         fprintf(stderr, "Tried to remove D children at %s\n", Path_getPathname(oNNode->oPPath));
         ulCount += Node_Dir_free(DynArray_get(oNNode->oDChildren, 0), numFreedFiles);
+        /* TODO ARRAY OF DCHILDREN HAS LENGTH UPDATING INCORRECTLY */
     }
     DynArray_free(oNNode->oDChildren);
 
     /* remove path */
     Path_free(oNNode->oPPath);
-    fprintf(stderr, "This might be a segfault\n");
+    fprintf(stderr, "Trying to get path at node %s", Node_toString(oNNode));
     dummy = oNNode->oPPath;
 
     /* finally, free the struct node */
