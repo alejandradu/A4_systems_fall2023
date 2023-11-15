@@ -357,7 +357,7 @@ freedFileNumbers = 0;
     fprintf(stderr, "dirCounter: %zu\n", dirCounter);
     fprintf(stderr, "fileCounter: %zu\n", fileCounter);
     fprintf(stderr, "ulNewNodes: %zu\n", ulNewNodes);
-    fprintf(stderr, "ulNewNodes: %zu\n", NodeCounter);
+    fprintf(stderr, "NodeCounter: %zu\n", NodeCounter);
     fprintf(stderr, "isFile: %d\n", isFile);
     fprintf(stderr, "fileLength: %zu\n", fileLength);
 
