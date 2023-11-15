@@ -163,7 +163,7 @@ int main(void) {
   assert(FT_rmDir("1anotherroot") == CONFLICTING_PATH);
   assert(FT_rmDir("1root") == SUCCESS);
   assert(FT_rmDir("1root") == NO_SUCH_PATH);
-  FT_containsDir("1root/2child");
+  FT_containsDir("1root");
 
   /*assert(FT_containsDir("1root/2child") == FALSE);*/
   assert(FT_containsDir("1root") == FALSE);
