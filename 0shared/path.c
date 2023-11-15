@@ -6,6 +6,7 @@
 #include <assert.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
 
 #include "dynarray.h"
 #include "path.h"
@@ -246,12 +247,16 @@ void Path_free(Path_T oPPath) {
       free((char *)oPPath->pcPath);
 
       if(oPPath->oDComponents != NULL) {
+        fprintf(stderr, "checkpoint 1");
          DynArray_map(oPPath->oDComponents,
                       (void (*)(void*, void*)) Path_freeString, NULL);
+         fprintf(stderr, "checkpoint 2");
          DynArray_free(oPPath->oDComponents);
+         fprintf(stderr, "checkpoint 3");
       }
    }
    free((struct path*) oPPath);
+   fprintf(stderr, "checkpoint 4");
 }
 
 const char *Path_getPathname(Path_T oPPath) {
