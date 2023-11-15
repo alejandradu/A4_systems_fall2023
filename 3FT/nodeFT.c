@@ -303,7 +303,7 @@ boolean Node_hasChild(Node_T oNParent, Path_T oPPath, boolean *pisFile,
 
 /*-------------------------------------------------------------------------*/
 
-size_t Node_Dir_free(Node_T oNNode) {
+size_t Node_Dir_free(Node_T oNNode, size_t* numFreedFiles) {
    size_t ulIndex;
    size_t ulCount = 0;
    size_t numFileChildren;
@@ -325,15 +325,16 @@ size_t Node_Dir_free(Node_T oNNode) {
 
     /* remove file children*/
     numFileChildren = DynArray_getLength(oNNode->oFChildren);
+    *numFreedFiles += numFileChildren;
 
     for(ulIndexFile=0; ulIndexFile < numFileChildren; ulIndexFile++) {
-        ulCount += Node_File_free(DynArray_get(oNNode->oFChildren, ulIndexFile));
+         Node_File_free(DynArray_get(oNNode->oFChildren, ulIndexFile));
     }
     DynArray_free(oNNode->oFChildren);
 
     /* recursively remove directory children */
     while(DynArray_getLength(oNNode->oDChildren) != 0) {
-        ulCount += Node_Dir_free(DynArray_get(oNNode->oDChildren, 0));
+        ulCount += Node_Dir_free(DynArray_get(oNNode->oDChildren, 0), numFreedFiles);
     }
     DynArray_free(oNNode->oDChildren);
 

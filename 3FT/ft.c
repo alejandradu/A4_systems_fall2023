@@ -469,6 +469,7 @@ boolean FT_containsDir(const char *pcPath) {
 int FT_rmDir(const char *pcPath) {
    int iStatus;
    Node_T oNFound = NULL;
+   size_t* numFileDeleted;
 
    assert(pcPath != NULL);
    /*assert(CheckerFT_isValid(bIsInitialized, oNRoot, ulCount));*/
@@ -478,7 +479,8 @@ int FT_rmDir(const char *pcPath) {
    if(iStatus != SUCCESS)
        return iStatus;
 
-   dirCounter -= Node_Dir_free(oNFound);
+   dirCounter -= Node_Dir_free(oNFound, &numFileDeleted);
+   fileCounter -= (*numFileDeleted);
    if(dirCounter == 0)
       oNRoot = NULL;
 
@@ -538,7 +540,9 @@ int FT_rmFile(const char *pcPath) {
    Node_T oNFound = NULL;
 
    assert(pcPath != NULL);
-   /*assert(CheckerFT_isValid(bIsInitialized, oNRoot, ulCount));*/
+
+   if (!isInitialized)
+      return INITIALIZATION_ERROR;
 
    iStatus = FT_findNode(pcPath, &oNFound, TRUE);
 
@@ -546,10 +550,8 @@ int FT_rmFile(const char *pcPath) {
        return iStatus;
 
    fileCounter -= Node_File_free(oNFound);
-   if(fileCounter == 0)
-      oNRoot = NULL;
 
-   /*assert(CheckerDT_isValid(bIsInitialized, oNRoot, ulCount));*/
+
    return SUCCESS;
 }
 
