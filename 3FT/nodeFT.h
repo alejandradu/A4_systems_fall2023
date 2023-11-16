@@ -134,21 +134,21 @@ size_t Node_File_free(Node_T oNNode);
 
 /*--------------------------------------------------------------------*/
 
-/* Take in a File Node oNNode, return the Length of the file 
-   The Function fails if it is not a file*/
-size_t Node_FileLength(Node_T oNNode);
-
-/*--------------------------------------------------------------------*/
-
 /* Takes in a Node oNNode. returns True if it is a file, false if it 
 is a directory*/
 boolean Node_isFile(Node_T oNNode);
 
 /*--------------------------------------------------------------------*/
 
-
 /* Takes in a File Node oNNode and returns its file content*/
 void *Node_getContent(Node_T oNNode);
+
+/*--------------------------------------------------------------------*/
+
+
+/* Take in a File Node oNNode, return the Length of the file 
+   The Function fails if it is not a file*/
+size_t Node_FileLength(Node_T oNNode);
 
 /*--------------------------------------------------------------------*/
 
