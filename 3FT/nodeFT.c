@@ -59,7 +59,6 @@ static int Node_addChild(Node_T oNParent, Node_T oNChild,
    }
 
     if (oNChild->isFile){
-        DynArray_sort(oNParent->oFChildren, (int (*)(const void *, const void *)) Node_compare);
         if(DynArray_addAt(oNParent->oFChildren, ulIndex, oNChild)) {
             DynArray_sort(oNParent->oFChildren, (int (*)(const void *, const void *)) Node_compare);
             return SUCCESS;
@@ -67,7 +66,6 @@ static int Node_addChild(Node_T oNParent, Node_T oNChild,
         else
             return MEMORY_ERROR;
     } else {
-        DynArray_sort(oNParent->oDChildren, (int (*)(const void *, const void *)) Node_compare);
         if(DynArray_addAt(oNParent->oDChildren, ulIndex, oNChild)) {
             DynArray_sort(oNParent->oDChildren, (int (*)(const void *, const void *)) Node_compare);
             return SUCCESS;
@@ -267,6 +265,8 @@ boolean Node_hasChild(Node_T oNParent, Path_T oPPath, boolean *pisFile,
                          size_t *pulChildID) {
    boolean hasDirChild; 
    boolean hasFileChild;
+   size_t fileChildID;
+   size_t dirChildID;
    assert(oNParent != NULL);
    assert(oPPath != NULL);
    assert(pulChildID != NULL);
@@ -277,20 +277,26 @@ boolean Node_hasChild(Node_T oNParent, Path_T oPPath, boolean *pisFile,
    
     /* *pulChildID is the index into oNParent->oDChildren */
     hasDirChild = DynArray_bsearch(oNParent->oDChildren,
-            (char*) Path_getPathname(oPPath), pulChildID,
+            (char*) Path_getPathname(oPPath), &dirChildID,
+            (int (*)(const void*,const void*)) Node_compareString);
+
+   hasFileChild = DynArray_bsearch(oNParent->oFChildren,
+            (char*) Path_getPathname(oPPath), &fileChildID,
             (int (*)(const void*,const void*)) Node_compareString);
     
     if (hasDirChild) {
         *pisFile = FALSE;
+        *pulChildID = dirChildID;
         return hasDirChild;
-    } else {
-        /* *pulChildID is the index into oNParent->oDChildren */
-        hasFileChild = DynArray_bsearch(oNParent->oFChildren,
-            (char*) Path_getPathname(oPPath), pulChildID,
-            (int (*)(const void*,const void*)) Node_compareString);
-        *pisFile = hasFileChild;
+    } else if (hasFileChild){
+         *pisFile = TRUE;
+        *pulChildID = fileChildID;
         return hasFileChild;
-    }   
+    } else {
+         pisFile = NULL;
+         *pulChildID = 0;
+         return FALSE;
+    }
 }
 
 /*-------------------------------------------------------------------------*/
