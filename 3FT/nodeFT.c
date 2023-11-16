@@ -272,7 +272,7 @@ boolean Node_hasChild(Node_T oNParent, Path_T oPPath, boolean *pisFile,
     if((oNParent->isFile)) {
       return FALSE;
     }
-
+   
     /* *pulChildID is the index into oNParent->oDChildren */
     hasDirChild = DynArray_bsearch(oNParent->oDChildren,
             (char*) Path_getPathname(oPPath), pulChildID,
