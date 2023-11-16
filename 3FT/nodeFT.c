@@ -49,11 +49,10 @@ static int Node_compareString(const Node_T oNFirst,
 
 static int Node_addChild(Node_T oNParent, Node_T oNChild,
                          size_t ulIndex) {
-   /* assert(oNParent != NULL);*/ /* PARENT CAN BE NULL IF IT'S THE ROOT */
    assert(oNChild != NULL);
    
 
-/*or CONFLICTING PATH???*/
+
    if (oNParent->isFile) {
       return NO_SUCH_PATH; 
    }
@@ -89,7 +88,6 @@ int Node_new(Path_T oPPath, Node_T oNParent,
    int iStatus;
 
    assert(oPPath != NULL);
-   /* assert(oNParent == NULL); PARENT CAN BE NULL IF IT'S THE ROOT - maybe validate another way */
 
    /* allocate space for a new node */
    psNew = malloc(sizeof(struct node));
@@ -162,21 +160,6 @@ int Node_new(Path_T oPPath, Node_T oNParent,
         psNew->oDChildren = NULL;
         psNew->oFChildren = NULL;
         psNew->ulContLength = ulContLength;
-
-        /* HERE: would it be useful to track the lenght of the
-        file content?? */
-    
-        /* allocate memory for contents 
-        psNew->FileContent = malloc(ulContLength);
-        if(psNew->FileContent == NULL) {
-            Path_free(psNew->oPPath);
-            free(psNew);
-            *poNResult = NULL;
-            return MEMORY_ERROR;
-        } else {
-            memcpy(psNew->FileContent, FileContent, ulContLength);
-            psNew->ulContLength = ulContLength;
-        }*/
     
    } else {
         psNew->oDChildren = DynArray_new(0);
@@ -228,8 +211,7 @@ boolean Node_isFile(Node_T oNNode) {
 void *Node_getContent(Node_T oNNode) {
     assert (oNNode != NULL);
 
-    /* this content might be NULL 
-    HERE: should this dereference? */
+    /* this content might be NULL */
     return oNNode->FileContent;
 }
 
@@ -244,7 +226,6 @@ void *Node_getContent(Node_T oNNode) {
 */
 void *Node_ReplaceFileContent(Node_T oNNode, void* NewFileContent, size_t ulNewLength) {
     void* oldContent;
-    /* void* temp; */
     
     assert(oNNode != NULL);
     assert(oNNode->isFile);
@@ -355,9 +336,6 @@ size_t Node_File_free(Node_T oNNode) {
 
    assert(oNNode != NULL);
    assert(oNNode->isFile);
-
-    /* Free space of file content */
-    /*free(oNNode->FileContent);*/ /*might not be needed if we are not mallocing*/
 
     /* remove from parent's list */
     if(oNNode->oNParent != NULL) {
