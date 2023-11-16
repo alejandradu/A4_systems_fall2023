@@ -256,6 +256,7 @@ boolean Node_hasChild(Node_T oNParent, Path_T oPPath, boolean *pisFile,
    assert(oNParent != NULL);
    assert(oPPath != NULL);
    assert(pulChildID != NULL);
+   assert(pisFile != NULL);
 
     if((oNParent->isFile)) {
       return FALSE;
@@ -294,6 +295,7 @@ size_t Node_Dir_free(Node_T oNNode, size_t* numFreedFiles) {
 
    assert(oNNode != NULL);
    assert(!oNNode->isFile);
+   assert(numFreedFiles != NULL);
 
     /* remove from parent's list */
     if(oNNode->oNParent != NULL) {
