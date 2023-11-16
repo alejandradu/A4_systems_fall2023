@@ -230,7 +230,6 @@ static int FT_insertions(const char *pcPath, boolean isFile,
     size_t ulDepth, ulIndex;
     size_t ulNewNodes = 0;
     size_t* freedFileNumbers = 0;
-    int errorStatus;
 
     assert(pcPath != NULL);
  
