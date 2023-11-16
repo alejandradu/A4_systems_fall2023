@@ -500,14 +500,30 @@ int FT_rmDir(const char *pcPath) {
    if(iStatus != SUCCESS)
        return iStatus;
 
+   fprintf(stderr, "before removing\n");
+   fprintf(stderr, "dirCounter: %zu\n", dirCounter);
+   fprintf(stderr, "fileCounter: %zu\n", fileCounter);
+   fprintf(stderr, "NodeCounter: %zu\n", NodeCounter);
+
+   fprintf(stderr, "removing a dir\n");
+
    /*updates counters of the number of nodes presenting in the tree*/
    numDirDeleted = Node_Dir_free(oNFound, &numFileDeleted);
+
+   fprintf(stderr, "numDirDeleted: %zu\n", numDirDeleted);
+   fprintf(stderr, "numFileDeleted: %zu\n", numFileDeleted);
+   
    dirCounter -= numDirDeleted;
    fileCounter -= numFileDeleted;
    NodeCounter -= numDirDeleted;
    NodeCounter -= numFileDeleted;
    if(dirCounter == 0)
       oNRoot = NULL;
+
+   fprintf(stderr, "after removing\n");
+   fprintf(stderr, "dirCounter: %zu\n", dirCounter);
+   fprintf(stderr, "fileCounter: %zu\n", fileCounter);
+   fprintf(stderr, "NodeCounter: %zu\n", NodeCounter);
 
    /*assert(CheckerDT_isValid(bIsInitialized, oNRoot, ulCount));*/
    return SUCCESS;
