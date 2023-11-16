@@ -169,7 +169,7 @@ static size_t DT_countValidNodes(Node_T oNRoot) {
         int iStatus = Node_getChild(oNRoot, i, &oNChild);
 
         if (iStatus == SUCCESS) {
-            count += countValidNodes(oNChild);
+            count += DT_countValidNodes(oNChild);
         }
     }
 
@@ -258,7 +258,7 @@ boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
     }
 
     /* NEW: check length field agrees with node count */
-    totalCount = countValidNodes(oNRoot);
+    totalCount = DT_countValidNodes(oNRoot);
     if (totalCount != ulCount) {
         fprintf(stderr, 
           "DT length does not equal total number of nodes detected \n");
