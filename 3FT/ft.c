@@ -207,8 +207,10 @@ static int FT_findNode(const char *pcPath, Node_T *poNResult, boolean isFile) {
 /* Encapsulation of the insertion algorithm for file or directory
 nodes as determined by isFile (TRUE or False): inserts a new node into 
 the FT with absolute path pcPath, with file contents FileContent of size
-fileLength bytes. Returns SUCCESS if the new file is inserted 
-successfully. Otherwise, returns:
+fileLength bytes. The logic is to add the new nodes one by one if
+appropriate as determined by different comparisons of the Path objects
+of the node to insert and the ancestors. Returns SUCCESS if the new node
+is inserted successfully. Otherwise, returns:
    * INITIALIZATION_ERROR if the FT is not in an initialized state
    * BAD_PATH if pcPath does not represent a well-formatted path
    * CONFLICTING_PATH if the root exists but is not a prefix of pcPath,
@@ -315,8 +317,10 @@ static int FT_insertions(const char *pcPath, boolean isFile,
                NodeCounter++;
                dirCounter++;
             }
-        } else {          /* the target node is a file or directory */
+        /* the target node is a file or directory */
+        } else {         
             iStatus = Node_new(oPPrefix, oNCurr, isFile, FileContent, fileLength, &oNNewNode);
+            /* update counters accordingly */
             if (iStatus == SUCCESS) {
                NodeCounter++;
                if (isFile) {
@@ -343,6 +347,7 @@ static int FT_insertions(const char *pcPath, boolean isFile,
   
         /* set up for next level */
         Path_free(oPPrefix);
+        /* update oNCurr to point at the last inserted node */
         oNCurr = oNNewNode;
         ulNewNodes++;
         if(oNFirstNew == NULL)

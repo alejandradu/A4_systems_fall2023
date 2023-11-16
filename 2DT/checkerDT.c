@@ -69,13 +69,18 @@ static boolean check_GetChildNull(Node_T oNNode) {
  */
 static boolean check_toStringComplete(Node_T oNNode) {
     char *stringContain;
-    stringContain= strstr((const char*)DT_toString(), 
-        Node_toString(oNNode)); 
+    char *temp1 = DT_toString();
+    char *temp2 = Node_toString(oNNode);
+    stringContain= strstr((const char*)temp1, temp2); 
     if (stringContain == NULL) {
+        free(temp1);
+        free(temp2);
         fprintf(stderr,
          "DT_toString does not print all the nodes in the DT\n");
         return FALSE;
     }
+    free(temp1);
+    free(temp2);
     return TRUE;
 }
 

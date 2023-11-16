@@ -100,7 +100,9 @@ to read another person's code. Not fun. Too much.
 will help your grader to grade it in the most favorable light? In
 particular, what bugs are in your submission?
 
-
+We have detected no bugs. To clarify, we choose design option #2 for 
+ft.c, in which each node has 2 separate fields for file and directory 
+children. 
 
 ------------------------------------------------------------------------
 What warnings does splint generate for Part 2's checker, and what are
@@ -108,6 +110,22 @@ your disagreements with them? Copy the splint warnings here, and
 express your disagreement after each warning. If there are no
 warnings, then write "None."
 
+No warnings for CheckerDT.C
+
+Warnings for the dependencies of CheckerDT.C
+
+dtGood.c: (in function DT_traversePath)
+dtGood.c:94:42: Variable ulChildID used before definition
+  An rvalue is used that may not be initialized to a value on some execution
+  path. (Use -usedef to inhibit warning)
+nodeDTGood.c: (in function Node_new)
+nodeDTGood.c:148:48: Variable ulIndex used before definition
+nodeDTGood.c: (in function Node_free)
+nodeDTGood.c:180:35: Variable ulIndex used before definition
+path.h:94:13: Function exported but not used outside path: Path_getComponent
+  A declaration is exported, but not used outside this module. Declaration can
+  use static qualifier. (Use -exportlocal to inhibit warning)
+   path.c:317:1: Definition of Path_getComponent
 
 
 ------------------------------------------------------------------------
@@ -116,7 +134,7 @@ disagreements with them? Copy the critTer warnings here, and express
 your disagreement after each warning. If there are no warnings, then
 write "None."
 
-
+None
 
 ------------------------------------------------------------------------
 What warnings does splint generate on your Part 3 code, and what are
@@ -124,7 +142,27 @@ your disagreements with them? Copy the splint warnings here, and
 express your disagreement after each warning. If there are no
 warnings, then write "None."
 
-
+nodeFT.c: (in function Node_new)
+nodeFT.c:185:49: Variable ulIndex used before definition
+  An rvalue is used that may not be initialized to a value on some execution
+  path. (Use -usedef to inhibit warning)
+nodeFT.c: (in function Node_hasChild)
+nodeFT.c:270:23: Variable dirChildID used before definition
+nodeFT.c:274:23: Variable fileChildID used before definition
+nodeFT.c: (in function Node_Dir_free)
+nodeFT.c:301:37: Variable ulIndex used before definition
+nodeFT.c: (in function Node_File_free)
+nodeFT.c:348:37: Variable ulIndex used before definition
+ft.c: (in function FT_traversePath)
+ft.c:106:13: Variable isFile used before definition
+ft.c:107:49: Variable ulChildID used before definition
+ft.c:116:48: Variable ulChildID used before definition
+path.h:94:13: Function exported but not used outside path: Path_getComponent
+  A declaration is exported, but not used outside this module. Declaration can
+  use static qualifier. (Use -exportlocal to inhibit warning)
+   path.c:317:1: Definition of Path_getComponent
+nodeFT.h:121:5: Function exported but not used outside nodeFT: Node_compare
+   nodeFT.c:442:1: Definition of Node_compare
 
 ------------------------------------------------------------------------
 What warnings does critTer generate on your Part 3 code, and what are
@@ -132,7 +170,7 @@ your disagreements with them? Copy the critTer warnings here, and
 express your disagreement after each warning. If there are no
 warnings, then write "None."
 
-
+MANY - REDO DOCSTRINGS?
 
 ------------------------------------------------------------------------
 For each of the five faulty BDT implementations required by Step
