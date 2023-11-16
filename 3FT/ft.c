@@ -230,6 +230,7 @@ static int FT_insertions(const char *pcPath, boolean isFile,
     size_t ulDepth, ulIndex;
     size_t ulNewNodes = 0;
     size_t* freedFileNumbers = 0;
+    int errorStatus;
 
     assert(pcPath != NULL);
  
@@ -296,16 +297,16 @@ static int FT_insertions(const char *pcPath, boolean isFile,
   
         /* generate a Path_T for this level */
         iStatus = Path_prefix(oPPath, ulIndex, &oPPrefix);
-        if(iStatus != SUCCESS) {
+        if (iStatus != SUCCESS) {
             Path_free(oPPath);
-            if(oNFirstNew != NULL) {
-                /* all levels before the target one must be dirs */
-                if(ulIndex < ulDepth)
-                   (void) Node_Dir_free(oNFirstNew, freedFileNumbers);
-                else if(isFile)
-                   (void) Node_File_free(oNFirstNew);
-                else
-                   (void) Node_Dir_free(oNFirstNew, freedFileNumbers);
+            if (oNFirstNew != NULL) {
+                /* free the nodes - given parameters are guaranteed
+                to be valid */
+                if ((ulIndex < ulDepth) || !isFile) {
+                    (void) Node_Dir_free(oNFirstNew, freedFileNumbers);
+                } else {
+                    (void) Node_File_free(oNFirstNew);
+                }
             }
             return iStatus;
         }
@@ -335,12 +336,13 @@ static int FT_insertions(const char *pcPath, boolean isFile,
             Path_free(oPPath);
             Path_free(oPPrefix);
             if(oNFirstNew != NULL) {
-                if(ulIndex < ulDepth)
-                   (void) Node_Dir_free(oNFirstNew, freedFileNumbers);
-                else if(isFile)
-                   (void) Node_File_free(oNFirstNew);
-                else
-                   (void) Node_Dir_free(oNFirstNew, freedFileNumbers);
+                /* free the nodes - given parameters are guaranteed
+                to be valid */
+                if ((ulIndex < ulDepth) || !isFile) {
+                    (void) Node_Dir_free(oNFirstNew, freedFileNumbers);
+                } else {
+                    (void) Node_File_free(oNFirstNew);
+                }
             }
            return iStatus;
         }
