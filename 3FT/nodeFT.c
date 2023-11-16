@@ -265,6 +265,8 @@ boolean Node_hasChild(Node_T oNParent, Path_T oPPath, boolean *pisFile,
                          size_t *pulChildID) {
    boolean hasDirChild; 
    boolean hasFileChild;
+   size_t fileChildID;
+   size_t dirChildID;
    assert(oNParent != NULL);
    assert(oPPath != NULL);
    assert(pulChildID != NULL);
@@ -275,20 +277,26 @@ boolean Node_hasChild(Node_T oNParent, Path_T oPPath, boolean *pisFile,
    
     /* *pulChildID is the index into oNParent->oDChildren */
     hasDirChild = DynArray_bsearch(oNParent->oDChildren,
-            (char*) Path_getPathname(oPPath), pulChildID,
+            (char*) Path_getPathname(oPPath), &dirChildID,
+            (int (*)(const void*,const void*)) Node_compareString);
+
+   hasFileChild = DynArray_bsearch(oNParent->oFChildren,
+            (char*) Path_getPathname(oPPath), &fileChildID,
             (int (*)(const void*,const void*)) Node_compareString);
     
     if (hasDirChild) {
         *pisFile = FALSE;
+        *pulChildID = dirChildID;
         return hasDirChild;
-    } else {
-        /* *pulChildID is the index into oNParent->oDChildren */
-        hasFileChild = DynArray_bsearch(oNParent->oFChildren,
-            (char*) Path_getPathname(oPPath), pulChildID,
-            (int (*)(const void*,const void*)) Node_compareString);
-        *pisFile = hasFileChild;
+    } else if (hasFileChild){
+         *pisFile = TRUE;
+        *pulChildID = fileChildID;
         return hasFileChild;
-    }   
+    } else {
+         pisFile = NULL;
+         pulChildID = NULL;
+         return FALSE;
+    }
 }
 
 /*-------------------------------------------------------------------------*/
