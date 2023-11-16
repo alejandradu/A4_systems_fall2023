@@ -315,16 +315,14 @@ static int FT_insertions(const char *pcPath, boolean isFile,
   
         /* insert new nodes level by level */
         if (ulIndex < ulDepth) {   /* all ancestors are directories */
-           iStatus = Node_new(oPPrefix, oNCurr, FALSE, FileContent, 
-                              fileLength, &oNNewNode);
+           iStatus = Node_new(oPPrefix, oNCurr, FALSE, FileContent, fileLength, &oNNewNode);
             if (iStatus == SUCCESS) {
                NodeCounter++;
                dirCounter++;
             }
         /* the target node is a file or directory */
         } else {         
-            iStatus = Node_new(oPPrefix, oNCurr, isFile, FileContent, 
-                               fileLength, &oNNewNode);
+            iStatus = Node_new(oPPrefix, oNCurr, isFile, FileContent, fileLength, &oNNewNode);
             /* update counters accordingly */
             if (iStatus == SUCCESS) {
                NodeCounter++;
