@@ -144,27 +144,27 @@ your disagreements with them? Copy the splint warnings here, and
 express your disagreement after each warning. If there are no
 warnings, then write "None."
 
-nodeFT.c: (in function Node_new)
-nodeFT.c:185:49: Variable ulIndex used before definition
+ft.c: (in function FT_traversePath)
+ft.c:109:13: Variable isFile used before definition
   An rvalue is used that may not be initialized to a value on some execution
   path. (Use -usedef to inhibit warning)
+ft.c:110:49: Variable ulChildID used before definition
+ft.c:120:44: Variable ulChildID used before definition
+nodeFT.c: (in function Node_new)
+nodeFT.c:193:49: Variable ulIndex used before definition
 nodeFT.c: (in function Node_hasChild)
-nodeFT.c:270:23: Variable dirChildID used before definition
-nodeFT.c:274:23: Variable fileChildID used before definition
+nodeFT.c:236:23: Variable dirChildID used before definition
+nodeFT.c:240:23: Variable fileChildID used before definition
 nodeFT.c: (in function Node_Dir_free)
-nodeFT.c:301:37: Variable ulIndex used before definition
+nodeFT.c:344:37: Variable ulIndex used before definition
 nodeFT.c: (in function Node_File_free)
-nodeFT.c:348:37: Variable ulIndex used before definition
-ft.c: (in function FT_traversePath)
-ft.c:106:13: Variable isFile used before definition
-ft.c:107:49: Variable ulChildID used before definition
-ft.c:116:48: Variable ulChildID used before definition
+nodeFT.c:392:37: Variable ulIndex used before definition
 path.h:94:13: Function exported but not used outside path: Path_getComponent
   A declaration is exported, but not used outside this module. Declaration can
   use static qualifier. (Use -exportlocal to inhibit warning)
    path.c:317:1: Definition of Path_getComponent
-nodeFT.h:121:5: Function exported but not used outside nodeFT: Node_compare
-   nodeFT.c:442:1: Definition of Node_compare
+nodeFT.h:177:5: Function exported but not used outside nodeFT: Node_compare
+   nodeFT.c:453:1: Definition of Node_compare
 
 ------------------------------------------------------------------------
 What warnings does critTer generate on your Part 3 code, and what are
@@ -172,7 +172,46 @@ your disagreements with them? Copy the critTer warnings here, and
 express your disagreement after each warning. If there are no
 warnings, then write "None."
 
-MANY - REDO DOCSTRINGS?
+Checking ft.c
+
+   ft.c: line 296: low priority: 
+   A loop should consist of fewer than 35 lines;
+   this loop consists of 64 lines; consider refactoring
+
+   ft.c: line 705: low priority: 
+   A file should contain no more than 15 functions;
+   this file contains 18 functions
+
+   ft.c: line 228: medium priority:
+   Do you want to validate 'FileContent' through an assert?
+
+   ft.c: line 501: medium priority:
+   Do you want to validate 'pvContents' through an assert?
+
+   ft.c: line 569: medium priority:
+   Do you want to validate 'pvNewContents' through an assert?
+
+   ft.c: line 704: low priority: 
+   A source code file should contain fewer than 500 lines;
+   this file contains 705 lines
+
+   ft.c: line 307: low priority: 
+   This area is deeply nested at level 4, consider refactoring
+
+   ft.c: line 343: low priority: 
+   This area is deeply nested at level 4, consider refactoring
+
+Checking nodeFT.c
+
+   nodeFT.c: line 467: low priority: 
+   A file should contain no more than 15 functions;
+   this file contains 18 functions
+
+   nodeFT.c: line 88: medium priority:
+   Do you want to validate 'FileContent' through an assert?
+
+   nodeFT.c: line 432: medium priority:
+   Do you want to validate 'NewFileContent' through an assert?
 
 ------------------------------------------------------------------------
 For each of the five faulty BDT implementations required by Step
