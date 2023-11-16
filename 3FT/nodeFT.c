@@ -305,7 +305,6 @@ size_t Node_Dir_free(Node_T oNNode, size_t* numFreedFiles) {
    size_t ulIndex;
    size_t ulCount = 0;
    size_t numFileChildren;
-   size_t ulIndexFile;
 
    assert(oNNode != NULL);
    assert(!oNNode->isFile);
