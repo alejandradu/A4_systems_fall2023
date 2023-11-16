@@ -161,6 +161,7 @@ int Node_new(Path_T oPPath, Node_T oNParent,
         psNew->FileContent = FileContent;
         psNew->oDChildren = NULL;
         psNew->oFChildren = NULL;
+        psNew->ulContLength = ulContLength;
 
         /* HERE: would it be useful to track the lenght of the
         file content?? */
@@ -193,6 +194,7 @@ int Node_new(Path_T oPPath, Node_T oNParent,
             return MEMORY_ERROR;
         }
         psNew->FileContent = NULL;
+        psNew->ulContLength = 0;
    }
 
     /* Link into parent's children list */
