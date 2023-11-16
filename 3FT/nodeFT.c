@@ -294,7 +294,7 @@ boolean Node_hasChild(Node_T oNParent, Path_T oPPath, boolean *pisFile,
         return hasFileChild;
     } else {
          pisFile = NULL;
-         pulChildID = NULL;
+         *pulChildID = 0;
          return FALSE;
     }
 }
