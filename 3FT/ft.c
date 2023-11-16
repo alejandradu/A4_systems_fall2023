@@ -1,6 +1,6 @@
 /*--------------------------------------------------------------------*/
 /* ft.c                                                               */
-/* Author: Christopher Moretti                                        */
+/* Author: Alejandra & Siling                                         */
 /*--------------------------------------------------------------------*/
 
 #include <stddef.h>
@@ -63,7 +63,6 @@ static int FT_traversePath(Path_T oPPath, Node_T *poNFurthest) {
    size_t i;
    size_t ulChildID;
    boolean isFile;
-   size_t ulIndex;
 
    assert(oPPath != NULL);
    assert(poNFurthest != NULL);
@@ -301,13 +300,22 @@ freedFileNumbers = 0;
         /* all levels up to depth - 1 must be directories */
         if (ulIndex < ulDepth) {
            iStatus = Node_new(oPPrefix, oNCurr, FALSE, FileContent, fileLength, &oNNewNode);
-NodeCounter++;
-           dirCounter++;
+            if (iStatus == SUCCESS) {
+               NodeCounter++;
+               dirCounter++;
+            }
         } else {
             iStatus = Node_new(oPPrefix, oNCurr, isFile, FileContent, fileLength, &oNNewNode);
-NodeCounter++;
-            fileCounter++;
+            if (iStatus == SUCCESS) {
+               NodeCounter++;
+               if (isFile) {
+                  fileCounter++;
+               } else {
+                  dirCounter++;
+               }
+            }
         }
+        
         if(iStatus != SUCCESS) {
             Path_free(oPPath);
             Path_free(oPPrefix);
@@ -353,6 +361,7 @@ NodeCounter++;
     fprintf(stderr, "dirCounter: %zu\n", dirCounter);
     fprintf(stderr, "fileCounter: %zu\n", fileCounter);
     fprintf(stderr, "ulNewNodes: %zu\n", ulNewNodes);
+    fprintf(stderr, "NodeCounter: %zu\n", NodeCounter);
     fprintf(stderr, "isFile: %d\n", isFile);
     fprintf(stderr, "fileLength: %zu\n", fileLength);
 
@@ -378,7 +387,7 @@ static size_t FT_preOrderTraversal(Node_T oNRoot, DynArray_T AllNodesArray, size
       for( fileChildIndex = 0; fileChildIndex < Node_getNumChildrenFiles(oNRoot); fileChildIndex++) {
          int iStatus;
          Node_T oNChild = NULL;
-         iStatus = Node_getDirChild(oNRoot,fileChildIndex, &oNChild);
+         iStatus = Node_getFileChild(oNRoot,fileChildIndex, &oNChild);
          assert(iStatus == SUCCESS);
          (void) DynArray_set(AllNodesArray, index, oNChild);
          index++;
@@ -491,15 +500,30 @@ int FT_rmDir(const char *pcPath) {
    if(iStatus != SUCCESS)
        return iStatus;
 
+   fprintf(stderr, "before removing\n");
+   fprintf(stderr, "dirCounter: %zu\n", dirCounter);
+   fprintf(stderr, "fileCounter: %zu\n", fileCounter);
+   fprintf(stderr, "NodeCounter: %zu\n", NodeCounter);
+
+   fprintf(stderr, "removing a dir\n");
+
    /*updates counters of the number of nodes presenting in the tree*/
    numDirDeleted = Node_Dir_free(oNFound, &numFileDeleted);
+
+   fprintf(stderr, "numDirDeleted: %zu\n", numDirDeleted);
+   fprintf(stderr, "numFileDeleted: %zu\n", numFileDeleted);
+   
    dirCounter -= numDirDeleted;
    fileCounter -= numFileDeleted;
    NodeCounter -= numDirDeleted;
    NodeCounter -= numFileDeleted;
-   fprintf(stderr, "FINAL dirCounter: %zu\n", dirCounter);
    if(dirCounter == 0)
       oNRoot = NULL;
+
+   fprintf(stderr, "after removing\n");
+   fprintf(stderr, "dirCounter: %zu\n", dirCounter);
+   fprintf(stderr, "fileCounter: %zu\n", fileCounter);
+   fprintf(stderr, "NodeCounter: %zu\n", NodeCounter);
 
    /*assert(CheckerDT_isValid(bIsInitialized, oNRoot, ulCount));*/
    return SUCCESS;
@@ -566,10 +590,25 @@ size_t numFilesDeleted;
 
    if(iStatus != SUCCESS)
        return iStatus;
+   
+   fprintf(stderr, "before removing\n");
+   fprintf(stderr, "dirCounter: %zu\n", dirCounter);
+   fprintf(stderr, "fileCounter: %zu\n", fileCounter);
+   fprintf(stderr, "NodeCounter: %zu\n", NodeCounter);
+
+   fprintf(stderr, "removing a File\n");
 
    numFilesDeleted = Node_File_free(oNFound);
+
+   fprintf(stderr, "numFileDeleted: %zu\n", numFilesDeleted);
+
    fileCounter -= numFilesDeleted;
    NodeCounter -= numFilesDeleted;
+
+   fprintf(stderr, "after removing\n");
+   fprintf(stderr, "dirCounter: %zu\n", dirCounter);
+   fprintf(stderr, "fileCounter: %zu\n", fileCounter);
+   fprintf(stderr, "NodeCounter: %zu\n", NodeCounter);
 
    return SUCCESS;
 }

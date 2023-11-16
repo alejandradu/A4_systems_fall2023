@@ -1,6 +1,6 @@
 /*--------------------------------------------------------------------*/
-/* nodeDT.c                                                           */
-/* Author: Christopher Moretti                                        */
+/* nodeFT.c                                                           */
+/* Author: Alejandra & Siling                                         */
 /*--------------------------------------------------------------------*/
 
 #include <stdlib.h>
@@ -10,8 +10,6 @@
 #include "nodeFT.h"
 #include "a4def.h"
 #include "path.h"
-
-/* dummy */
 
 /* A node in a FT */
 struct node {
@@ -163,6 +161,7 @@ int Node_new(Path_T oPPath, Node_T oNParent,
         psNew->FileContent = FileContent;
         psNew->oDChildren = NULL;
         psNew->oFChildren = NULL;
+        psNew->ulContLength = ulContLength;
 
         /* HERE: would it be useful to track the lenght of the
         file content?? */
@@ -195,6 +194,7 @@ int Node_new(Path_T oPPath, Node_T oNParent,
             return MEMORY_ERROR;
         }
         psNew->FileContent = NULL;
+        psNew->ulContLength = 0;
    }
 
     /* Link into parent's children list */
@@ -251,17 +251,7 @@ void *Node_ReplaceFileContent(Node_T oNNode, void* NewFileContent, size_t ulNewL
 
     /* reorder pointers */
     oldContent = oNNode->FileContent;
-
-    /* re-allocate memory for contents 
-    temp = realloc(oNNode->FileContent, ulNewLength);
-    if(temp == NULL) {
-        oNNode->FileContent = oldContent;
-        return NULL;
-    } else {
-        oNNode->FileContent = temp;
-        memcpy(oNNode->FileContent, NewFileContent, ulNewLength);
-        oNNode->ulContLength = ulNewLength;
-    }*/
+    oNNode->FileContent = NewFileContent;
 
     oNNode->ulContLength = ulNewLength;
 
@@ -282,7 +272,7 @@ boolean Node_hasChild(Node_T oNParent, Path_T oPPath, boolean *pisFile,
     if((oNParent->isFile)) {
       return FALSE;
     }
-
+   
     /* *pulChildID is the index into oNParent->oDChildren */
     hasDirChild = DynArray_bsearch(oNParent->oDChildren,
             (char*) Path_getPathname(oPPath), pulChildID,
@@ -334,16 +324,15 @@ size_t Node_Dir_free(Node_T oNNode, size_t* numFreedFiles) {
     DynArray_free(oNNode->oFChildren);
 
     /* recursively remove directory children */
-    fprintf(stderr, "at node %sdetected %zu children\n", Node_toString(oNNode), DynArray_getLength(oNNode->oDChildren));
     while(DynArray_getLength(oNNode->oDChildren) != 0) {
+        fprintf(stderr, "Tried to remove D children at %s\n", Path_getPathname(oNNode->oPPath));
         ulCount += Node_Dir_free(DynArray_get(oNNode->oDChildren, 0), numFreedFiles);
-        /* TODO ARRAY OF DCHILDREN HAS LENGTH UPDATING INCORRECTLY */
     }
     DynArray_free(oNNode->oDChildren);
 
     /* remove path */
-    fprintf(stderr, "Trying to free path at node %s\n", Node_toString(oNNode));
     Path_free(oNNode->oPPath);
+    /*fprintf(stderr, "This might be a segfault\n");*/
     dummy = oNNode->oPPath;
 
     /* finally, free the struct node */
