@@ -35,8 +35,6 @@ static size_t dirCounter = 0;
 /* 4. a counter for all the nodes */
 static size_t NodeCounter = 0;
 
-/* dummy comment */
-
 
 /* --------------------------------------------------------------------
 
