@@ -25,8 +25,11 @@ typedef struct node *Node_T;
 /*--------------------------------------------------------------------*/
 /*
   Creates a new node in the File Tree, with path oPPath and
-  parent oNParent, boolean isFile, FileContent. Returns an int SUCCESS
-  status and sets *poNResult to be the new node if successful. 
+  parent oNParent, boolean isFile, FileContent, the length of the file
+  (ulContLength) and a pointer p to a node that would be storing the new node
+  created.
+  Returns an int SUCCESS status and sets *poNResult to be the new node
+  if successful. 
   Otherwise, sets *poNResult to NULL and returns status:
   * MEMORY_ERROR if memory could not be allocated to complete request
   * CONFLICTING_PATH if oNParent's path is not an ancestor of oPPath
@@ -131,19 +134,20 @@ size_t Node_File_free(Node_T oNNode);
 
 /*--------------------------------------------------------------------*/
 
-/* Take in a File Node, return the Length of the file 
+/* Take in a File Node oNNode, return the Length of the file 
    The Function fails if it is not a file*/
 size_t Node_FileLength(Node_T oNNode);
 
 /*--------------------------------------------------------------------*/
 
-/* Takes in a Node. returns True if it is a file, false if it is a directory*/
+/* Takes in a Node oNNode. returns True if it is a file, false if it 
+is a directory*/
 boolean Node_isFile(Node_T oNNode);
 
 /*--------------------------------------------------------------------*/
 
 
-/* Takes in a File Node and returns its file content*/
+/* Takes in a File Node oNNode and returns its file content*/
 void *Node_getContent(Node_T oNNode);
 
 /*--------------------------------------------------------------------*/
