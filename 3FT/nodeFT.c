@@ -251,17 +251,7 @@ void *Node_ReplaceFileContent(Node_T oNNode, void* NewFileContent, size_t ulNewL
 
     /* reorder pointers */
     oldContent = oNNode->FileContent;
-
-    /* re-allocate memory for contents 
-    temp = realloc(oNNode->FileContent, ulNewLength);
-    if(temp == NULL) {
-        oNNode->FileContent = oldContent;
-        return NULL;
-    } else {
-        oNNode->FileContent = temp;
-        memcpy(oNNode->FileContent, NewFileContent, ulNewLength);
-        oNNode->ulContLength = ulNewLength;
-    }*/
+    oNNode->FileContent = NewFileContent;
 
     oNNode->ulContLength = ulNewLength;
 
