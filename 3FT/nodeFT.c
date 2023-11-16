@@ -358,9 +358,6 @@ size_t Node_File_free(Node_T oNNode) {
    assert(oNNode != NULL);
    assert(oNNode->isFile);
 
-    /* Free space of file content */
-    /*free(oNNode->FileContent);*/ /*might not be needed if we are not mallocing*/
-
     /* remove from parent's list */
     if(oNNode->oNParent != NULL) {
         if(DynArray_bsearch(

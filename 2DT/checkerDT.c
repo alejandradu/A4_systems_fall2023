@@ -8,10 +8,6 @@
 #include <string.h>
 #include <stdlib.h>
 #include "checkerDT.h"
-#include "dynarray.h"
-#include "path.h"
-#include "dt.h"
-
 
 
 boolean CheckerDT_Node_isValid(Node_T oNNode) {
