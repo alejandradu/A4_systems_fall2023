@@ -440,8 +440,11 @@ boolean FT_containsDir(const char *pcPath) {
     assert(pcPath != NULL);
 
     iStatus = FT_findNode(pcPath, &oNFound, FALSE);
-    
-    return (iStatus == SUCCESS);
+    if (iStatus == SUCCESS) {
+        return TRUE;
+    } else {
+        return FALSE;
+    }
 }
 
 
@@ -522,7 +525,11 @@ boolean FT_containsFile(const char *pcPath) {
     assert(pcPath != NULL);
 
     iStatus = FT_findNode(pcPath, &oNFound, TRUE);
-    return (iStatus == SUCCESS);
+    if (iStatus == SUCCESS) {
+        return TRUE;
+    } else {
+        return FALSE;
+    }
 }
 
 /*
