@@ -6,14 +6,18 @@
 #ifndef FT_INCLUDED
 #define FT_INCLUDED
 
+#include <stddef.h>
+#include "a4def.h"
+
+/*--------------------------------------------------------------------*/
+
 /*
   A File Tree is a representation of a hierarchy of directories and
   files: the File Tree is rooted at a directory, directories
   may be internal nodes or leaves, and files are always leaves.
 */
 
-#include <stddef.h>
-#include "a4def.h"
+/*--------------------------------------------------------------------*/
 
 /*
    Inserts a new directory into the FT with absolute path pcPath.
@@ -28,11 +32,15 @@
 */
 int FT_insertDir(const char *pcPath);
 
+/*--------------------------------------------------------------------*/
+
 /*
   Returns TRUE if the FT contains a directory with absolute path
   pcPath and FALSE if not or if there is an error while checking.
 */
 boolean FT_containsDir(const char *pcPath);
+
+/*--------------------------------------------------------------------*/
 
 /*
   Removes the FT hierarchy (subtree) at the directory with absolute
@@ -46,6 +54,8 @@ boolean FT_containsDir(const char *pcPath);
   * MEMORY_ERROR if memory could not be allocated to complete request
 */
 int FT_rmDir(const char *pcPath);
+
+/*--------------------------------------------------------------------*/
 
 
 /*
@@ -64,11 +74,15 @@ int FT_rmDir(const char *pcPath);
 int FT_insertFile(const char *pcPath, void *pvContents,
                   size_t ulLength);
 
+/*--------------------------------------------------------------------*/
+
 /*
   Returns TRUE if the FT contains a file with absolute path
   pcPath and FALSE if not or if there is an error while checking.
 */
 boolean FT_containsFile(const char *pcPath);
+
+/*--------------------------------------------------------------------*/
 
 /*
   Removes the FT file with absolute path pcPath.
@@ -83,6 +97,8 @@ boolean FT_containsFile(const char *pcPath);
 */
 int FT_rmFile(const char *pcPath);
 
+/*--------------------------------------------------------------------*/
+
 /*
   Returns the contents of the file with absolute path pcPath.
   Returns NULL if unable to complete the request for any reason.
@@ -92,6 +108,8 @@ int FT_rmFile(const char *pcPath);
 */
 void *FT_getFileContents(const char *pcPath);
 
+/*--------------------------------------------------------------------*/
+
 /*
   Replaces current contents of the file with absolute path pcPath with
   the parameter pvNewContents of size ulNewLength bytes.
@@ -100,6 +118,8 @@ void *FT_getFileContents(const char *pcPath);
 */
 void *FT_replaceFileContents(const char *pcPath, void *pvNewContents,
                              size_t ulNewLength);
+
+/*--------------------------------------------------------------------*/
 
 /*
   Returns SUCCESS if pcPath exists in the hierarchy,
@@ -119,6 +139,8 @@ void *FT_replaceFileContents(const char *pcPath, void *pvNewContents,
 */
 int FT_stat(const char *pcPath, boolean *pbIsFile, size_t *pulSize);
 
+/*--------------------------------------------------------------------*/
+
 /*
   Sets the FT data structure to an initialized state.
   The data structure is initially empty.
@@ -127,6 +149,8 @@ int FT_stat(const char *pcPath, boolean *pbIsFile, size_t *pulSize);
 */
 int FT_init(void);
 
+/*--------------------------------------------------------------------*/
+
 /*
   Removes all contents of the data structure and
   returns it to an uninitialized state.
@@ -134,6 +158,8 @@ int FT_init(void);
   and SUCCESS otherwise.
 */
 int FT_destroy(void);
+
+/*--------------------------------------------------------------------*/
 
 /*
   Returns a string representation of the
@@ -150,3 +176,5 @@ int FT_destroy(void);
 char *FT_toString(void);
 
 #endif
+
+/*--------------------------------------------------------------------*/
