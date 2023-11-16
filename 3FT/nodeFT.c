@@ -306,7 +306,6 @@ size_t Node_Dir_free(Node_T oNNode, size_t* numFreedFiles) {
    size_t ulCount = 0;
    size_t numFileChildren;
    size_t ulIndexFile;
-   Path_T dummy;
 
    assert(oNNode != NULL);
    assert(!oNNode->isFile);
@@ -340,6 +339,7 @@ size_t Node_Dir_free(Node_T oNNode, size_t* numFreedFiles) {
 
     /* remove path */
     Path_free(oNNode->oPPath);
+
 
     /* finally, free the struct node */
     free(oNNode);
