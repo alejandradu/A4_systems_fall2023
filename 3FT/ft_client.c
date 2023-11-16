@@ -182,6 +182,7 @@ int main(void) {
   l = -1;
   assert(FT_stat("1root/H", &bIsFile, &l) == SUCCESS);
   assert(bIsFile == TRUE);
+  fprintf(stderr, "the proper filelength is %ld while your filelength is %ld\n", strlen("hello, world!")+1, l);
   assert(l == (strlen("hello, world!")+1));
   assert(!strcmp(FT_replaceFileContents("1root/H","Kernighan",
                                         strlen("Kernighan")+1),
