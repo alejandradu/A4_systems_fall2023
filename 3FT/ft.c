@@ -271,7 +271,6 @@ size_t* freedFileNumbers;
  
          /* fails if there is already a node (any type) with that 
         path at that depth */
-        fprintf(stderr, "in else, index %zu, depth %zu\n", ulIndex, ulDepth);
         if(ulIndex == ulDepth+1 && !Path_comparePath(oPPath,
                                          Node_getPath(oNCurr))) {
            Path_free(oPPath);
@@ -340,8 +339,6 @@ size_t* freedFileNumbers;
            oNFirstNew = oNCurr;
         ulIndex++;
 
-    fprintf(stderr, "path depth of inserted node %zu\n", Path_getDepth(Node_getPath(oNCurr)));
-
 
     }
 
@@ -352,13 +349,6 @@ size_t* freedFileNumbers;
 
 
    /*assert(CheckerFT_isValid(bIsInitialized, oNRoot, ulCount));*/
-
-    fprintf(stderr, "dirCounter: %zu\n", dirCounter);
-    fprintf(stderr, "fileCounter: %zu\n", fileCounter);
-    fprintf(stderr, "ulNewNodes: %zu\n", ulNewNodes);
-    fprintf(stderr, "NodeCounter: %zu\n", NodeCounter);
-    fprintf(stderr, "isFile: %d\n", isFile);
-    fprintf(stderr, "fileLength: %zu\n", fileLength);
 
    return SUCCESS;
 }
@@ -495,18 +485,10 @@ int FT_rmDir(const char *pcPath) {
    if(iStatus != SUCCESS)
        return iStatus;
 
-   fprintf(stderr, "before removing\n");
-   fprintf(stderr, "dirCounter: %zu\n", dirCounter);
-   fprintf(stderr, "fileCounter: %zu\n", fileCounter);
-   fprintf(stderr, "NodeCounter: %zu\n", NodeCounter);
 
-   fprintf(stderr, "removing a dir\n");
 
    /*updates counters of the number of nodes presenting in the tree*/
    numDirDeleted = Node_Dir_free(oNFound, &numFileDeleted);
-
-   fprintf(stderr, "numDirDeleted: %zu\n", numDirDeleted);
-   fprintf(stderr, "numFileDeleted: %zu\n", numFileDeleted);
    
    dirCounter -= numDirDeleted;
    fileCounter -= numFileDeleted;
@@ -514,11 +496,6 @@ int FT_rmDir(const char *pcPath) {
    NodeCounter -= numFileDeleted;
    if(dirCounter == 0)
       oNRoot = NULL;
-
-   fprintf(stderr, "after removing\n");
-   fprintf(stderr, "dirCounter: %zu\n", dirCounter);
-   fprintf(stderr, "fileCounter: %zu\n", fileCounter);
-   fprintf(stderr, "NodeCounter: %zu\n", NodeCounter);
 
    /*assert(CheckerDT_isValid(bIsInitialized, oNRoot, ulCount));*/
    return SUCCESS;
@@ -585,25 +562,12 @@ size_t numFilesDeleted;
 
    if(iStatus != SUCCESS)
        return iStatus;
-   
-   fprintf(stderr, "before removing\n");
-   fprintf(stderr, "dirCounter: %zu\n", dirCounter);
-   fprintf(stderr, "fileCounter: %zu\n", fileCounter);
-   fprintf(stderr, "NodeCounter: %zu\n", NodeCounter);
-
-   fprintf(stderr, "removing a File\n");
 
    numFilesDeleted = Node_File_free(oNFound);
-
-   fprintf(stderr, "numFileDeleted: %zu\n", numFilesDeleted);
 
    fileCounter -= numFilesDeleted;
    NodeCounter -= numFilesDeleted;
 
-   fprintf(stderr, "after removing\n");
-   fprintf(stderr, "dirCounter: %zu\n", dirCounter);
-   fprintf(stderr, "fileCounter: %zu\n", fileCounter);
-   fprintf(stderr, "NodeCounter: %zu\n", NodeCounter);
 
    return SUCCESS;
 }

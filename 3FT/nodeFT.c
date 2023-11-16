@@ -334,7 +334,6 @@ size_t Node_Dir_free(Node_T oNNode, size_t* numFreedFiles) {
 
     /* recursively remove directory children */
     while(DynArray_getLength(oNNode->oDChildren) != 0) {
-        fprintf(stderr, "Tried to remove D children at %s\n", Path_getPathname(oNNode->oPPath));
         ulCount += Node_Dir_free(DynArray_get(oNNode->oDChildren, 0), numFreedFiles);
     }
     DynArray_free(oNNode->oDChildren);
