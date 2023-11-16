@@ -89,7 +89,7 @@ static int FT_traversePath(Path_T oPPath, Node_T *poNFurthest) {
 
    oNCurr = oNRoot;
    ulDepth = Path_getDepth(oPPath);
-   for(i = 2; i <= ulDepth; i++) { /*at most reaching level ulDepth - 1*/
+   for(i = 2; i <= ulDepth; i++) { 
       iStatus = Path_prefix(oPPath, i, &oPPrefix);
       if(iStatus != SUCCESS) {
          *poNFurthest = NULL;
@@ -133,8 +133,6 @@ static int FT_traversePath(Path_T oPPath, Node_T *poNFurthest) {
   return SUCCESS;
 
 }
-
-/* this is a dummy comment */
 
 /*
   Traverses the FT to find a node with absolute path pcPath. Returns a
@@ -203,8 +201,6 @@ assert(oNFound != NULL);
    return SUCCESS;
 }
 
-/* TODO: make the function more concise?? break up the functions?? */
-/* static function for remove?? */
 
 /*--------------------------------------------------------------------*/
 
@@ -347,9 +343,6 @@ size_t* freedFileNumbers;
     if(oNRoot == NULL)
       oNRoot = oNFirstNew;
 
-
-   /*assert(CheckerFT_isValid(bIsInitialized, oNRoot, ulCount));*/
-
    return SUCCESS;
 }
 
@@ -394,8 +387,6 @@ static size_t FT_preOrderTraversal(Node_T oNRoot, DynArray_T AllNodesArray, size
   to accumulate a string length, rather than returning the length of
   oNNode's path, and also always adds one addition byte to the sum.
 */
-
-/*not modified for FT*/
 static void FT_strlenAccumulate(Node_T oNNode, size_t *pulAcc) {
    assert(pulAcc != NULL);
 
@@ -409,7 +400,6 @@ static void FT_strlenAccumulate(Node_T oNNode, size_t *pulAcc) {
   order, appending oNNode's path onto pcAcc, and also always adds one
   newline at the end of the concatenated string.
 */
-/*not yet modified for FT*/
 static void FT_strcatAccumulate(Node_T oNNode, char *pcAcc) {
    assert(pcAcc != NULL);
 
@@ -478,7 +468,7 @@ int FT_rmDir(const char *pcPath) {
    numFileDeleted = 0;
 
    assert(pcPath != NULL);
-   /*assert(CheckerFT_isValid(bIsInitialized, oNRoot, ulCount));*/
+
 
    iStatus = FT_findNode(pcPath, &oNFound, FALSE);
 
@@ -497,7 +487,6 @@ int FT_rmDir(const char *pcPath) {
    if(dirCounter == 0)
       oNRoot = NULL;
 
-   /*assert(CheckerDT_isValid(bIsInitialized, oNRoot, ulCount));*/
    return SUCCESS;
 }
 
