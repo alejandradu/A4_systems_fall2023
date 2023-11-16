@@ -273,7 +273,7 @@ static int FT_insertions(const char *pcPath, boolean isFile, void* FileContent, 
         }
     }
 
-    freedFileNumbers = 0   /* initialize */
+    freedFileNumbers = 0 ;  /* initialize */
 
     /* starting at oNCurr, build rest of the path one level at a time */
     while(ulIndex <= ulDepth) {
