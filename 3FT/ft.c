@@ -234,8 +234,10 @@ size_t* freedFileNumbers;
  
     /*validate that a root exists if we are trying to insert a file*/
     if (isFile) {
-      if (oNRoot == NULL)
+      if (oNRoot == NULL) {
+         Path_free(oPPath);
          return CONFLICTING_PATH;
+      }
     }
  
     /* find the closest ancestor of oPPath already in the tree */
@@ -348,13 +350,6 @@ size_t* freedFileNumbers;
     if(oNRoot == NULL)
       oNRoot = oNFirstNew;
 
-    /*we might have to update these within the loop*/
-    /*dirCounter += ulNewNodes-1;
-    if (!isFile){
-        dirCounter += 1;
-    } else {
-        fileCounter += 1;
-    }*/
 
    /*assert(CheckerFT_isValid(bIsInitialized, oNRoot, ulCount));*/
 
