@@ -606,7 +606,7 @@ size_t numFilesDeleted;
    NodeCounter -= numFilesDeleted;
 
    fprintf(stderr, "after removing\n");
-    fprintf(stderr, "dirCounter: %zu\n", dirCounter);
+   fprintf(stderr, "dirCounter: %zu\n", dirCounter);
    fprintf(stderr, "fileCounter: %zu\n", fileCounter);
    fprintf(stderr, "NodeCounter: %zu\n", NodeCounter);
 
