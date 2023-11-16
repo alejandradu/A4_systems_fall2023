@@ -59,6 +59,7 @@ static int Node_addChild(Node_T oNParent, Node_T oNChild,
    }
 
     if (oNChild->isFile){
+        DynArray_sort(oNParent->oFChildren, (int (*)(const void *, const void *)) Node_compare);
         if(DynArray_addAt(oNParent->oFChildren, ulIndex, oNChild)) {
             DynArray_sort(oNParent->oFChildren, (int (*)(const void *, const void *)) Node_compare);
             return SUCCESS;
@@ -66,6 +67,7 @@ static int Node_addChild(Node_T oNParent, Node_T oNChild,
         else
             return MEMORY_ERROR;
     } else {
+        DynArray_sort(oNParent->oDChildren, (int (*)(const void *, const void *)) Node_compare);
         if(DynArray_addAt(oNParent->oDChildren, ulIndex, oNChild)) {
             DynArray_sort(oNParent->oDChildren, (int (*)(const void *, const void *)) Node_compare);
             return SUCCESS;
