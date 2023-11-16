@@ -10,8 +10,6 @@
 #include <string.h>
 #include "ft.h"
 
-/* dummy */
-
 /* Tests the FT implementation with an assortment of checks.
    Prints the status of the data structure along the way to stderr.
    Returns 0. */
@@ -111,9 +109,9 @@ int main(void) {
   /* Children must be unique, but individual directories or files
      in different paths needn't be
   */
-  /*assert(FT_insertFile("1root/2child/3gkid", NULL, 0) ==
+  assert(FT_insertFile("1root/2child/3gkid", NULL, 0) ==
          ALREADY_IN_TREE);
-  assert(FT_insertDir("1root/2child/3gkid") == ALREADY_IN_TREE);*/
+  assert(FT_insertDir("1root/2child/3gkid") == ALREADY_IN_TREE);
   assert(FT_insertDir("1root/2child/3gk2/4ggk") == SUCCESS);
   assert(FT_containsDir("1root/2child/3gk2/4ggk") == TRUE);
   assert(FT_containsFile("1root/2child/3gk2/4ggk") == FALSE);
@@ -129,7 +127,7 @@ int main(void) {
   free(temp);
 
   /* Attempting to insert a child of a file is illegal */
-  /*assert(FT_insertDir("1root/2third/3nopeD") == NOT_A_DIRECTORY);*/
+  assert(FT_insertDir("1root/2third/3nopeD") == NOT_A_DIRECTORY);
   assert(FT_containsDir("1root/2third/3nopeD") == FALSE);
   assert(FT_insertFile("1root/2third/3nopeF", NULL, 0) ==
          NOT_A_DIRECTORY);
@@ -148,7 +146,6 @@ int main(void) {
   assert(FT_rmDir("1root/2second/3gfile") == NOT_A_DIRECTORY);
   assert(FT_rmFile("1root/2child/3nope") == NO_SUCH_PATH);
   assert(FT_rmFile("1root/2child/3gkid") == NOT_A_FILE);
-
   assert(FT_rmDir("1root/2child/3gkid") == SUCCESS);
   assert(FT_rmFile("1root/2second/3gfile") == SUCCESS);
   assert(FT_containsDir("1root/2child/3gkid") == FALSE);
@@ -163,8 +160,6 @@ int main(void) {
   assert(FT_rmDir("1anotherroot") == CONFLICTING_PATH);
   assert(FT_rmDir("1root") == SUCCESS);
   assert(FT_rmDir("1root") == NO_SUCH_PATH);
-  assert(FT_containsDir("1root") == FALSE);
-
   assert(FT_containsDir("1root/2child") == FALSE);
   assert(FT_containsDir("1root") == FALSE);
   assert(FT_rmDir("1root") == NO_SUCH_PATH);
@@ -182,12 +177,10 @@ int main(void) {
   l = -1;
   assert(FT_stat("1root/H", &bIsFile, &l) == SUCCESS);
   assert(bIsFile == TRUE);
-  fprintf(stderr, "the proper filelength is %ld while your filelength is %ld\n", strlen("hello, world!")+1, l);
   assert(l == (strlen("hello, world!")+1));
   assert(!strcmp(FT_replaceFileContents("1root/H","Kernighan",
                                         strlen("Kernighan")+1),
                  "hello, world!"));
-   fprintf(stderr, "getFileCountent is %s\n", (char*)FT_getFileContents("1root/H"));
   assert(!strcmp((char*)FT_getFileContents("1root/H"),"Kernighan"));
   assert(FT_stat("1root/H", &bIsFile, &l) == SUCCESS);
   assert(bIsFile == TRUE);
