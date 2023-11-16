@@ -70,7 +70,8 @@ boolean Node_hasChild(Node_T oNParent, Path_T oPPath, boolean *pisFile,
 /*
   Destroys and frees all memory allocated for the subtree rooted at
   oNNode, i.e., deletes this node and all its descendents. Returns the
-  number of nodes deleted.
+  number of directories deleted, passing the number of files freed to
+  the pointer numFreedFiles
 */
 size_t Node_Dir_free(Node_T oNNode, size_t* numFreedFiles);
 

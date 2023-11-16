@@ -747,13 +747,14 @@ int FT_init(void) {
 */
 int FT_destroy(void) {
 size_t numFreedFiles;
+numFreedFiles = 0;
 
    if(!isInitialized)
       return INITIALIZATION_ERROR;
 
    if(oNRoot) {
       dirCounter -= Node_Dir_free(oNRoot, &numFreedFiles);
-fileCounter -= numFreedFiles;
+      fileCounter -= numFreedFiles;
       NodeCounter = 0;
       
       oNRoot = NULL;

@@ -326,7 +326,7 @@ size_t Node_Dir_free(Node_T oNNode, size_t* numFreedFiles) {
     numFileChildren = DynArray_getLength(oNNode->oFChildren);
     *numFreedFiles += numFileChildren;
 
-    for(ulIndexFile=0; ulIndexFile < numFileChildren; ulIndexFile++) {
+    for(ulIndexFile=0; ulIndexFile < DynArray_getLength(oNNode->oFChildren); ulIndexFile++) {
         Node_File_free(DynArray_get(oNNode->oFChildren, ulIndexFile));
     }
     DynArray_free(oNNode->oFChildren);
