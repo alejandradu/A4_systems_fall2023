@@ -308,7 +308,11 @@ freedFileNumbers = 0;
             iStatus = Node_new(oPPrefix, oNCurr, isFile, FileContent, fileLength, &oNNewNode);
             if (iStatus == SUCCESS) {
                NodeCounter++;
-               fileCounter++;
+               if (isFile) {
+                  fileCounter++;
+               } else {
+                  dirCounter++;
+               }
             }
         }
         
