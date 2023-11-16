@@ -296,13 +296,13 @@ size_t* freedFileNumbers;
   
         /* all levels up to depth - 1 must be directories */
         if (ulIndex < ulDepth) {
-           iStatus = Node_new(oPPrefix, oNCurr, FALSE, FileContent, fileLength, &oNNewNode);
+           iStatus = Node_new(oNCurr, oPPrefix, FALSE, FileContent, fileLength, &oNNewNode);
             if (iStatus == SUCCESS) {
                NodeCounter++;
                dirCounter++;
             }
         } else {
-            iStatus = Node_new(oPPrefix, oNCurr, isFile, FileContent, fileLength, &oNNewNode);
+            iStatus = Node_new(oNCurr, oPPrefix, isFile, FileContent, fileLength, &oNNewNode);
             if (iStatus == SUCCESS) {
                NodeCounter++;
                if (isFile) {
