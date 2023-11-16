@@ -45,8 +45,8 @@ static size_t NodeCounter = 0;
 */
 
 /*
-  Traverses the FT to find a node with absolute path pcPath. Returns a
-  int SUCCESS status and sets *poNResult to be the node, if found.
+  Traverses the FT to find a node with absolute path oPPath. Returns a
+  int SUCCESS status and sets *poNFurthest to be the node, if found.
   Otherwise, sets *poNResult to NULL and returns with status:
   * INITIALIZATION_ERROR if the FT is not in an initialized state
   * BAD_PATH if pcPath does not represent a well-formatted path
@@ -132,9 +132,10 @@ static int FT_traversePath(Path_T oPPath, Node_T *poNFurthest) {
 }
 
 /*
-  Traverses the FT to find a node with absolute path pcPath. Returns a
-  int SUCCESS status and sets *poNResult to be the node, if found.
-  Otherwise, sets *poNResult to NULL and returns with status:
+  Traverses the FT to find a node with absolute path pcPath and type
+  determined by isFile (TRUE or FALSE). Returns a int SUCCESS status and
+  sets *poNResult to be the node, if found. Otherwise, sets *poNResult 
+  to NULL and returns with status:
   * INITIALIZATION_ERROR if the FT is not in an initialized state
   * BAD_PATH if pcPath does not represent a well-formatted path
   * CONFLICTING_PATH if the root's path is not a prefix of pcPath
@@ -203,9 +204,23 @@ static int FT_findNode(const char *pcPath, Node_T *poNResult, boolean isFile) {
 
 /*--------------------------------------------------------------------*/
 
-/* Encapsulation of the algorithm to insert a new node accounting
-for the differences between a file and a directory */
-static int FT_insertions(const char *pcPath, boolean isFile, void* FileContent, size_t fileLength) {
+/* Encapsulation of the insertion algorithm for file or directory
+nodes as determined by isFile (TRUE or False): inserts a new node into 
+the FT with absolute path pcPath, with file contents FileContent of size
+fileLength bytes. Returns SUCCESS if the new file is inserted 
+successfully. Otherwise, returns:
+   * INITIALIZATION_ERROR if the FT is not in an initialized state
+   * BAD_PATH if pcPath does not represent a well-formatted path
+   * CONFLICTING_PATH if the root exists but is not a prefix of pcPath,
+                      or if the new file would be the FT root
+   * NOT_A_DIRECTORY if a proper prefix of pcPath exists as a file
+   * ALREADY_IN_TREE if pcPath is already in the FT (as dir or file)
+   * MEMORY_ERROR if memory could not be allocated to complete request
+
+
+*/
+static int FT_insertions(const char *pcPath, boolean isFile, 
+                         void* FileContent, size_t fileLength) {
     int iStatus;
     Path_T oPPath = NULL;
     Node_T oNFirstNew = NULL;
@@ -347,12 +362,13 @@ static int FT_insertions(const char *pcPath, boolean isFile, void* FileContent, 
 
 
 /*
-  Performs a pre-order traversal of the tree rooted at n,
-  inserting each payload to DynArray_T d beginning at index i.
-  Returns the next unused index in d after the insertion(s).
+  Performs a pre-order traversal of the tree rooted at oNRoot,
+  inserting each payload to DynArray_T AllNodesArray beginning at index.
+  Returns the next unused index in AllNodesArray after the insertion(s).
 */
 
-static size_t FT_preOrderTraversal(Node_T oNRoot, DynArray_T AllNodesArray, size_t index) {
+static size_t FT_preOrderTraversal(Node_T oNRoot, 
+                               DynArray_T AllNodesArray, size_t index) {
    size_t c;
    size_t fileChildIndex;
 
