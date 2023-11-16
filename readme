@@ -27,7 +27,8 @@ Documents that are referenced directly by the course's website. Such documents i
 
 The man pages on the armlab cluster.
 
-The course's current staff members outside of class time through office hours.
+The course's current staff members outside of class time through office 
+hours.
 
 The course's current staff members outside of class time through Ed.
 
@@ -48,7 +49,8 @@ Documents that are referenced directly by the course's website. Such documents i
 
 The man pages on the armlab cluster.
 
-The course's current staff members outside of class time through office hours.
+The course's current staff members outside of class time through office 
+hours.
 
 The course's current staff members outside of class time through Ed.
 
@@ -86,14 +88,14 @@ None
 Student 1: What is your assessment of the assignment? Was it helpful?
 Was it fun?
 
-Helpful to learn how to debug and use gdb. Not fun. Tedious.
+Helpful to learn how to debug and use gdb. Not fun. Confusing.
 
 ------------------------------------------------------------------------
 Student 2: What is your assessment of the assignment? Was it helpful?
 Was it fun?
 
 Helpful to learn how to collaborate on a codebase and learn
-to read another person's code. Not fun. Too much.
+to read another person's code. Not fun. Overwhelming.
 
 ------------------------------------------------------------------------
 (optional) What information can you provide about your submission that
@@ -102,7 +104,9 @@ particular, what bugs are in your submission?
 
 We have detected no bugs. To clarify, we choose design option #2 for 
 ft.c, in which each node has 2 separate fields for file and directory 
-children. 
+children. We made some refactoring in comparison to the dtGood.c 
+implementation to reduce nesting, and renamed some variables for
+clarity.
 
 ------------------------------------------------------------------------
 What warnings does splint generate for Part 2's checker, and what are
@@ -115,18 +119,21 @@ None for CheckerDT.C
 
 
 Warnings for the dependencies of CheckerDT.C
+(we touch on these warnings in the questions below)
 
 dtGood.c: (in function DT_traversePath)
 dtGood.c:94:42: Variable ulChildID used before definition
-  An rvalue is used that may not be initialized to a value on some execution
-  path. (Use -usedef to inhibit warning)
+  An rvalue is used that may not be initialized to a value on some 
+  execution path. (Use -usedef to inhibit warning)
 nodeDTGood.c: (in function Node_new)
 nodeDTGood.c:148:48: Variable ulIndex used before definition
 nodeDTGood.c: (in function Node_free)
 nodeDTGood.c:180:35: Variable ulIndex used before definition
-path.h:94:13: Function exported but not used outside path: Path_getComponent
-  A declaration is exported, but not used outside this module. Declaration can
-  use static qualifier. (Use -exportlocal to inhibit warning)
+path.h:94:13: Function exported but not used outside path: 
+Path_getComponent
+  A declaration is exported, but not used outside this module. 
+  Declaration can use static qualifier. (Use -exportlocal to inhibit 
+  warning)
    path.c:317:1: Definition of Path_getComponent
 
 
@@ -146,8 +153,8 @@ warnings, then write "None."
 
 ft.c: (in function FT_traversePath)
 ft.c:109:13: Variable isFile used before definition
-  An rvalue is used that may not be initialized to a value on some execution
-  path. (Use -usedef to inhibit warning)
+  An rvalue is used that may not be initialized to a value on some 
+  execution path. (Use -usedef to inhibit warning)
 ft.c:110:49: Variable ulChildID used before definition
 ft.c:120:44: Variable ulChildID used before definition
 nodeFT.c: (in function Node_new)
@@ -159,6 +166,8 @@ nodeFT.c: (in function Node_Dir_free)
 nodeFT.c:344:37: Variable ulIndex used before definition
 nodeFT.c: (in function Node_File_free)
 nodeFT.c:392:37: Variable ulIndex used before definition
+
+
 path.h:94:13: Function exported but not used outside path: Path_getComponent
   A declaration is exported, but not used outside this module. Declaration can
   use static qualifier. (Use -exportlocal to inhibit warning)
@@ -166,11 +175,25 @@ path.h:94:13: Function exported but not used outside path: Path_getComponent
 nodeFT.h:177:5: Function exported but not used outside nodeFT: Node_compare
    nodeFT.c:453:1: Definition of Node_compare
 
+DISCUSSION: the first set of warnings all refer to passing a
+uninitialized pointer to a size_t or boolean as a parameter to 
+another function (that assigns it). But these values (that determine
+where and how to look for a node in a DynArray) cannot be initialized
+directly, because that would be "telling" the program where to look
+before actually traversing the tree to find the target node. This 
+could lead to irregular outputs (as discussed in Ed discussin too).
+
+The second set of warnings refer to non-static functions defined in 
+path.c and nodeFT.c that are not used in any other module. This is not
+a problem, but simply there was no need to do so in our implementation,
+and it would have added unnecessary complexity.
+
 ------------------------------------------------------------------------
 What warnings does critTer generate on your Part 3 code, and what are
 your disagreements with them? Copy the critTer warnings here, and
 express your disagreement after each warning. If there are no
 warnings, then write "None."
+
 
 Checking ft.c
 
@@ -201,6 +224,32 @@ Checking ft.c
    ft.c: line 343: low priority: 
    This area is deeply nested at level 4, consider refactoring
 
+DISCUSSION: we don't think these are serious issues. The loop at line
+296 is used in the insertion algorithm, which has to build the path
+level-by-level. Since FT has to handle both files and directories, 
+which imply very specific conditions on when and how a node can be 
+inserted, the loop needs several if-else statements inside. In these, 
+removing brackets for the sake of length would be counterproducent and
+reduce clarity. 
+
+18 compared to 15 functions in a file does not seem too bad: the 
+alternative of breaking up the functions into different scripts could 
+add excessive modules only for 3 functions (and there are already 
+several modules). 
+
+Validating the pointers mentioned above would not be correct; these
+are void pointers, and to make a proper assertion, we would need their
+type.
+
+The length of 705 lines is the result of very detailed commenting 
+of the implementation, which we prefer over concision and cryptic 
+function definitions.
+
+That nesting level is necessary to handle adding/removing files vs 
+directiories appropriately. This might be a consequence of choosing
+the design option #2. Although it might not be too elegant, it 
+prioritizes clarity of the if-else statements.
+
 Checking nodeFT.c
 
    nodeFT.c: line 467: low priority: 
@@ -212,6 +261,10 @@ Checking nodeFT.c
 
    nodeFT.c: line 432: medium priority:
    Do you want to validate 'NewFileContent' through an assert?
+
+DISCUSIION: we cannot validate the void pointers for the same
+reason mentioned above. The slightly large number of functions does
+not seem problematic, for the same reasons above.
 
 ------------------------------------------------------------------------
 For each of the five faulty BDT implementations required by Step
@@ -238,6 +291,43 @@ the error manifests itself or is "noticed" by the client.
 What are your critiques of the given DT implementations, as
 specified in Step 2.5?
 
+* Poorly informative variable names: the parameters of the static
+function DT_preOrderTraversal "n", "d", "i" are too short to make
+sense of them, and don't follow the names that were assigned
+rather consistently to the same objects in other functions.
 
+* Not initializing the state variables: bIsInitialized should be 
+initialized to FALSE to avoid a random assignment to it before
+calling DT_init(). Similarly for oNRoot, which should be initialized
+to NULL and ulCount to 0, as in ft.c 
 
+* Order of functions: static functions should all be at the top, 
+but they are spread around in dtGood.c 
+
+* Some loops could be refactored by re-organizing the sequence
+and parameters of the if-else statements in dtGood.c For example,
+DT_traversePath can be refactored to make it more readable and shorter,
+as we did in ft.C
+
+* nodeDTGood.c might have excessive modules. For example, the 
+logic of Node_addChild() is short enough to be included right away in
+Node_new(). Similarly, the Node_compare() and Node_compareString()
+functions are too similar - they could be joined in one, of what's more
+its output (which is really just Path_comparePath and 
+Path_compareString) could be used directly.
+
+* Not checking if the index returned by DynArray_bsearch is within the
+array bounds of the DynArray at which it will index. For example, This
+could be solved by adding an error case in Node_free() that compares 
+the index with the length of the array to be accessed. 
+
+* General error handling: although the functions return the different
+enums declared in a4def.h, it would be good to write to stderr
+every time an error state is returned. This could be done by an 
+additional function that takes in iStatus as a parameter and 
+prints out a pre-formatted message that is descriptive of the enum state.
+
+* order of parameters: in function Node_new() the order of parameters
+is switched from that used in all other functions. The positions of
+the Path_T and the Node_T objects are switched.
 ------------------------------------------------------------------------
