@@ -330,7 +330,7 @@ size_t Node_Dir_free(Node_T oNNode, size_t* numFreedFiles) {
     }
     DynArray_free(oNNode->oFChildren);
 
-   *numFreedFiles += numFileChildren;
+   *numFreedFiles = numFileChildren;
 
     /* recursively remove directory children */
     while(DynArray_getLength(oNNode->oDChildren) != 0) {
