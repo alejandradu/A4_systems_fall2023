@@ -89,41 +89,41 @@ static int FT_traversePath(Path_T oPPath, Node_T *poNFurthest) {
 
    oNCurr = oNRoot;
    ulDepth = Path_getDepth(oPPath);
-   for(i = 2; i <= ulDepth; i++) { 
-      iStatus = Path_prefix(oPPath, i, &oPPrefix);
-      if(iStatus != SUCCESS) {
-         *poNFurthest = NULL;
-         return iStatus;
-      }
-
-      if(Node_hasChild(oNCurr, oPPrefix, &isFile, &ulChildID)) {
-         /* go to that child and continue with next prefix */
-         Path_free(oPPrefix);
-         oPPrefix = NULL;
-         if(isFile) { /* handles if a child TO GET is a file */
+    for (i = 2; i <= ulDepth; i++) { 
+        iStatus = Path_prefix(oPPath, i, &oPPrefix);
+        if (iStatus != SUCCESS) {
+            *poNFurthest = NULL;
+            return iStatus;
+        }
+    
+        /* oNCurr doesn't have child with path oPPrefix: this is as 
+        far as we can go */
+        if (!Node_hasChild(oNCurr, oPPrefix, &isFile, &ulChildID)) {
+            break;
+        }
+    
+        Path_free(oPPrefix);
+        oPPrefix = NULL;
+    
+        if (isFile) { /* handles if a child TO GET is a file */
             iStatus = Node_getFileChild(oNCurr, ulChildID, &oNChild);
-            if(iStatus != SUCCESS) {
-               *poNFurthest = NULL;
-               return iStatus;
+            if (iStatus != SUCCESS) {
+                *poNFurthest = NULL;
+                return iStatus;
             }
             /* file can't have children - end all loops */
             oNCurr = oNChild;
             break;
-         } else {
-            iStatus = Node_getDirChild(oNCurr, ulChildID, &oNChild);
-            if(iStatus != SUCCESS) {
-               *poNFurthest = NULL;
-               return iStatus;
-            }
-            oNCurr = oNChild;
-         }    
-      }
-      else {
-         /* oNCurr doesn't have child with path oPPrefix:
-            this is as far as we can go */
-         break;
-      }
-   }
+        }
+    
+        iStatus = Node_getDirChild(oNCurr, ulChildID, &oNChild);
+        if (iStatus != SUCCESS) {
+            *poNFurthest = NULL;
+            return iStatus;
+    }
+
+    oNCurr = oNChild;
+}
 
   Path_free(oPPrefix);
   *poNFurthest = oNCurr;
@@ -579,11 +579,13 @@ int FT_stat(const char *pcPath, boolean *pbIsFile, size_t *pulSize) {
       return INITIALIZATION_ERROR;
    }
 
+   /* create path object for the target path */
    iStatus = Path_new(pcPath, &oPPath);
    if(iStatus != SUCCESS) {
       return iStatus;
    }
 
+    /* get the closest ancestor node to the node of target path */
    iStatus = FT_traversePath(oPPath, &oNFound);
    if(iStatus != SUCCESS)
    {
@@ -591,16 +593,19 @@ int FT_stat(const char *pcPath, boolean *pbIsFile, size_t *pulSize) {
       return iStatus;
    }
 
+   /* path is not in tree if it has no ancestor node */
    if(oNFound == NULL) {
       Path_free(oPPath);
       return NO_SUCH_PATH;
    }
 
+   /* path is not in tree if its path does not contain ancestor path */
    if(Path_comparePath(Node_getPath(oNFound), oPPath) != 0) {
       Path_free(oPPath);
       return NO_SUCH_PATH;
    }
 
+   /* return if found path has a file/directory node object */
    Path_free(oPPath);
    assert(oNFound != NULL);
    isFile = Node_isFile(oNFound);

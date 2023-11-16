@@ -110,7 +110,9 @@ your disagreements with them? Copy the splint warnings here, and
 express your disagreement after each warning. If there are no
 warnings, then write "None."
 
-No warnings for CheckerDT.C
+None for CheckerDT.C
+
+
 
 Warnings for the dependencies of CheckerDT.C
 
