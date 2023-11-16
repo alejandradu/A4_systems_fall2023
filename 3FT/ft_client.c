@@ -187,6 +187,7 @@ int main(void) {
   assert(!strcmp(FT_replaceFileContents("1root/H","Kernighan",
                                         strlen("Kernighan")+1),
                  "hello, world!"));
+   fprintf(stderr, "getFileCountent is %s\n", (char*)FT_getFileContents("1root/H"));
   assert(!strcmp((char*)FT_getFileContents("1root/H"),"Kernighan"));
   assert(FT_stat("1root/H", &bIsFile, &l) == SUCCESS);
   assert(bIsFile == TRUE);
