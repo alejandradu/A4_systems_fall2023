@@ -6,7 +6,6 @@
 #--------------------------------------------------------------------
 
 CC = gcc217
-CFLAGS = -Wall -Wextra -pedantic -std=c99
 
 all: testFT
 
@@ -14,19 +13,19 @@ clean:
 	rm -f testFT meminfo*.out *.o
 
 testFT: ft_client.o dynarray.o path.o nodeFT.o ft.o
-	$(CC) $(CFLAGS) -g $^ -o $@ 
+	$(CC) -g ft_client.o dynarray.o path.o nodeFT.o ft.o -o testFT
 
 ft_client.o: ft_client.c ft.h a4def.h
-	$(CC) $(CFLAGS) -g -c $< -o $@
+	$(CC) -g -c ft_client.c -o ft_client.o
 
 dynarray.o: dynarray.c dynarray.h
-	$(CC) $(CFLAGS) -g -c $< -o $@
+	$(CC) -g -c dynarray.c -o dynarray.o
 
 path.o: path.c dynarray.h path.h a4def.h
-	$(CC) $(CFLAGS) -g -c $< -o $@
+	$(CC) -g -c path.c -o path.o
 
 nodeFT.o: nodeFT.c dynarray.h path.h ft.h a4def.h
-	$(CC) $(CFLAGS) -g -c $< -o $@
+	$(CC) -g -c nodeFT.c -o nodeFT.o
 
 ft.o: ft.c dynarray.h path.h ft.h a4def.h	
-	$(CC) $(CFLAGS) -g -c $< -o $@
+	$(CC) -g -c ft.c -o ft.o
