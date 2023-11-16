@@ -590,10 +590,25 @@ size_t numFilesDeleted;
 
    if(iStatus != SUCCESS)
        return iStatus;
+   
+   fprintf(stderr, "before removing\n");
+   fprintf(stderr, "dirCounter: %zu\n", dirCounter);
+   fprintf(stderr, "fileCounter: %zu\n", fileCounter);
+   fprintf(stderr, "NodeCounter: %zu\n", NodeCounter);
+
+   fprintf(stderr, "removing a File\n");
 
    numFilesDeleted = Node_File_free(oNFound);
+
+   fprintf(stderr, "numFileDeleted: %zu\n", numFilesDeleted);
+
    fileCounter -= numFilesDeleted;
    NodeCounter -= numFilesDeleted;
+
+   fprintf(stderr, "after removing\n");
+    fprintf(stderr, "dirCounter: %zu\n", dirCounter);
+   fprintf(stderr, "fileCounter: %zu\n", fileCounter);
+   fprintf(stderr, "NodeCounter: %zu\n", NodeCounter);
 
    return SUCCESS;
 }
