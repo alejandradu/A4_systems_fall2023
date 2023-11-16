@@ -67,8 +67,8 @@ static boolean check_toStringComplete(Node_T oNNode) {
         fprintf(stderr, "DT_toString does not print all the nodes in the DT\n");
         return FALSE;
     }
-    Path_freeString(temp1);
-    Path_freeString(temp2);
+    Path_free(temp1);
+    Path_free(temp2);
     return TRUE;
 }
 
