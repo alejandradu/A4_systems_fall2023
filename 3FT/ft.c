@@ -217,7 +217,6 @@ static int FT_insertions(const char *pcPath, boolean isFile, void* FileContent, 
 
     assert(pcPath != NULL);
  
-    /*freedFileNumbers = 0;*/
      /* validate initialization */
     if(!isInitialized) {
         return INITIALIZATION_ERROR; 
@@ -273,6 +272,8 @@ static int FT_insertions(const char *pcPath, boolean isFile, void* FileContent, 
            return ALREADY_IN_TREE;
         }
     }
+
+    freedFileNumbers = 0   /* initialize */
 
     /* starting at oNCurr, build rest of the path one level at a time */
     while(ulIndex <= ulDepth) {
