@@ -93,6 +93,7 @@ int Node_new(Node_T oNParent, Path_T oPPath,boolean isFile,
    int iStatus;
 
    assert(oPPath != NULL);
+   assert(poNResult != NULL);
 
    /* allocate space for a new node */
    psNew = malloc(sizeof(struct node));
