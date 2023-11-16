@@ -7,6 +7,7 @@
 #define CHECKER_INCLUDED
 
 #include "nodeDT.h"
+#include "dt.h"
 
 
 /*
