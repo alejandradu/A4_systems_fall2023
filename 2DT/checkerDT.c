@@ -40,9 +40,13 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
    return TRUE;
 }
 
-/* Validate Node_getChild calls
-*  Return TRUE if all assigned pointers to children are not
-*  null, return false otherwise */
+/**
+ * Check if all calls to Node_getChild return a non-NULL node.
+ * 
+ * @param oNNode The parent node.
+ * 
+ * @return TRUE if all calls to Node_getChild return a non-NULL node, FALSE otherwise.
+ */
 static boolean check_GetChildNull(Node_T oNNode) {
     Node_T oNChild = NULL;
     size_t ulIndex = 0;
@@ -56,10 +60,13 @@ static boolean check_GetChildNull(Node_T oNNode) {
     return TRUE;
 }
 
-/* Validate toString calls
-* Assumes that node_toString works. Return TRUE if the string
-* representation of the tree contains the string representation
-* of all nodes. Return FALSE otherwise */
+/**
+ * Check if the toString function prints the path names of all nodes in the DT.
+ * 
+ * @param oNNode The root node of the DT.
+ * 
+ * @return TRUE if the toString function prints all path names, FALSE otherwise.
+ */
 static boolean check_toStringComplete(Node_T oNNode) {
     char *stringContain;
     stringContain= strstr((const char*)DT_toString(), 
@@ -72,7 +79,13 @@ static boolean check_toStringComplete(Node_T oNNode) {
     return TRUE;
 }
 
-/* Validate uniqueness of paths */
+/**
+ * Check if all nodes in the DT have unique path names.
+ * 
+ * @param oNNode The root node of the DT.
+ * 
+ * @return TRUE if all nodes have unique path names, FALSE otherwise.
+ */
 static boolean check_UniquePaths(Node_T oNNode) {
     size_t ulIndex;
     size_t ulIndex2;
@@ -100,7 +113,13 @@ static boolean check_UniquePaths(Node_T oNNode) {
     return TRUE;
 }
 
-/* Validate lexicographic order of children */
+/**
+ * Check if all nodes in the DT are in lexicographic order.
+ * 
+ * @param oNNode The root node of the DT.
+ * 
+ * @return TRUE if all nodes are in lexicographic order, FALSE otherwise.
+ */
 static boolean check_lexOrder(Node_T oNNode) {
     size_t ulIndex;
 
@@ -124,9 +143,14 @@ static boolean check_lexOrder(Node_T oNNode) {
 }
 
 
-/* Count the number of valid nodes in a tree rooted at oNRoot
-* recursively. Is not affected by the length field of the DT */
-static size_t countValidNodes(Node_T oNRoot) {
+/**
+ * Count the number of valid nodes in the DT.
+ * 
+ * @param oNRoot The root node of the DT.
+ * 
+ * @return The number of valid nodes in the DT.
+ */
+static size_t DT_countValidNodes(Node_T oNRoot) {
     size_t count = 0;
     size_t i;
 
