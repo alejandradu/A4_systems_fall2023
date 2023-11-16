@@ -221,7 +221,7 @@ size_t* freedFileNumbers;
 
     assert(pcPath != NULL);
  
-freedFileNumbers = 0;
+   freedFileNumbers = 0;
      /* validate initialization */
     if(!isInitialized) {
         return INITIALIZATION_ERROR; 
@@ -229,7 +229,6 @@ freedFileNumbers = 0;
     /* create path for the (potential) insertion */
     iStatus = Path_new(pcPath, &oPPath);    
     if(iStatus != SUCCESS) {
-         Path_free(oPPath); /*MIGHT CAUSE A DOUBLE FREE*/
         return iStatus;
     }    
  

@@ -340,8 +340,6 @@ size_t Node_Dir_free(Node_T oNNode, size_t* numFreedFiles) {
 
     /* remove path */
     Path_free(oNNode->oPPath);
-    /*fprintf(stderr, "This might be a segfault\n");*/
-    dummy = oNNode->oPPath;
 
     /* finally, free the struct node */
     free(oNNode);
