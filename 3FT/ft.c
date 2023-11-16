@@ -213,11 +213,11 @@ static int FT_insertions(const char *pcPath, boolean isFile, void* FileContent, 
     Node_T oNCurr = NULL;
     size_t ulDepth, ulIndex;
     size_t ulNewNodes = 0;
-size_t* freedFileNumbers;
+    size_t* freedFileNumbers;
 
     assert(pcPath != NULL);
  
-   freedFileNumbers = 0;
+    /*freedFileNumbers = 0;*/
      /* validate initialization */
     if(!isInitialized) {
         return INITIALIZATION_ERROR; 
